@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "title": "Ach Gadol — Grand Frère pour les soldats seuls",
+    "description": "Tous les droits, informations et accompagnement pour les soldats seuls de Tsahal — en un seul endroit. Vérification d'éligibilité, chatbot intelligent et des centaines de bénévoles à votre service."
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "rights": "Droits",
+    "check": "Vérification d'éligibilité",
+    "videos": "Vidéos",
+    "resources": "Ressources",
+    "chat": "Chat",
+    "volunteer": "Bénévolat",
+    "language": "עברית"
+  },
+  "hero": {
+    "title": "Tous les droits auxquels vous avez droit — en un seul endroit",
+    "subtitle": "Chatbot intelligent, vérification d'éligibilité personnalisée et accompagnement professionnel — pour que vous obteniez tout ce qui vous revient en tant que soldat seul.",
+    "cta_check": "Vérifier votre éligibilité",
+    "cta_chat": "Posez-nous une question",
+    "stats_soldiers": "~7 000 soldats seuls",
+    "stats_volunteers": "~250 bénévoles",
+    "stats_rights": "30+ droits et avantages"
+  },
+  "about": {
+    "title": "À propos d'Ach Gadol",
+    "description": "Ach Gadol est une association à but non lucratif dédiée au soutien des soldats seuls de Tsahal. Nous sommes là pour nous assurer que chaque soldat seul connaisse ses droits et reçoive le soutien dont il a besoin.",
+    "founded": "Année de fondation",
+    "volunteers_count": "Bénévoles actifs",
+    "soldiers_yearly": "Soldats accompagnés chaque année",
+    "presidential_award": "Lauréats du Prix présidentiel du bénévolat",
+    "mission": "Notre mission est d'être le grand frère de chaque soldat seul — accompagner, soutenir et garantir l'accès à tous les droits et ressources auxquels ils ont droit."
+  },
+  "rights": {
+    "title": "Droits et avantages du soldat seul",
+    "subtitle": "Nous avons rassemblé tous les droits et avantages disponibles pour les soldats seuls — subventions, logement, jours de congé et bien plus.",
+    "categories": {
+      "financial": "Finances et subventions",
+      "housing": "Logement et hébergement",
+      "vacations": "Congés et jours de repos",
+      "post_service": "Avantages post-service",
+      "reserves": "Service de réserve",
+      "pre_service": "Pré-enrôlement"
+    },
+    "per_month": "par mois",
+    "one_time": "versement unique",
+    "free": "gratuit",
+    "up_to": "jusqu'à",
+    "details": "Plus de détails",
+    "source": "Source",
+    "conditions": "Conditions d'éligibilité"
+  },
+  "check": {
+    "title": "Vérification d'éligibilité personnalisée",
+    "subtitle": "Répondez à quelques courtes questions et découvrez à quels droits et avantages vous avez droit.",
+    "soldier_type": "Catégorie de soldat seul",
+    "soldier_types": {
+      "lone_classic": "Soldat seul classique (nouvel immigrant sans famille en Israël)",
+      "child_of_emigrants": "Enfant de parents ayant quitté Israël",
+      "child_of_envoys": "Enfant d'émissaires à l'étranger",
+      "no_family_support": "Sans soutien familial (coupé de sa famille)",
+      "orphan": "Orphelin",
+      "foster_family": "Issu d'une famille d'accueil ou d'un établissement de placement"
+    },
+    "service_status": "Étape du service",
+    "statuses": {
+      "pre_service": "Pré-enrôlement",
+      "in_service": "Service actif",
+      "released": "Post-service",
+      "reserves": "Service de réserve"
+    },
+    "is_combat": "Êtes-vous en rôle combattant ?",
+    "is_immigrant": "Êtes-vous un nouvel immigrant (Oleh) ?",
+    "parents_abroad": "Vos parents vivent-ils à l'étranger ?",
+    "yes": "Oui",
+    "no": "Non",
+    "check_button": "Vérifier l'éligibilité",
+    "results_title": "Vos résultats",
+    "your_rights": "Droits auxquels vous avez droit",
+    "total_monthly": "Total mensuel estimé",
+    "disclaimer": "Ces résultats sont fournis à titre indicatif uniquement et ne constituent pas un avis juridique. L'éligibilité finale est déterminée par les autorités compétentes."
+  },
+  "chat": {
+    "title": "Demandez à Ach Gadol",
+    "placeholder": "Posez une question sur les droits, le service ou tout autre sujet...",
+    "send": "Envoyer",
+    "typing": "Ach Gadol est en train d'écrire...",
+    "welcome": "Bonjour ! Je suis le chatbot d'Ach Gadol. Je suis là pour vous aider avec toutes vos questions sur les droits des soldats seuls, les subventions, le logement ou tout autre sujet. Comment puis-je vous aider ?",
+    "escalate": "Vous souhaitez parler à un vrai bénévole ? Cliquez ici.",
+    "powered_by": "Propulsé par l'IA",
+    "disclaimer": "Le chatbot fournit des informations générales uniquement et ne remplace pas un conseil professionnel. En cas de doute, contactez nos bénévoles."
+  },
+  "resources": {
+    "title": "Ressources utiles",
+    "subtitle": "Lignes d'assistance, organisations et informations complémentaires pour les soldats seuls.",
+    "hotlines": "Lignes d'assistance",
+    "organizations": "Organisations",
+    "phone": "Téléphone",
+    "website": "Site web"
+  },
+  "footer": {
+    "about": "Ach Gadol — Grand Frère pour les soldats seuls — une association à but non lucratif soutenant et accompagnant les soldats seuls de Tsahal depuis 2003.",
+    "rights_reserved": "Tous droits réservés à Ach Gadol — Grand Frère pour les soldats seuls.",
+    "disclaimer": "Les informations sur ce site sont fournies à titre informatif uniquement et ne constituent pas un avis juridique.",
+    "privacy": "Politique de confidentialité",
+    "accessibility": "Accessibilité",
+    "contact": "Nous contacter"
+  },
+  "features": {
+    "title": "Comment nous aidons",
+    "subtitle": "Outils intelligents et soutien humain — tout pour que vous obteniez ce qui vous revient.",
+    "rights_info": {
+      "title": "Informations sur les droits",
+      "description": "Une base de données complète de tous les droits, subventions et avantages disponibles pour les soldats seuls — à jour et organisée."
+    },
+    "eligibility_checker": {
+      "title": "Vérification d'éligibilité",
+      "description": "Répondez à quelques questions simples et découvrez exactement à quels droits vous avez droit et les montants estimés."
+    },
+    "ai_chat": {
+      "title": "Chatbot intelligent",
+      "description": "Posez n'importe quelle question dans votre langue et obtenez une réponse instantanée basée sur des informations vérifiées et à jour."
+    },
+    "personal_guidance": {
+      "title": "Accompagnement personnel",
+      "description": "Des centaines de bénévoles prêts à vous accompagner personnellement — de l'enrôlement, pendant le service et jusqu'à la libération."
+    }
+  },
+  "cta": {
+    "title": "Besoin d'aide ? Nous sommes là pour vous",
+    "subtitle": "Quelle que soit la question — vérifiez votre éligibilité ou posez une question à notre chatbot maintenant.",
+    "check_button": "Vérifier l'éligibilité",
+    "chat_button": "Posez-nous une question"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite. Veuillez réessayer.",
+    "back": "Retour",
+    "next": "Suivant",
+    "close": "Fermer",
+    "search": "Rechercher",
+    "learn_more": "En savoir plus",
+    "contact_us": "Nous contacter",
+    "nis": "₪",
+    "updated_at": "Dernière mise à jour"
+  }
+}

@@ -1,0 +1,74 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { Heart } from "lucide-react";
+
+export default function Footer() {
+  const t = useTranslations("footer");
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-border/40 bg-[hsl(var(--primary))]">
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-8 md:grid-cols-3">
+          {/* About Section */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-primary-foreground">
+              אח גדול
+            </h3>
+            <p className="text-sm leading-relaxed text-primary-foreground/80">
+              {t("about")}
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-bold text-primary-foreground">
+              {t("contact")}
+            </h3>
+            <div className="flex flex-col gap-2">
+              <Link
+                href="/about"
+                className="text-sm text-primary-foreground/80 transition-colors hover:text-[hsl(var(--accent))]"
+              >
+                {t("privacy")}
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm text-primary-foreground/80 transition-colors hover:text-[hsl(var(--accent))]"
+              >
+                {t("accessibility")}
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm text-primary-foreground/80 transition-colors hover:text-[hsl(var(--accent))]"
+              >
+                {t("contact")}
+              </Link>
+            </div>
+          </div>
+
+          {/* Disclaimer */}
+          <div className="space-y-4">
+            <p className="text-xs leading-relaxed text-primary-foreground/60">
+              {t("disclaimer")}
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="mt-8 flex flex-col items-center gap-2 border-t border-primary-foreground/10 pt-8 text-center">
+          <p className="text-sm text-primary-foreground/70">
+            {t("rights_reserved")} &copy; {currentYear}
+          </p>
+          <div className="flex items-center gap-1 text-xs text-primary-foreground/50">
+            <span>Built with</span>
+            <Heart className="h-3 w-3 fill-[hsl(var(--accent))] text-[hsl(var(--accent))]" />
+            <span>for Lone Soldiers</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

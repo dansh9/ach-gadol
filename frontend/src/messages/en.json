@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "title": "Ach Gadol — Big Brother for Lone Soldiers",
+    "description": "All the rights, information, and guidance for lone soldiers in the IDF — in one place. Eligibility checker, smart chatbot, and hundreds of volunteers at your service."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "rights": "Rights",
+    "check": "Eligibility Check",
+    "videos": "Videos",
+    "resources": "Resources",
+    "chat": "Chat",
+    "volunteer": "Volunteer",
+    "language": "עברית"
+  },
+  "hero": {
+    "title": "All the rights you deserve — in one place",
+    "subtitle": "Smart chatbot, personalized eligibility check, and professional guidance — so you get everything you're entitled to as a lone soldier.",
+    "cta_check": "Check Your Eligibility",
+    "cta_chat": "Ask Us",
+    "stats_soldiers": "~7,000 Lone Soldiers",
+    "stats_volunteers": "~250 Volunteers",
+    "stats_rights": "30+ Rights & Benefits"
+  },
+  "about": {
+    "title": "About Ach Gadol",
+    "description": "Ach Gadol is a nonprofit organization dedicated to supporting lone soldiers in the IDF. We're here to make sure every lone soldier knows their rights and receives the support they need.",
+    "founded": "Year Founded",
+    "volunteers_count": "Active Volunteers",
+    "soldiers_yearly": "Soldiers Supported Annually",
+    "presidential_award": "Recipients of the Presidential Volunteer Award",
+    "mission": "Our mission is to be the big brother for every lone soldier — to accompany, support, and ensure access to all the rights and resources they deserve."
+  },
+  "rights": {
+    "title": "Lone Soldier Rights & Benefits",
+    "subtitle": "We've gathered all the rights and benefits available to lone soldiers — grants, housing, leave days, and more.",
+    "categories": {
+      "financial": "Financial & Grants",
+      "housing": "Housing & Accommodation",
+      "vacations": "Leave & Rest Days",
+      "post_service": "Post-Service Benefits",
+      "reserves": "Reserve Duty",
+      "pre_service": "Pre-Enlistment"
+    },
+    "per_month": "per month",
+    "one_time": "one-time",
+    "free": "free",
+    "up_to": "up to",
+    "details": "More Details",
+    "source": "Source",
+    "conditions": "Eligibility Conditions"
+  },
+  "check": {
+    "title": "Personalized Eligibility Check",
+    "subtitle": "Answer a few short questions and discover which rights and benefits you're entitled to.",
+    "soldier_type": "Lone Soldier Category",
+    "soldier_types": {
+      "lone_classic": "Classic Lone Soldier (new immigrant without family in Israel)",
+      "child_of_emigrants": "Child of parents who left Israel",
+      "child_of_envoys": "Child of envoys abroad",
+      "no_family_support": "No family support (estranged from family)",
+      "orphan": "Orphan",
+      "foster_family": "Graduate of foster care or institutional care"
+    },
+    "service_status": "Service Stage",
+    "statuses": {
+      "pre_service": "Pre-Enlistment",
+      "in_service": "Active Service",
+      "released": "Post-Service",
+      "reserves": "Reserve Duty"
+    },
+    "is_combat": "Are you in a combat role?",
+    "is_immigrant": "Are you a new immigrant (Oleh)?",
+    "parents_abroad": "Do your parents live abroad?",
+    "yes": "Yes",
+    "no": "No",
+    "check_button": "Check Eligibility",
+    "results_title": "Your Results",
+    "your_rights": "Rights You're Entitled To",
+    "total_monthly": "Estimated Monthly Total",
+    "disclaimer": "These results are for general estimation only and do not constitute legal advice. Final eligibility is determined by the relevant authorities."
+  },
+  "chat": {
+    "title": "Ask Ach Gadol",
+    "placeholder": "Ask any question about rights, service, or anything else...",
+    "send": "Send",
+    "typing": "Ach Gadol is typing...",
+    "welcome": "Hi there! I'm the Ach Gadol chatbot. I'm happy to help with any questions about lone soldier rights, grants, housing, or anything else. How can I help?",
+    "escalate": "Want to speak with a real volunteer? Click here.",
+    "powered_by": "Powered by AI",
+    "disclaimer": "The chatbot provides general information only and does not replace professional advice. If in doubt, reach out to our volunteers."
+  },
+  "resources": {
+    "title": "Useful Resources",
+    "subtitle": "Hotlines, organizations, and additional information for lone soldiers.",
+    "hotlines": "Hotlines",
+    "organizations": "Organizations",
+    "phone": "Phone",
+    "website": "Website"
+  },
+  "footer": {
+    "about": "Ach Gadol — Big Brother for Lone Soldiers — a nonprofit organization supporting and empowering lone soldiers in the IDF since 2003.",
+    "rights_reserved": "All rights reserved to Ach Gadol — Big Brother for Lone Soldiers.",
+    "disclaimer": "The information on this site is for general informational purposes only and does not constitute legal advice.",
+    "privacy": "Privacy Policy",
+    "accessibility": "Accessibility",
+    "contact": "Contact Us"
+  },
+  "features": {
+    "title": "How We Help",
+    "subtitle": "Smart tools and human support — everything so you get what you deserve.",
+    "rights_info": {
+      "title": "Rights Information",
+      "description": "A comprehensive database of all the rights, grants, and benefits available to lone soldiers — up-to-date and organized."
+    },
+    "eligibility_checker": {
+      "title": "Eligibility Checker",
+      "description": "Answer a few simple questions and find out exactly which rights you're entitled to and the estimated amounts."
+    },
+    "ai_chat": {
+      "title": "Smart Chatbot",
+      "description": "Ask any question in your language and get an instant answer based on verified, up-to-date information."
+    },
+    "personal_guidance": {
+      "title": "Personal Guidance",
+      "description": "Hundreds of volunteers ready to accompany you personally — from enlistment, through service, and until discharge."
+    }
+  },
+  "cta": {
+    "title": "Need help? We're here for you",
+    "subtitle": "No matter the question — check your eligibility or ask our chatbot now.",
+    "check_button": "Check Eligibility",
+    "chat_button": "Ask Us"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again.",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "search": "Search",
+    "learn_more": "Learn More",
+    "contact_us": "Contact Us",
+    "nis": "NIS",
+    "updated_at": "Last Updated"
+  }
+}

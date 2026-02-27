@@ -1,0 +1,36 @@
+{
+  "rewrites": [
+    {
+      "source": "/he/:path*",
+      "destination": "/he/:path*"
+    },
+    {
+      "source": "/en/:path*",
+      "destination": "/en/:path*"
+    },
+    {
+      "source": "/ru/:path*",
+      "destination": "/ru/:path*"
+    },
+    {
+      "source": "/am/:path*",
+      "destination": "/am/:path*"
+    },
+    {
+      "source": "/fr/:path*",
+      "destination": "/fr/:path*"
+    },
+    {
+      "source": "/es/:path*",
+      "destination": "/es/:path*"
+    },
+    {
+      "source": "/ar/:path*",
+      "destination": "/ar/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/he/:path*"
+    }
+  ]
+}

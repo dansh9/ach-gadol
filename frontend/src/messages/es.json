@@ -1,0 +1,148 @@
+{
+  "metadata": {
+    "title": "Ach Gadol — Hermano Mayor para soldados solitarios",
+    "description": "Todos los derechos, información y orientación para soldados solitarios en las FDI — en un solo lugar. Verificación de elegibilidad, chatbot inteligente y cientos de voluntarios a tu servicio."
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "rights": "Derechos",
+    "check": "Verificación de elegibilidad",
+    "videos": "Videos",
+    "resources": "Recursos",
+    "chat": "Chat",
+    "volunteer": "Voluntariado",
+    "language": "עברית"
+  },
+  "hero": {
+    "title": "Todos los derechos que te corresponden — en un solo lugar",
+    "subtitle": "Chatbot inteligente, verificación de elegibilidad personalizada y orientación profesional — para que recibas todo lo que te corresponde como soldado solitario.",
+    "cta_check": "Verifica tu elegibilidad",
+    "cta_chat": "Pregúntanos",
+    "stats_soldiers": "~7,000 soldados solitarios",
+    "stats_volunteers": "~250 voluntarios",
+    "stats_rights": "30+ derechos y beneficios"
+  },
+  "about": {
+    "title": "Acerca de Ach Gadol",
+    "description": "Ach Gadol es una organización sin fines de lucro dedicada a apoyar a los soldados solitarios en las FDI. Estamos aquí para asegurarnos de que cada soldado solitario conozca sus derechos y reciba el apoyo que necesita.",
+    "founded": "Año de fundación",
+    "volunteers_count": "Voluntarios activos",
+    "soldiers_yearly": "Soldados apoyados anualmente",
+    "presidential_award": "Galardonados con el Premio Presidencial de Voluntariado",
+    "mission": "Nuestra misión es ser el hermano mayor de cada soldado solitario — acompañar, apoyar y garantizar el acceso a todos los derechos y recursos que merecen."
+  },
+  "rights": {
+    "title": "Derechos y beneficios del soldado solitario",
+    "subtitle": "Hemos reunido todos los derechos y beneficios disponibles para soldados solitarios — subsidios, vivienda, días de descanso y más.",
+    "categories": {
+      "financial": "Finanzas y subsidios",
+      "housing": "Vivienda y alojamiento",
+      "vacations": "Permisos y días de descanso",
+      "post_service": "Beneficios post-servicio",
+      "reserves": "Servicio de reserva",
+      "pre_service": "Pre-alistamiento"
+    },
+    "per_month": "por mes",
+    "one_time": "pago único",
+    "free": "gratis",
+    "up_to": "hasta",
+    "details": "Más detalles",
+    "source": "Fuente",
+    "conditions": "Condiciones de elegibilidad"
+  },
+  "check": {
+    "title": "Verificación de elegibilidad personalizada",
+    "subtitle": "Responde algunas preguntas cortas y descubre a qué derechos y beneficios tienes derecho.",
+    "soldier_type": "Categoría de soldado solitario",
+    "soldier_types": {
+      "lone_classic": "Soldado solitario clásico (nuevo inmigrante sin familia en Israel)",
+      "child_of_emigrants": "Hijo de padres que dejaron Israel",
+      "child_of_envoys": "Hijo de enviados en el extranjero",
+      "no_family_support": "Sin apoyo familiar (distanciado de la familia)",
+      "orphan": "Huérfano",
+      "foster_family": "Egresado de familia de acogida o institución de cuidado"
+    },
+    "service_status": "Etapa del servicio",
+    "statuses": {
+      "pre_service": "Pre-alistamiento",
+      "in_service": "Servicio activo",
+      "released": "Post-servicio",
+      "reserves": "Servicio de reserva"
+    },
+    "is_combat": "¿Estás en un rol de combate?",
+    "is_immigrant": "¿Eres un nuevo inmigrante (Oleh)?",
+    "parents_abroad": "¿Tus padres viven en el extranjero?",
+    "yes": "Sí",
+    "no": "No",
+    "check_button": "Verificar elegibilidad",
+    "results_title": "Tus resultados",
+    "your_rights": "Derechos a los que tienes derecho",
+    "total_monthly": "Total mensual estimado",
+    "disclaimer": "Estos resultados son solo una estimación general y no constituyen asesoramiento legal. La elegibilidad final es determinada por las autoridades correspondientes."
+  },
+  "chat": {
+    "title": "Pregunta a Ach Gadol",
+    "placeholder": "Haz cualquier pregunta sobre derechos, servicio o cualquier otra cosa...",
+    "send": "Enviar",
+    "typing": "Ach Gadol está escribiendo...",
+    "welcome": "¡Hola! Soy el chatbot de Ach Gadol. Estoy aquí para ayudarte con cualquier pregunta sobre derechos de soldados solitarios, subsidios, vivienda o cualquier otro tema. ¿En qué puedo ayudarte?",
+    "escalate": "¿Quieres hablar con un voluntario real? Haz clic aquí.",
+    "powered_by": "Impulsado por IA",
+    "disclaimer": "El chatbot proporciona información general únicamente y no reemplaza el asesoramiento profesional. En caso de duda, contacta a nuestros voluntarios."
+  },
+  "resources": {
+    "title": "Recursos útiles",
+    "subtitle": "Líneas de ayuda, organizaciones e información adicional para soldados solitarios.",
+    "hotlines": "Líneas de ayuda",
+    "organizations": "Organizaciones",
+    "phone": "Teléfono",
+    "website": "Sitio web"
+  },
+  "footer": {
+    "about": "Ach Gadol — Hermano Mayor para soldados solitarios — una organización sin fines de lucro que apoya y fortalece a los soldados solitarios en las FDI desde 2003.",
+    "rights_reserved": "Todos los derechos reservados a Ach Gadol — Hermano Mayor para soldados solitarios.",
+    "disclaimer": "La información en este sitio es solo con fines informativos generales y no constituye asesoramiento legal.",
+    "privacy": "Política de privacidad",
+    "accessibility": "Accesibilidad",
+    "contact": "Contáctanos"
+  },
+  "features": {
+    "title": "Cómo ayudamos",
+    "subtitle": "Herramientas inteligentes y apoyo humano — todo para que recibas lo que te corresponde.",
+    "rights_info": {
+      "title": "Información sobre derechos",
+      "description": "Una base de datos completa de todos los derechos, subsidios y beneficios disponibles para soldados solitarios — actualizada y organizada."
+    },
+    "eligibility_checker": {
+      "title": "Verificación de elegibilidad",
+      "description": "Responde a algunas preguntas simples y descubre exactamente a qué derechos tienes derecho y los montos estimados."
+    },
+    "ai_chat": {
+      "title": "Chatbot inteligente",
+      "description": "Haz cualquier pregunta en tu idioma y obtén una respuesta instantánea basada en información verificada y actualizada."
+    },
+    "personal_guidance": {
+      "title": "Orientación personal",
+      "description": "Cientos de voluntarios listos para acompañarte personalmente — desde el alistamiento, durante el servicio y hasta la baja."
+    }
+  },
+  "cta": {
+    "title": "¿Necesitas ayuda? Estamos aquí para ti",
+    "subtitle": "Sin importar la pregunta — verifica tu elegibilidad o pregunta a nuestro chatbot ahora.",
+    "check_button": "Verificar elegibilidad",
+    "chat_button": "Pregúntanos"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "learn_more": "Más información",
+    "contact_us": "Contáctanos",
+    "nis": "₪",
+    "updated_at": "Última actualización"
+  }
+}
