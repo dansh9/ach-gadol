@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import {
@@ -14,6 +14,7 @@ import {
   AlertTriangle,
   Loader2,
   MessageCircle,
+  ExternalLink,
 } from "lucide-react";
 
 /* ===== Types ===== */
@@ -23,6 +24,8 @@ interface Message {
   role: "user" | "bot";
   content: string;
   timestamp: Date;
+  sources?: string[];
+  confidence?: number;
 }
 
 interface QuickAction {
@@ -33,26 +36,7 @@ interface QuickAction {
   message: string;
 }
 
-/* ===== Mock Responses ===== */
-
-const MOCK_RESPONSES: Record<string, { he: string; en: string }> = {
-  rights: {
-    he: "כחייל בודד מוכר, מגיעות לך מגוון זכויות כספיות, דיור, חופשות ועוד. הנה סיכום קצר:\n\n- תוספת חייל בודד: 620.70 ש\"ח לחודש\n- דמי כלכלה: 150 ש\"ח לחודש\n- מענק משרד השיכון: 402 ש\"ח לחודש\n- הנחת חשמל: 105 ש\"ח לחודש\n- פטור מלא מארנונה\n\nכדי לדעת בדיוק מה מגיע לך, מומלץ להשתמש בבדיקת הזכאות שלנו.",
-    en: "As a recognized lone soldier, you're entitled to various financial benefits, housing, leave days, and more. Here's a brief summary:\n\n- Lone Soldier Allowance: NIS 620.70/mo\n- Food Allowance: NIS 150/mo\n- Housing Ministry Grant: NIS 402/mo\n- Electricity Discount: NIS 105/mo\n- Full Property Tax Exemption\n\nTo find out exactly what you're entitled to, I recommend using our eligibility checker.",
-  },
-  forms: {
-    he: "יש כמה טפסים חשובים שכדאי שתכיר:\n\n1. טופס הכרה כחייל בודד — מוגש דרך הקצין המטפל ביחידה\n2. בקשה לסבסוד דיור — דרך מדור רווחה\n3. טופס פטור מארנונה — ברשות המקומית שלך\n\nרוצה שאפנה אותך למתנדב שיעזור לך למלא את הטפסים?",
-    en: "There are several important forms you should know about:\n\n1. Lone Soldier Recognition Form — submitted through your unit's welfare officer\n2. Housing Subsidy Application — through the welfare department\n3. Property Tax Exemption Form — at your local municipality\n\nWould you like me to connect you with a volunteer who can help you fill out the forms?",
-  },
-  volunteer: {
-    he: "בטח! אח גדול מפעיל צוות של כ-250 מתנדבים ברחבי הארץ. מתנדב אישי יכול:\n\n- ללוות אותך בתהליך מיצוי הזכויות\n- לעזור לך עם בירוקרטיה וטפסים\n- להיות כתף תומכת בכל נושא\n\nניתן ליצור קשר עם העמותה לשיבוץ מתנדב אישי.",
-    en: "Of course! Ach Gadol has a team of ~250 volunteers across Israel. A personal volunteer can:\n\n- Guide you through claiming your rights\n- Help with bureaucracy and forms\n- Be a supportive presence for any issue\n\nYou can contact the organization to be matched with a personal volunteer.",
-  },
-  default: {
-    he: "תודה על השאלה! אני מנסה לעזור בכל נושא הקשור לזכויות חיילים בודדים. לצערי, אני עדיין בשלב הפיתוח ולא יכול לענות על כל שאלה.\n\nבינתיים, אני ממליץ:\n- לבדוק את הזכויות שלך בעמוד הזכויות\n- להשתמש בבדיקת הזכאות\n- לפנות למתנדבי העמותה לעזרה אישית",
-    en: "Thanks for your question! I try to help with everything related to lone soldier rights. Unfortunately, I'm still in development and can't answer every question.\n\nIn the meantime, I recommend:\n- Checking your rights on the Rights page\n- Using the Eligibility Checker\n- Reaching out to our volunteers for personal help",
-  },
-};
+/* ===== Quick Actions ===== */
 
 const QUICK_ACTIONS: QuickAction[] = [
   {
@@ -60,23 +44,48 @@ const QUICK_ACTIONS: QuickAction[] = [
     labelHe: "מה מגיע לי?",
     labelEn: "What am I entitled to?",
     icon: ClipboardCheck,
-    message: "rights",
+    message: "מה הזכויות שמגיעות לי כחייל בודד?",
   },
   {
     id: "forms",
     labelHe: "עזרה עם טפסים",
     labelEn: "Help with forms",
     icon: FileText,
-    message: "forms",
+    message: "אילו טפסים אני צריך למלא כחייל בודד?",
   },
   {
     id: "volunteer",
     labelHe: "דברו עם מתנדב",
     labelEn: "Talk to a volunteer",
     icon: Users,
-    message: "volunteer",
+    message: "אני רוצה לדבר עם מתנדב",
   },
 ];
+
+/* ===== Confidence Indicator ===== */
+
+function ConfidenceDot({ confidence }: { confidence: number }) {
+  const color =
+    confidence >= 0.8
+      ? "bg-emerald-500"
+      : confidence >= 0.5
+        ? "bg-amber-500"
+        : "bg-rose-500";
+
+  const label =
+    confidence >= 0.8
+      ? "High confidence"
+      : confidence >= 0.5
+        ? "Medium confidence"
+        : "Low confidence";
+
+  return (
+    <span
+      className={`inline-block h-2 w-2 rounded-full ${color}`}
+      title={label}
+    />
+  );
+}
 
 /* ===== Message Bubble Component ===== */
 
@@ -84,9 +93,7 @@ function MessageBubble({ message }: { message: Message }) {
   const isBot = message.role === "bot";
 
   return (
-    <div
-      className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}
-    >
+    <div className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}>
       {/* Avatar */}
       <div
         className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
@@ -106,23 +113,78 @@ function MessageBubble({ message }: { message: Message }) {
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 sm:max-w-[70%] ${
           isBot
-            ? "rounded-ss-sm bg-card border border-border/50 text-foreground"
+            ? "rounded-ss-sm border border-border/50 bg-card text-foreground"
             : "rounded-se-sm bg-[hsl(var(--primary))] text-primary-foreground"
         }`}
       >
         <p className="whitespace-pre-line text-sm leading-relaxed">
           {message.content}
         </p>
-        <p
-          className={`mt-1 text-[10px] ${
-            isBot ? "text-muted-foreground" : "text-primary-foreground/60"
-          }`}
-        >
-          {message.timestamp.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </p>
+
+        {/* Sources */}
+        {isBot && message.sources && message.sources.length > 0 && (
+          <div className="mt-2 border-t border-border/30 pt-2">
+            <p className="text-[10px] font-medium text-muted-foreground">
+              Sources:
+            </p>
+            <div className="mt-1 flex flex-wrap gap-1">
+              {message.sources.map((source, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
+                >
+                  <ExternalLink className="h-2.5 w-2.5" />
+                  {source}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Timestamp + Confidence */}
+        <div className="mt-1 flex items-center gap-1.5">
+          {isBot && message.confidence !== undefined && (
+            <ConfidenceDot confidence={message.confidence} />
+          )}
+          <p
+            className={`text-[10px] ${
+              isBot ? "text-muted-foreground" : "text-primary-foreground/60"
+            }`}
+          >
+            {message.timestamp.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ===== Escalation Banner ===== */
+
+function EscalationBanner() {
+  const tChat = useTranslations("chat");
+
+  return (
+    <div className="mx-auto max-w-4xl px-4 sm:px-6">
+      <div className="rounded-xl border border-amber-200/50 bg-amber-50 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
+        <div className="flex items-start gap-2">
+          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+          <div>
+            <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
+              {tChat("escalate")}
+            </p>
+            <Link
+              href="/resources"
+              className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300"
+            >
+              <Users className="h-3 w-3" />
+              Contact a volunteer
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -141,133 +203,97 @@ export default function ChatPage() {
       role: "bot",
       content: tChat("welcome"),
       timestamp: new Date(),
+      confidence: 1.0,
     },
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [showEscalation, setShowEscalation] = useState(false);
 
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  function getMockResponse(userMessage: string): string {
-    const lowerMessage = userMessage.toLowerCase();
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!text.trim() || isTyping) return;
 
-    // Check for keyword matches
-    if (
-      lowerMessage.includes("rights") ||
-      lowerMessage.includes("entitled") ||
-      lowerMessage.includes("benefits") ||
-      lowerMessage.includes("allowance") ||
-      lowerMessage.includes("money") ||
-      lowerMessage.includes("grant") ||
-      lowerMessage.includes("pay")
-    ) {
-      return MOCK_RESPONSES.rights.he;
-    }
-
-    if (
-      lowerMessage.includes("form") ||
-      lowerMessage.includes("document") ||
-      lowerMessage.includes("application") ||
-      lowerMessage.includes("paper")
-    ) {
-      return MOCK_RESPONSES.forms.he;
-    }
-
-    if (
-      lowerMessage.includes("volunteer") ||
-      lowerMessage.includes("person") ||
-      lowerMessage.includes("human") ||
-      lowerMessage.includes("talk") ||
-      lowerMessage.includes("speak")
-    ) {
-      return MOCK_RESPONSES.volunteer.he;
-    }
-
-    // Hebrew keyword check
-    if (
-      lowerMessage.includes("זכויות") ||
-      lowerMessage.includes("מגיע") ||
-      lowerMessage.includes("כסף") ||
-      lowerMessage.includes("מענק")
-    ) {
-      return MOCK_RESPONSES.rights.he;
-    }
-
-    if (
-      lowerMessage.includes("טופס") ||
-      lowerMessage.includes("מסמך") ||
-      lowerMessage.includes("בקשה")
-    ) {
-      return MOCK_RESPONSES.forms.he;
-    }
-
-    if (
-      lowerMessage.includes("מתנדב") ||
-      lowerMessage.includes("אדם") ||
-      lowerMessage.includes("לדבר")
-    ) {
-      return MOCK_RESPONSES.volunteer.he;
-    }
-
-    return MOCK_RESPONSES.default.he;
-  }
-
-  function handleSend() {
-    const trimmed = input.trim();
-    if (!trimmed || isTyping) return;
-
-    // Add user message
-    const userMsg: Message = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      content: trimmed,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-    setIsTyping(true);
-
-    // Simulate bot response delay
-    setTimeout(() => {
-      const botResponse = getMockResponse(trimmed);
-      const botMsg: Message = {
-        id: `bot-${Date.now()}`,
-        role: "bot",
-        content: botResponse,
+      // Add user message
+      const userMsg: Message = {
+        id: `user-${Date.now()}`,
+        role: "user",
+        content: text.trim(),
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 1200 + Math.random() * 800);
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setIsTyping(true);
+      setShowEscalation(false);
+
+      try {
+        const response = await fetch("/api/chat/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            message: text.trim(),
+            language: "he",
+            channel: "website",
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to send message");
+        }
+
+        // Update session ID
+        if (data.sessionId && !sessionId) {
+          setSessionId(data.sessionId);
+        }
+
+        // Add bot response
+        const botMsg: Message = {
+          id: `bot-${Date.now()}`,
+          role: "bot",
+          content: data.reply,
+          timestamp: new Date(),
+          sources: data.sources,
+          confidence: data.confidence,
+        };
+        setMessages((prev) => [...prev, botMsg]);
+
+        // Show escalation banner for low confidence
+        if (data.confidence < 0.5) {
+          setShowEscalation(true);
+        }
+      } catch (error) {
+        console.error("Send message error:", error);
+        const errorMsg: Message = {
+          id: `error-${Date.now()}`,
+          role: "bot",
+          content:
+            "סליחה, משהו השתבש. אנא נסה שוב או פנה למתנדב לעזרה.",
+          timestamp: new Date(),
+          confidence: 0,
+        };
+        setMessages((prev) => [...prev, errorMsg]);
+      } finally {
+        setIsTyping(false);
+      }
+    },
+    [isTyping, sessionId]
+  );
+
+  function handleSend() {
+    sendMessage(input);
   }
 
   function handleQuickAction(action: QuickAction) {
-    // Add user message (the quick action label)
-    const userMsg: Message = {
-      id: `user-${Date.now()}`,
-      role: "user",
-      content: action.labelHe,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, userMsg]);
-    setIsTyping(true);
-
-    // Simulate bot response
-    setTimeout(() => {
-      const response =
-        MOCK_RESPONSES[action.message]?.he ?? MOCK_RESPONSES.default.he;
-      const botMsg: Message = {
-        id: `bot-${Date.now()}`,
-        role: "bot",
-        content: response,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-      setIsTyping(false);
-    }, 1000 + Math.random() * 600);
+    sendMessage(action.message);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -358,6 +384,9 @@ export default function ChatPage() {
             </div>
           )}
         </div>
+
+        {/* Escalation Banner */}
+        {showEscalation && <EscalationBanner />}
       </div>
 
       {/* ===== Disclaimer ===== */}
