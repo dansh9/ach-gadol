@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "src/app/api/chat/send/route.ts": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     {
       "source": "/he/:path*",

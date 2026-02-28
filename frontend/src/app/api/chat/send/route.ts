@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runRagPipeline } from "@/lib/rag/pipeline";
 
+// Allow up to 30s for the AI pipeline (translate + embed + search + Claude)
+export const maxDuration = 30;
+
 /**
  * POST /api/chat/send
  * Body: { sessionId?: string, message: string, language?: string, channel?: string }
