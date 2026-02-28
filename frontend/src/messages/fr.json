@@ -19,6 +19,7 @@
     "subtitle": "Chatbot intelligent, vérification d'éligibilité personnalisée et accompagnement professionnel — pour que vous obteniez tout ce qui vous revient en tant que soldat seul.",
     "cta_check": "Vérifier votre éligibilité",
     "cta_chat": "Posez-nous une question",
+    "badge": "Organisation Ach Gadol pour soldats seuls",
     "stats_soldiers": "~7 000 soldats seuls",
     "stats_volunteers": "~250 bénévoles",
     "stats_rights": "30+ droits et avantages"
@@ -49,7 +50,13 @@
     "up_to": "jusqu'à",
     "details": "Plus de détails",
     "source": "Source",
-    "conditions": "Conditions d'éligibilité"
+    "conditions": "Conditions d'éligibilité",
+    "check_eligibility_button": "Vérifier l'éligibilité",
+    "rights_count": "droits et avantages",
+    "not_sure_title": "Vous ne savez pas quels droits s'appliquent à vous ?",
+    "not_sure_description": "Utilisez notre vérificateur d'éligibilité pour découvrir exactement les avantages auxquels vous avez droit.",
+    "ask_question": "Poser une question",
+    "badge_count": "30+ droits"
   },
   "check": {
     "title": "Vérification d'éligibilité personnalisée",

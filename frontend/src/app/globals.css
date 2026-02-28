@@ -30,7 +30,7 @@
 
     /* Accent - Blue (#5B8DBE) from achgadol.org logo silhouette */
     --accent: 210 40% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent-foreground: 210 45% 25%;
 
     /* Destructive */
     --destructive: 0 72% 51%;

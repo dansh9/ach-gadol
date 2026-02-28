@@ -19,6 +19,7 @@
     "subtitle": "Smart chatbot, personalized eligibility check, and professional guidance — so you get everything you're entitled to as a lone soldier.",
     "cta_check": "Check Your Eligibility",
     "cta_chat": "Ask Us",
+    "badge": "Big Brother Organization for Lone Soldiers",
     "stats_soldiers": "~7,000 Lone Soldiers",
     "stats_volunteers": "~250 Volunteers",
     "stats_rights": "30+ Rights & Benefits"
@@ -49,7 +50,13 @@
     "up_to": "up to",
     "details": "More Details",
     "source": "Source",
-    "conditions": "Eligibility Conditions"
+    "conditions": "Eligibility Conditions",
+    "check_eligibility_button": "Check Eligibility",
+    "rights_count": "rights & benefits",
+    "not_sure_title": "Not sure which rights apply to you?",
+    "not_sure_description": "Use our eligibility checker to find out exactly which benefits you are entitled to and the estimated monthly total.",
+    "ask_question": "Ask a Question",
+    "badge_count": "30+ Rights"
   },
   "check": {
     "title": "Personalized Eligibility Check",
