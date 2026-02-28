@@ -1,5 +1,6 @@
 /**
  * RAG Pipeline: embed query → vector search → build prompt → Claude → parse response
+ * Falls back to keyword-based KB search when API keys are not configured.
  */
 
 import Anthropic from "@anthropic-ai/sdk";
@@ -20,8 +21,160 @@ interface ConversationMessage {
   content: string;
 }
 
+/* ===== Demo mode responses (keyword-based, no API keys needed) ===== */
+
+const DEMO_RESPONSES: Record<string, Record<string, { reply: string; sources: string[] }>> = {
+  rights: {
+    he: {
+      reply: "כחייל בודד, מגיעות לך זכויות רבות:\n\n• מענק חודשי מקצבת משרד הביטחון (~1,200 ₪)\n• סיוע בשכר דירה (~1,100 ₪/חודש)\n• דמי כלכלה\n• הנחות בארנונה ובחשמל\n• דיור בדירות אל\"ח או לינה בבית החייל\n• חופשה מיוחדת לביקור הורים בחו\"ל\n• מענק שחרור מוגדל (פיקדון ~25,000 ₪)\n• תוספת קרבית ללוחמים (~700 ₪/חודש)\n\nלפרטים מלאים על כל זכות, בקר בעמוד הזכויות שלנו או פנה למתנדב.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    en: {
+      reply: "As a lone soldier, you're entitled to many benefits:\n\n• Monthly stipend from the Ministry of Defense (~1,200 NIS)\n• Rent assistance (~1,100 NIS/month)\n• Food allowance\n• Property tax and electricity discounts\n• Housing in IDF apartments or Beit HaChayal\n• Special leave to visit parents abroad\n• Enhanced release grant (Pikadon ~25,000 NIS)\n• Combat bonus for combat soldiers (~700 NIS/month)\n\nFor full details on each right, visit our Rights page or contact a volunteer.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    ru: {
+      reply: "Как одинокий солдат, вы имеете право на многие льготы:\n\n• Ежемесячное пособие от Министерства обороны (~1,200 шекелей)\n• Помощь с арендой жилья (~1,100 шекелей/месяц)\n• Продовольственное пособие\n• Скидки на муниципальный налог и электричество\n• Жильё в квартирах ЦАХАЛ или в Бейт ХаХаяль\n• Специальный отпуск для посещения родителей за рубежом\n• Увеличенный грант при увольнении (Пикадон ~25,000 шекелей)\n\nДля полной информации посетите страницу прав или обратитесь к волонтёру.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    am: {
+      reply: "እንደ ብቸኛ ወታደር፣ ለብዙ ጥቅማጥቅሞች መብት አለዎት:\n\n• ከመከላከያ ሚኒስቴር ወርሃዊ ድጎማ (~1,200 ₪)\n• የቤት ኪራይ ድጋፍ (~1,100 ₪/ወር)\n• የምግብ አበል\n• በንብረት ግብር እና በኤሌክትሪክ ቅናሽ\n• በጦር ኃይሎች አፓርታማዎች ወይም ቤት ሃሃያል ውስጥ መኖሪያ\n• ወላጆችን ለመጎብኘት ልዩ ፈቃድ\n• የተጨማሪ የመልቀቂያ ድጎማ (ፒካዶን ~25,000 ₪)\n\nለሙሉ ዝርዝር የመብቶች ገጻችንን ይጎብኙ ወይም ከበጎ ፈቃደኛ ጋር ይገናኙ።",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    fr: {
+      reply: "En tant que soldat seul, vous avez droit à de nombreux avantages :\n\n• Allocation mensuelle du Ministère de la Défense (~1 200 NIS)\n• Aide au loyer (~1 100 NIS/mois)\n• Allocation alimentaire\n• Réductions sur la taxe municipale et l'électricité\n• Logement dans des appartements de Tsahal ou au Beit HaChayal\n• Congé spécial pour visiter les parents à l'étranger\n• Prime de libération améliorée (Pikadon ~25 000 NIS)\n\nPour tous les détails, visitez notre page Droits ou contactez un bénévole.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    es: {
+      reply: "Como soldado solitario, tienes derecho a muchos beneficios:\n\n• Estipendio mensual del Ministerio de Defensa (~1.200 NIS)\n• Asistencia de alquiler (~1.100 NIS/mes)\n• Asignación de alimentos\n• Descuentos en impuesto municipal y electricidad\n• Vivienda en apartamentos de las FDI o Beit HaChayal\n• Permiso especial para visitar a los padres en el extranjero\n• Bono de liberación mejorado (Pikadon ~25.000 NIS)\n\nPara más detalles, visita nuestra página de Derechos o contacta a un voluntario.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+    ar: {
+      reply: "كجندي وحيد، يحق لك الحصول على العديد من المزايا:\n\n• منحة شهرية من وزارة الدفاع (~1,200 شيكل)\n• مساعدة في الإيجار (~1,100 شيكل/شهر)\n• بدل طعام\n• خصومات على ضريبة الأملاك والكهرباء\n• سكن في شقق الجيش أو بيت هحيال\n• إجازة خاصة لزيارة الوالدين في الخارج\n• منحة تسريح محسنة (بيكادون ~25,000 شيكل)\n\nلمزيد من التفاصيل، قم بزيارة صفحة الحقوق أو تواصل مع متطوع.",
+      sources: ["Lone Soldier Rights Overview"],
+    },
+  },
+  rent: {
+    he: {
+      reply: "כדי להגיש בקשה לסיוע בשכר דירה:\n\n1. השג אישור חייל בודד מאגף כוח אדם של צה\"ל\n2. הכן חוזה שכירות חתום\n3. צלם תעודת חייל\n4. הכן פרטי חשבון בנק להפקדה\n5. מלא את טופס הבקשה במשרד השיכון או באינטרנט\n\nזמן טיפול: 4-6 שבועות. הסכום החודשי כ-1,100 ₪ (משתנה לפי מיקום).\n\nניתן להגיש בקשה בכל שלב של השירות. לשאלות, פנה לקו החם של משרד השיכון או לקצין הרווחה ביחידה.",
+      sources: ["How to Apply for Rent Assistance"],
+    },
+    en: {
+      reply: "To apply for rent assistance:\n\n1. Get a lone soldier confirmation letter from the IDF Personnel Directorate\n2. Prepare a signed rental agreement\n3. Copy of your military ID (Teudat Chayal)\n4. Bank account details for direct deposit\n5. Complete the application at Misrad HaShikun offices or online\n\nProcessing time: 4-6 weeks. Monthly amount is ~1,100 NIS (varies by location).\n\nYou can apply at any point during service. For questions, contact the Misrad HaShikun hotline or your unit welfare officer.",
+      sources: ["How to Apply for Rent Assistance"],
+    },
+    ru: {
+      reply: "Для подачи заявки на помощь с арендой:\n\n1. Получите подтверждение статуса одинокого солдата\n2. Подготовьте подписанный договор аренды\n3. Копию военного удостоверения\n4. Реквизиты банковского счёта\n5. Заполните заявку в Мисрад ХаШикун или онлайн\n\nСрок обработки: 4-6 недель. Ежемесячная сумма ~1,100 шекелей.\n\nПодать заявку можно в любой момент службы. Обратитесь к офицеру по социальным вопросам в вашем подразделении.",
+      sources: ["How to Apply for Rent Assistance"],
+    },
+    am: { reply: "የቤት ኪራይ ድጋፍ ለማመልከት:\n\n1. ከጦር ኃይሎች የብቸኛ ወታደር ማረጋገጫ ያግኙ\n2. የተፈረመ የኪራይ ውል ያዘጋጁ\n3. የወታደራዊ መታወቂያ ቅጂ\n4. የባንክ ሂሳብ ዝርዝሮች\n5. በሚስራድ ሃሺኩን ቢሮ ወይም በኦንላይን ማመልከቻውን ይሙሉ\n\nየሂደት ጊዜ: 4-6 ሳምንታት። ወርሃዊ መጠን ~1,100 ₪።\n\nበአገልግሎት ጊዜ በማንኛውም ጊዜ ማመልከት ይችላሉ።", sources: ["How to Apply for Rent Assistance"] },
+    fr: { reply: "Pour demander l'aide au loyer :\n\n1. Obtenez une lettre de confirmation de soldat seul\n2. Préparez un contrat de location signé\n3. Copie de la carte militaire\n4. Coordonnées bancaires\n5. Remplissez le formulaire au Misrad HaShikun ou en ligne\n\nDélai : 4-6 semaines. Montant mensuel ~1 100 NIS.\n\nVous pouvez postuler à tout moment pendant votre service.", sources: ["How to Apply for Rent Assistance"] },
+    es: { reply: "Para solicitar asistencia de alquiler:\n\n1. Obtén una carta de confirmación de soldado solitario\n2. Prepara un contrato de alquiler firmado\n3. Copia de tu identificación militar\n4. Datos bancarios\n5. Completa el formulario en Misrad HaShikun o en línea\n\nTiempo de procesamiento: 4-6 semanas. Monto mensual ~1,100 NIS.\n\nPuedes solicitar en cualquier momento durante tu servicio.", sources: ["How to Apply for Rent Assistance"] },
+    ar: { reply: "للتقدم بطلب للحصول على مساعدة الإيجار:\n\n1. احصل على خطاب تأكيد الجندي الوحيد\n2. جهز عقد إيجار موقع\n3. نسخة من الهوية العسكرية\n4. تفاصيل الحساب البنكي\n5. أكمل الطلب في مسراد هشيكون أو عبر الإنترنت\n\nمدة المعالجة: 4-6 أسابيع. المبلغ الشهري ~1,100 شيكل.", sources: ["How to Apply for Rent Assistance"] },
+  },
+  release: {
+    he: {
+      reply: "תהליך השחרור והפיקדון המוגדל:\n\n1. ודא שסטטוס החייל הבודד מעודכן במערכת לפחות 3 חודשים לפני השחרור\n2. השתתף בסמינר הכנה לשחרור של אח גדול\n3. פתח חשבון בנק אם אין לך\n4. הגש בקשה לפיקדון דרך היחידה או דרך אתר משרד הביטחון\n5. המתן 60-90 ימים לעיבוד לאחר תאריך השחרור\n\nהפיקדון המוגדל לחיילים בודדים: כ-25,000 ₪ בנוסף לפיקדון הרגיל.\n\nלאחר שחרור תקבל גם גישה להטבות נוספות: סיוע בשכר לימוד, הכשרה מקצועית, ועוד.",
+      sources: ["Release Process and Enhanced Pikadon"],
+    },
+    en: {
+      reply: "Release process and enhanced Pikadon:\n\n1. Confirm your lone soldier status is up to date at least 3 months before release\n2. Attend the release preparation seminar by Ach Gadol\n3. Open a bank account if you don't have one\n4. Submit the Pikadon application through your unit or the Ministry of Defense portal\n5. Allow 60-90 days for processing after release\n\nEnhanced grant for lone soldiers: ~25,000 NIS on top of the regular Pikadon.\n\nAfter release you also get: higher education tuition assistance, vocational training subsidies, and more.",
+      sources: ["Release Process and Enhanced Pikadon"],
+    },
+    ru: { reply: "Процесс увольнения и увеличенный Пикадон:\n\n1. Убедитесь, что ваш статус одинокого солдата обновлён за 3 месяца до увольнения\n2. Посетите семинар подготовки к увольнению от Ах Гадоль\n3. Откройте банковский счёт\n4. Подайте заявку на Пикадон через подразделение или портал Минобороны\n5. Ожидайте 60-90 дней обработки\n\nУвеличенный грант: ~25,000 шекелей сверх обычного Пикадона.", sources: ["Release Process and Enhanced Pikadon"] },
+    am: { reply: "የመልቀቂያ ሂደት እና የተጨማሪ ፒካዶን:\n\n1. ከመልቀቅ 3 ወራት በፊት የብቸኛ ወታደር ሁኔታዎ የተዘመነ መሆኑን ያረጋግጡ\n2. በአኽ ጋዶል የመልቀቂያ ዝግጅት ሴሚናር ይሳተፉ\n3. የባንክ ሂሳብ ይክፈቱ\n4. የፒካዶን ማመልከቻ ያስገቡ\n5. ከመልቀቅ በኋላ 60-90 ቀናት ይጠብቁ\n\nየተጨማሪ ድጎማ: ~25,000 ₪።", sources: ["Release Process and Enhanced Pikadon"] },
+    fr: { reply: "Processus de libération et Pikadon amélioré :\n\n1. Confirmez votre statut de soldat seul 3 mois avant la libération\n2. Participez au séminaire de préparation d'Ach Gadol\n3. Ouvrez un compte bancaire\n4. Soumettez la demande de Pikadon via votre unité ou le portail du Ministère\n5. Attendez 60-90 jours de traitement\n\nPrime améliorée : ~25 000 NIS en plus du Pikadon standard.", sources: ["Release Process and Enhanced Pikadon"] },
+    es: { reply: "Proceso de liberación y Pikadon mejorado:\n\n1. Confirma tu estado de soldado solitario 3 meses antes de la liberación\n2. Asiste al seminario de preparación de Ach Gadol\n3. Abre una cuenta bancaria\n4. Envía la solicitud de Pikadon a través de tu unidad o el portal del Ministerio\n5. Espera 60-90 días de procesamiento\n\nBono mejorado: ~25,000 NIS adicionales al Pikadon estándar.", sources: ["Release Process and Enhanced Pikadon"] },
+    ar: { reply: "عملية التسريح وبيكادون المحسن:\n\n1. تأكد من تحديث حالة الجندي الوحيد قبل 3 أشهر من التسريح\n2. احضر ندوة الإعداد للتسريح من أخ جادول\n3. افتح حساب بنكي\n4. قدم طلب البيكادون عبر وحدتك أو بوابة وزارة الدفاع\n5. انتظر 60-90 يومًا للمعالجة\n\nالمنحة المحسنة: ~25,000 شيكل إضافية.", sources: ["Release Process and Enhanced Pikadon"] },
+  },
+  volunteer: {
+    he: { reply: "בהחלט! תוכל ליצור קשר עם מתנדב של אח גדול בכמה דרכים:\n\n• דרך עמוד המשאבים שלנו באתר\n• טלפון: 02-581-0500\n• מייל: info@achgadol.org\n\nהמתנדבים שלנו זמינים לעזור בכל נושא — מזכויות ומענקים, דרך טפסים ובירוקרטיה, ועד ליווי אישי.", sources: [] },
+    en: { reply: "Absolutely! You can contact an Ach Gadol volunteer in several ways:\n\n• Through our Resources page on the website\n• Phone: 02-581-0500\n• Email: info@achgadol.org\n\nOur volunteers are available to help with everything — from rights and grants, to forms and bureaucracy, to personal support.", sources: [] },
+    ru: { reply: "Конечно! Вы можете связаться с волонтёром Ах Гадоль:\n\n• Через страницу ресурсов на сайте\n• Телефон: 02-581-0500\n• Email: info@achgadol.org\n\nНаши волонтёры помогут с любым вопросом.", sources: [] },
+    am: { reply: "በእርግጥ! ከአኽ ጋዶል በጎ ፈቃደኛ ጋር መገናኘት ይችላሉ:\n\n• በድረ-ገጻችን የመረጃ ገጽ በኩል\n• ስልክ: 02-581-0500\n• ኢሜይል: info@achgadol.org", sources: [] },
+    fr: { reply: "Bien sûr ! Vous pouvez contacter un bénévole d'Ach Gadol :\n\n• Via notre page Ressources\n• Téléphone : 02-581-0500\n• Email : info@achgadol.org\n\nNos bénévoles sont disponibles pour toute question.", sources: [] },
+    es: { reply: "¡Por supuesto! Puedes contactar a un voluntario de Ach Gadol:\n\n• A través de nuestra página de Recursos\n• Teléfono: 02-581-0500\n• Email: info@achgadol.org\n\nNuestros voluntarios están disponibles para ayudar con todo.", sources: [] },
+    ar: { reply: "بالطبع! يمكنك التواصل مع متطوع أخ جادول:\n\n• عبر صفحة الموارد على موقعنا\n• هاتف: 02-581-0500\n• بريد: info@achgadol.org\n\nمتطوعونا متاحون للمساعدة في أي موضوع.", sources: [] },
+  },
+  forms: {
+    he: {
+      reply: "הטפסים העיקריים שתצטרך כחייל בודד:\n\n• אישור חייל בודד — מאגף כוח אדם\n• טופס בקשה לסיוע בשכר דירה — משרד השיכון\n• טופס פיקדון — משרד הביטחון (לקראת שחרור)\n• טופס בקשה למענק חודשי — משרד הביטחון\n• טופס הנחה בארנונה — הרשות המקומית\n\nהמתנדבים שלנו יכולים לעזור לך למלא כל טופס. פנה אלינו דרך עמוד המשאבים.",
+      sources: ["How to Apply for Rent Assistance"],
+    },
+    en: {
+      reply: "Key forms you'll need as a lone soldier:\n\n• Lone Soldier Confirmation (Ishur Chayal Boded) — from IDF Personnel\n• Rent Assistance Application — Ministry of Housing\n• Pikadon Application — Ministry of Defense (before release)\n• Monthly Stipend Application — Ministry of Defense\n• Property Tax Discount Form — Local municipality\n\nOur volunteers can help you fill out any form. Reach out through our Resources page.",
+      sources: ["How to Apply for Rent Assistance"],
+    },
+    ru: { reply: "Основные формы для одинокого солдата:\n\n• Подтверждение статуса одинокого солдата — от кадрового управления ЦАХАЛ\n• Заявка на помощь с арендой — Министерство жилья\n• Заявка на Пикадон — Министерство обороны\n• Заявка на ежемесячное пособие — Министерство обороны\n• Форма скидки на муниципальный налог — местная администрация\n\nНаши волонтёры помогут заполнить любую форму.", sources: ["How to Apply for Rent Assistance"] },
+    am: { reply: "እንደ ብቸኛ ወታደር የሚያስፈልጉዎት ዋና ቅጾች:\n\n• የብቸኛ ወታደር ማረጋገጫ\n• የኪራይ ድጋፍ ማመልከቻ\n• የፒካዶን ማመልከቻ\n• ወርሃዊ ድጎማ ማመልከቻ\n• የንብረት ግብር ቅናሽ ቅጽ\n\nበጎ ፈቃደኞቻችን ማንኛውንም ቅጽ ለመሙላት ይረዱዎታል።", sources: ["How to Apply for Rent Assistance"] },
+    fr: { reply: "Formulaires clés pour un soldat seul :\n\n• Confirmation de soldat seul — Direction du personnel de Tsahal\n• Demande d'aide au loyer — Ministère du Logement\n• Demande de Pikadon — Ministère de la Défense\n• Demande d'allocation mensuelle — Ministère de la Défense\n• Formulaire de réduction de taxe municipale — Mairie\n\nNos bénévoles peuvent vous aider à remplir tout formulaire.", sources: ["How to Apply for Rent Assistance"] },
+    es: { reply: "Formularios clave como soldado solitario:\n\n• Confirmación de soldado solitario — Personal de las FDI\n• Solicitud de asistencia de alquiler — Ministerio de Vivienda\n• Solicitud de Pikadon — Ministerio de Defensa\n• Solicitud de estipendio mensual — Ministerio de Defensa\n• Formulario de descuento de impuesto municipal — Municipalidad\n\nNuestros voluntarios pueden ayudarte con cualquier formulario.", sources: ["How to Apply for Rent Assistance"] },
+    ar: { reply: "النماذج الرئيسية كجندي وحيد:\n\n• تأكيد الجندي الوحيد — من قسم شؤون الأفراد\n• طلب مساعدة الإيجار — وزارة الإسكان\n• طلب البيكادون — وزارة الدفاع\n• طلب المنحة الشهرية — وزارة الدفاع\n• نموذج خصم ضريبة الأملاك — البلدية\n\nمتطوعونا يمكنهم مساعدتك في ملء أي نموذج.", sources: ["How to Apply for Rent Assistance"] },
+  },
+};
+
+const DEFAULT_RESPONSES: Record<string, { reply: string }> = {
+  he: { reply: "תודה על השאלה! אני הצ'אטבוט של אח גדול.\n\nאני יכול לעזור לך בנושאים הבאים:\n• זכויות חיילים בודדים (מענקים, דיור, חופשות)\n• עזרה עם טפסים ובירוקרטיה\n• תהליך השחרור והפיקדון\n• חיבור למתנדב אישי\n\nנסה לשאול שאלה ספציפית, למשל: \"מה הזכויות שמגיעות לי?\" או \"איך מגישים בקשה לסיוע בשכר דירה?\"\n\nלחלופין, פנה למתנדב שלנו בטלפון 02-581-0500." },
+  en: { reply: "Thanks for your question! I'm the Ach Gadol chatbot.\n\nI can help you with:\n• Lone soldier rights (grants, housing, leave)\n• Help with forms and bureaucracy\n• Release process and Pikadon\n• Connecting you with a personal volunteer\n\nTry asking something specific, like: \"What rights am I entitled to?\" or \"How do I apply for rent assistance?\"\n\nOr contact our volunteer at 02-581-0500." },
+  ru: { reply: "Спасибо за вопрос! Я чат-бот Ах Гадоль.\n\nЯ могу помочь с:\n• Правами одиноких солдат\n• Формами и бюрократией\n• Процессом увольнения и Пикадоном\n• Связью с волонтёром\n\nПопробуйте задать конкретный вопрос или позвоните: 02-581-0500." },
+  am: { reply: "ለጥያቄዎ እናመሰግናለን! እኔ የአኽ ጋዶል ቻትቦት ነኝ።\n\nልረዳዎት የምችለው:\n• የብቸኛ ወታደር መብቶች\n• ቅጾች እና ቢሮክራሲ\n• የመልቀቂያ ሂደት\n• ከበጎ ፈቃደኛ ጋር ግንኙነት\n\nስልክ: 02-581-0500" },
+  fr: { reply: "Merci pour votre question ! Je suis le chatbot d'Ach Gadol.\n\nJe peux vous aider avec :\n• Les droits des soldats seuls\n• Les formulaires et la bureaucratie\n• Le processus de libération et le Pikadon\n• La mise en contact avec un bénévole\n\nEssayez de poser une question spécifique ou appelez : 02-581-0500." },
+  es: { reply: "¡Gracias por tu pregunta! Soy el chatbot de Ach Gadol.\n\nPuedo ayudarte con:\n• Derechos de soldados solitarios\n• Formularios y burocracia\n• Proceso de liberación y Pikadon\n• Conexión con un voluntario\n\nIntenta hacer una pregunta específica o llama: 02-581-0500." },
+  ar: { reply: "شكرًا على سؤالك! أنا روبوت الدردشة الخاص بأخ جادول.\n\nيمكنني مساعدتك في:\n• حقوق الجنود الوحيدين\n• النماذج والبيروقراطية\n• عملية التسريح والبيكادون\n• التواصل مع متطوع\n\nحاول طرح سؤال محدد أو اتصل: 02-581-0500." },
+};
+
+/**
+ * Match a user message to a demo response topic using keyword matching.
+ */
+function matchDemoTopic(message: string): string | null {
+  const lower = message.toLowerCase();
+
+  // Rights/entitlements
+  if (/rights|entitled|זכויות|מגיע|حقوق|droits|derechos|права|መብት/.test(lower)) return "rights";
+  // Rent/housing
+  if (/rent|דירה|שכירות|שכר דירה|housing|דיור|loyer|alquiler|аренд|ኪራይ|إيجار|سكن/.test(lower)) return "rent";
+  // Release/pikadon
+  if (/release|שחרור|pikadon|פיקדון|libération|liberación|увольнен|пикадон|تسريح|بيكادون|መልቀቅ/.test(lower)) return "release";
+  // Volunteer
+  if (/volunteer|מתנדב|bénévole|voluntario|волонтёр|በጎ ፈቃደኛ|متطوع/.test(lower)) return "volunteer";
+  // Forms
+  if (/form|טופס|טפסים|formulaire|formulario|форм|ቅጽ|نموذج/.test(lower)) return "forms";
+
+  return null;
+}
+
+/**
+ * Run demo mode: keyword-match → pre-written KB-based responses.
+ * Used when ANTHROPIC_API_KEY is not configured.
+ */
+function runDemoMode(message: string, language: string): RagResult {
+  const topic = matchDemoTopic(message);
+  const lang = language in DEFAULT_RESPONSES ? language : "en";
+
+  if (topic && DEMO_RESPONSES[topic]) {
+    const topicResponses = DEMO_RESPONSES[topic];
+    const response = topicResponses[lang] || topicResponses.en;
+    return {
+      reply: response.reply,
+      sources: response.sources,
+      confidence: 0.7,
+      language,
+    };
+  }
+
+  // Default response
+  const defaultResp = DEFAULT_RESPONSES[lang] || DEFAULT_RESPONSES.en;
+  return {
+    reply: defaultResp.reply,
+    sources: [],
+    confidence: 0.5,
+    language,
+  };
+}
+
 /**
  * Run the full RAG pipeline for a chat message.
+ * Falls back to demo mode when API keys are not configured.
  */
 export async function runRagPipeline(
   message: string,
@@ -31,7 +184,14 @@ export async function runRagPipeline(
   // 1. Detect language
   const language = preferredLanguage || detectLanguage(message);
 
-  // 2. Generate embedding for the query
+  // 2. Check if we have the Anthropic key — if not, use demo mode
+  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  if (!anthropicKey) {
+    console.log("No ANTHROPIC_API_KEY — running in demo mode");
+    return runDemoMode(message, language);
+  }
+
+  // 3. Generate embedding for the query
   let kbChunks: {
     chunk_text: string;
     metadata?: Record<string, unknown>;
@@ -41,7 +201,7 @@ export async function runRagPipeline(
   try {
     const embedding = await generateEmbedding(message);
 
-    // 3. Vector search for relevant KB chunks
+    // 4. Vector search for relevant KB chunks
     const supabase = createAdminClient();
     const { data, error } = await supabase.rpc("match_kb_chunks", {
       query_embedding: embedding,
@@ -68,27 +228,13 @@ export async function runRagPipeline(
     console.warn("Embedding/search failed, continuing without KB:", embeddingError);
   }
 
-  // 4. Build system prompt with KB context
+  // 5. Build system prompt with KB context
   const systemPrompt = buildSystemPrompt(language, kbChunks);
 
-  // 5. Build conversation messages
+  // 6. Build conversation messages
   const messages = buildMessages(conversationHistory, message);
 
-  // 6. Call Claude
-  const anthropicKey = process.env.ANTHROPIC_API_KEY;
-  if (!anthropicKey) {
-    // Return a helpful message if no API key configured
-    return {
-      reply:
-        language === "he"
-          ? "המערכת עדיין בשלב הגדרה. אנא פנה למתנדב לעזרה אישית."
-          : "The system is still being configured. Please contact a volunteer for personal help.",
-      sources: [],
-      confidence: 0,
-      language,
-    };
-  }
-
+  // 7. Call Claude
   const anthropic = new Anthropic({ apiKey: anthropicKey });
 
   const response = await anthropic.messages.create({
@@ -98,7 +244,7 @@ export async function runRagPipeline(
     messages,
   });
 
-  // 7. Parse response
+  // 8. Parse response
   const rawReply =
     response.content[0].type === "text" ? response.content[0].text : "";
 
