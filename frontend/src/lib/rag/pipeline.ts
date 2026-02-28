@@ -256,12 +256,18 @@ export async function runRagPipeline(
         };
 
         const scored = allChunks
-          .map((chunk: { chunk_text: string; embedding: number[]; kb_document_id: string; metadata: Record<string, unknown> }) => ({
-            chunk_text: chunk.chunk_text,
-            metadata: chunk.metadata,
-            document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
-            similarity: cosineSimilarity(embedding, chunk.embedding),
-          }))
+          .map((chunk: { chunk_text: string; embedding: number[] | string; kb_document_id: string; metadata: Record<string, unknown> }) => {
+            // Supabase returns vector columns as strings — parse if needed
+            const chunkEmb = typeof chunk.embedding === "string"
+              ? JSON.parse(chunk.embedding) as number[]
+              : chunk.embedding;
+            return {
+              chunk_text: chunk.chunk_text,
+              metadata: chunk.metadata,
+              document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
+              similarity: cosineSimilarity(embedding, chunkEmb),
+            };
+          })
           .filter((c: { similarity: number }) => c.similarity > 0.3)
           .sort((a: { similarity: number }, b: { similarity: number }) => b.similarity - a.similarity)
           .slice(0, 5);
