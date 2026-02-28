@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import {
@@ -580,11 +580,22 @@ function CategoryTab({
 function RightCard({
   right,
   tRights,
+  locale,
 }: {
   right: Right;
   tRights: ReturnType<typeof useTranslations>;
+  locale: string;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const isHe = locale === "he";
+
+  // Pick the right language: Hebrew for "he", English for everything else
+  const title = isHe ? right.titleHe : right.titleEn;
+  const subtitle = isHe ? right.titleEn : right.titleHe;
+  const conditions = isHe ? right.conditionsHe : right.conditionsEn;
+  const howToGet = isHe ? right.howToGetHe : right.howToGetEn;
+  const source = isHe ? right.sourceHe : right.sourceEn;
+  const frequency = isHe ? right.frequencyHe : (right.frequency ? tRights(right.frequency) : undefined);
 
   return (
     <div className="overflow-hidden rounded-xl border border-border/50 bg-card transition-colors hover:bg-muted/20">
@@ -593,26 +604,26 @@ function RightCard({
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1">
             <h4 className="text-base font-bold text-foreground">
-              {right.titleHe}
+              {title}
             </h4>
-            <p className="text-sm text-muted-foreground">{right.titleEn}</p>
+            <p className="text-sm text-muted-foreground">{subtitle}</p>
           </div>
           {right.amount && (
             <div className="flex-shrink-0 text-end">
               <div className="text-lg font-extrabold text-[hsl(var(--primary))] sm:text-xl">
                 {right.amount}
               </div>
-              {right.frequencyHe && (
+              {frequency && (
                 <p className="text-xs text-muted-foreground">
-                  {right.frequencyHe}
+                  {frequency}
                 </p>
               )}
             </div>
           )}
-          {!right.amount && right.frequencyHe && (
+          {!right.amount && frequency && (
             <div className="flex-shrink-0">
               <span className="inline-flex rounded-full bg-[hsl(var(--primary)/0.08)] px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
-                {right.frequencyHe}
+                {frequency}
               </span>
             </div>
           )}
@@ -635,38 +646,26 @@ function RightCard({
         {/* Expanded Details */}
         {expanded && (
           <div className="mt-2 space-y-2.5 border-t border-border/30 pt-2">
-            <div className="flex items-start gap-2">
-              <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                {tRights("conditions")}:
-              </span>
-              <div>
-                <p className="text-xs text-foreground">
-                  {right.conditionsHe}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {right.conditionsEn}
-                </p>
-              </div>
-            </div>
-
-            {/* How to get this benefit */}
-            {(right.howToGetHe || right.howToGetEn) && (
+            {conditions && (
               <div className="flex items-start gap-2">
                 <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                  איך לקבל:
+                  {tRights("conditions")}:
                 </span>
-                <div>
-                  {right.howToGetHe && (
-                    <p className="text-xs text-foreground">
-                      {right.howToGetHe}
-                    </p>
-                  )}
-                  {right.howToGetEn && (
-                    <p className="text-xs text-muted-foreground">
-                      {right.howToGetEn}
-                    </p>
-                  )}
-                </div>
+                <p className="text-xs text-foreground">
+                  {conditions}
+                </p>
+              </div>
+            )}
+
+            {/* How to get this benefit */}
+            {howToGet && (
+              <div className="flex items-start gap-2">
+                <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+                  {tRights("how_to_get")}:
+                </span>
+                <p className="text-xs text-foreground">
+                  {howToGet}
+                </p>
               </div>
             )}
 
@@ -683,15 +682,12 @@ function RightCard({
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-xs font-medium text-[hsl(var(--primary))] hover:underline"
                   >
-                    <span>{right.sourceHe}</span>
+                    <span>{source}</span>
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 ) : (
-                  <p className="text-xs text-foreground">{right.sourceHe}</p>
+                  <p className="text-xs text-foreground">{source}</p>
                 )}
-                <p className="text-xs text-muted-foreground">
-                  {right.sourceEn}
-                </p>
               </div>
             </div>
           </div>
@@ -705,6 +701,7 @@ function RightCard({
 
 export default function RightsPage() {
   const tRights = useTranslations("rights");
+  const locale = useLocale();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
   const initialTab = RIGHTS_DATA.find((c) => c.id === tabParam)?.id || RIGHTS_DATA[0].id;
@@ -780,6 +777,7 @@ export default function RightsPage() {
                 key={right.id}
                 right={right}
                 tRights={tRights}
+                locale={locale}
               />
             ))}
           </div>
