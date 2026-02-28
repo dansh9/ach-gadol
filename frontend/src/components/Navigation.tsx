@@ -29,7 +29,6 @@ export default function Navigation({ locale }: { locale: string }) {
 
   const navLinks = [
     { href: "/", label: t("home") },
-    { href: "/about", label: t("about") },
     { href: "/rights", label: t("rights") },
     { href: "/check", label: t("check") },
     { href: "/chat", label: t("chat") },

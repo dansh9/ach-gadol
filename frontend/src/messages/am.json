@@ -19,6 +19,7 @@
     "subtitle": "ስማርት ቻትቦት፣ ግላዊ የብቁነት ማረጋገጫ እና ባለሙያ መመሪያ — እንደ ብቸኛ ወታደር የሚገባዎትን ሁሉ እንዲያገኙ።",
     "cta_check": "ብቁነትዎን ያረጋግጡ",
     "cta_chat": "ጠይቁን",
+    "badge": "አች ጋዶል — ለብቸኛ ወታደሮች",
     "stats_soldiers": "~7,000 ብቸኛ ወታደሮች",
     "stats_volunteers": "~250 በጎ ፈቃደኞች",
     "stats_rights": "30+ መብቶች እና ጥቅሞች"
@@ -49,7 +50,13 @@
     "up_to": "እስከ",
     "details": "ተጨማሪ ዝርዝሮች",
     "source": "ምንጭ",
-    "conditions": "የብቁነት ሁኔታዎች"
+    "conditions": "የብቁነት ሁኔታዎች",
+    "check_eligibility_button": "ብቁነት ያረጋግጡ",
+    "rights_count": "መብቶች",
+    "not_sure_title": "የትኞቹ መብቶች እንደሚመለከቱዎ እርግጠኛ አይደሉም?",
+    "not_sure_description": "የእኛን የብቁነት ፈታሽ ይጠቀሙ።",
+    "ask_question": "ጥያቄ ይጠይቁ",
+    "badge_count": "30+ መብቶች"
   },
   "check": {
     "title": "ግላዊ የብቁነት ማረጋገጫ",

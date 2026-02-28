@@ -84,7 +84,7 @@ export default function HomePage() {
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.3)] bg-[hsl(var(--primary)/0.08)] px-4 py-1.5 text-sm font-medium text-foreground">
               <Shield className="h-4 w-4 text-[hsl(var(--primary))]" />
-              <span>Big Brother Organization for Lone Soldiers</span>
+              <span>{tHero("badge")}</span>
             </div>
 
             {/* Title */}
@@ -108,7 +108,7 @@ export default function HomePage() {
               </Link>
               <Link
                 href="/chat"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[hsl(var(--accent))] bg-[hsl(var(--accent)/0.08)] px-8 py-4 text-base font-semibold text-[hsl(var(--accent-foreground))] transition-all hover:bg-[hsl(var(--accent)/0.15)] sm:w-auto"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[hsl(var(--accent)/0.25)] transition-all hover:shadow-xl hover:shadow-[hsl(var(--accent)/0.3)] hover:brightness-110 sm:w-auto"
               >
                 <MessageCircle className="h-5 w-5" />
                 {tHero("cta_chat")}

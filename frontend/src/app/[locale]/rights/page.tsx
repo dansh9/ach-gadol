@@ -627,9 +627,9 @@ export default function RightsPage() {
 
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-20 sm:px-6 sm:pb-12 sm:pt-28 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent)/0.3)] bg-[hsl(var(--accent)/0.08)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--accent-foreground))]">
-              <Banknote className="h-4 w-4 text-[hsl(var(--accent))]" />
-              <span>30+</span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.3)] bg-[hsl(var(--primary)/0.08)] px-4 py-1.5 text-sm font-medium text-foreground">
+              <Banknote className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>{tRights("badge_count")}</span>
             </div>
 
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl">
@@ -646,7 +646,7 @@ export default function RightsPage() {
                 className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-xl hover:brightness-110"
               >
                 <ClipboardCheck className="h-4 w-4" />
-                <span>Check Your Eligibility</span>
+                <span>{tRights("check_eligibility_button")}</span>
               </Link>
             </div>
           </div>
@@ -683,7 +683,7 @@ export default function RightsPage() {
                 {tRights(`categories.${currentCategory.translationKey}`)}
               </h2>
               <p className="text-sm text-muted-foreground">
-                {currentCategory.rights.length} rights & benefits
+                {currentCategory.rights.length} {tRights("rights_count")}
               </p>
             </div>
           </div>
@@ -710,11 +710,10 @@ export default function RightsPage() {
               <Zap className="h-7 w-7 text-[hsl(var(--accent))]" />
             </div>
             <h3 className="text-xl font-bold text-foreground sm:text-2xl">
-              Not sure which rights apply to you?
+              {tRights("not_sure_title")}
             </h3>
             <p className="mx-auto mt-2 max-w-xl text-muted-foreground">
-              Use our eligibility checker to find out exactly which benefits you
-              are entitled to and the estimated monthly total.
+              {tRights("not_sure_description")}
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
@@ -722,14 +721,14 @@ export default function RightsPage() {
                 className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-8 py-3 font-semibold text-primary-foreground shadow-lg transition-all hover:shadow-xl hover:brightness-110"
               >
                 <ClipboardCheck className="h-5 w-5" />
-                Check Eligibility
+                {tRights("check_eligibility_button")}
               </Link>
               <Link
                 href="/chat"
                 className="inline-flex items-center gap-2 rounded-xl border-2 border-[hsl(var(--accent))] bg-[hsl(var(--accent)/0.08)] px-8 py-3 font-semibold text-[hsl(var(--accent-foreground))] transition-all hover:bg-[hsl(var(--accent)/0.15)]"
               >
                 <Heart className="h-5 w-5" />
-                Ask a Question
+                {tRights("ask_question")}
               </Link>
             </div>
           </div>
