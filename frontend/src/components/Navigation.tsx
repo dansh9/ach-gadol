@@ -6,6 +6,7 @@ import { Link, usePathname } from "@/i18n/routing";
 import { routing } from "@/i18n/routing";
 import { useRouter } from "@/i18n/routing";
 import { Menu, X, Globe } from "lucide-react";
+import Image from "next/image";
 
 type Locale = (typeof routing.locales)[number];
 
@@ -43,14 +44,31 @@ export default function Navigation({ locale }: { locale: string }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/80">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-lg font-bold text-primary"
+          className="flex shrink-0 items-center gap-2"
         >
-          <span className="text-xl">אח גדול</span>
+          {/* Icon logo for mobile */}
+          <Image
+            src="/favicon-192x192.png"
+            alt="אח גדול"
+            width={40}
+            height={40}
+            className="block sm:hidden"
+            priority
+          />
+          {/* Wide logo for desktop */}
+          <Image
+            src="/logo-wide.png"
+            alt="אח גדול למען חיילים בודדים — Big Brother Organization for Lone Soldiers"
+            width={200}
+            height={36}
+            className="hidden h-9 w-auto sm:block"
+            priority
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -59,7 +77,7 @@ export default function Navigation({ locale }: { locale: string }) {
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent/10 hover:text-accent-foreground ${
+              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-primary/10 hover:text-primary ${
                 pathname === link.href
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground"
@@ -76,7 +94,7 @@ export default function Navigation({ locale }: { locale: string }) {
           <div className="relative">
             <button
               onClick={() => setLangMenuOpen(!langMenuOpen)}
-              className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/10 hover:text-accent-foreground"
+              className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
               aria-label="Change language"
             >
               <Globe className="h-4 w-4" />
@@ -95,7 +113,7 @@ export default function Navigation({ locale }: { locale: string }) {
                     <button
                       key={loc}
                       onClick={() => handleLocaleChange(loc)}
-                      className={`flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent/10 ${
+                      className={`flex w-full items-center rounded-md px-3 py-2 text-sm transition-colors hover:bg-primary/10 ${
                         locale === loc
                           ? "font-semibold text-primary"
                           : "text-foreground"
@@ -112,7 +130,7 @@ export default function Navigation({ locale }: { locale: string }) {
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent/10 lg:hidden"
+            className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-primary/10 lg:hidden"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -133,7 +151,7 @@ export default function Navigation({ locale }: { locale: string }) {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`block rounded-md px-3 py-2.5 text-base font-medium transition-colors hover:bg-accent/10 ${
+                className={`block rounded-md px-3 py-2.5 text-base font-medium transition-colors hover:bg-primary/10 ${
                   pathname === link.href
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground"

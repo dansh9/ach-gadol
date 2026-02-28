@@ -4,46 +4,46 @@
 
 @layer base {
   :root {
-    /* Background & Foreground */
-    --background: 40 33% 98%;
-    --foreground: 215 45% 18%;
+    /* Background & Foreground — clean white like achgadol.org */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
 
     /* Card */
     --card: 0 0% 100%;
-    --card-foreground: 215 45% 18%;
+    --card-foreground: 0 0% 10%;
 
     /* Popover */
     --popover: 0 0% 100%;
-    --popover-foreground: 215 45% 18%;
+    --popover-foreground: 0 0% 10%;
 
-    /* Primary - Deep Blue (#1e3a5f) */
-    --primary: 213 52% 24%;
-    --primary-foreground: 40 33% 98%;
+    /* Primary - Olive Green (#496c1a) from achgadol.org brand */
+    --primary: 96 61% 26%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Light warm gray */
-    --secondary: 35 20% 93%;
-    --secondary-foreground: 215 45% 18%;
+    /* Secondary - Light gray-green tint */
+    --secondary: 100 8% 94%;
+    --secondary-foreground: 0 0% 15%;
 
     /* Muted */
-    --muted: 35 15% 93%;
-    --muted-foreground: 215 15% 47%;
+    --muted: 100 6% 93%;
+    --muted-foreground: 0 0% 40%;
 
-    /* Accent - Warm Gold (#d4a843) */
-    --accent: 40 62% 55%;
-    --accent-foreground: 215 45% 14%;
+    /* Accent - Blue (#5B8DBE) from achgadol.org logo silhouette */
+    --accent: 210 40% 55%;
+    --accent-foreground: 0 0% 100%;
 
     /* Destructive */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border, Input, Ring */
-    --border: 35 18% 86%;
-    --input: 35 18% 86%;
-    --ring: 213 52% 24%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 96 61% 26%;
 
     /* Chart colors */
-    --chart-1: 213 52% 24%;
-    --chart-2: 40 62% 55%;
+    --chart-1: 96 61% 26%;
+    --chart-2: 210 40% 55%;
     --chart-3: 175 40% 40%;
     --chart-4: 25 70% 55%;
     --chart-5: 280 40% 50%;
@@ -52,70 +52,70 @@
     --radius: 0.5rem;
 
     /* Sidebar */
-    --sidebar-background: 215 45% 14%;
-    --sidebar-foreground: 35 20% 93%;
-    --sidebar-primary: 40 62% 55%;
-    --sidebar-primary-foreground: 215 45% 14%;
-    --sidebar-accent: 213 40% 22%;
-    --sidebar-accent-foreground: 35 20% 93%;
-    --sidebar-border: 213 35% 20%;
-    --sidebar-ring: 40 62% 55%;
+    --sidebar-background: 96 50% 16%;
+    --sidebar-foreground: 100 10% 93%;
+    --sidebar-primary: 210 40% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 96 45% 22%;
+    --sidebar-accent-foreground: 100 10% 93%;
+    --sidebar-border: 96 40% 20%;
+    --sidebar-ring: 210 40% 55%;
   }
 
   .dark {
     /* Background & Foreground */
-    --background: 215 45% 10%;
-    --foreground: 35 20% 93%;
+    --background: 0 0% 8%;
+    --foreground: 100 10% 93%;
 
     /* Card */
-    --card: 215 40% 13%;
-    --card-foreground: 35 20% 93%;
+    --card: 0 0% 11%;
+    --card-foreground: 100 10% 93%;
 
     /* Popover */
-    --popover: 215 40% 13%;
-    --popover-foreground: 35 20% 93%;
+    --popover: 0 0% 11%;
+    --popover-foreground: 100 10% 93%;
 
-    /* Primary - Slightly lighter blue for dark mode */
-    --primary: 213 48% 35%;
-    --primary-foreground: 35 20% 96%;
+    /* Primary - Lighter olive green for dark mode */
+    --primary: 96 50% 36%;
+    --primary-foreground: 0 0% 100%;
 
     /* Secondary */
-    --secondary: 215 30% 18%;
-    --secondary-foreground: 35 20% 90%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 100 10% 90%;
 
     /* Muted */
-    --muted: 215 25% 18%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 60%;
 
-    /* Accent - Warm Gold, adjusted for dark mode */
-    --accent: 40 58% 50%;
-    --accent-foreground: 215 45% 10%;
+    /* Accent - Blue, adjusted for dark mode */
+    --accent: 210 45% 50%;
+    --accent-foreground: 0 0% 100%;
 
     /* Destructive */
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border, Input, Ring */
-    --border: 215 25% 20%;
-    --input: 215 25% 20%;
-    --ring: 40 58% 50%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 210 45% 50%;
 
     /* Chart colors */
-    --chart-1: 213 48% 50%;
-    --chart-2: 40 58% 55%;
+    --chart-1: 96 50% 45%;
+    --chart-2: 210 45% 55%;
     --chart-3: 175 45% 50%;
     --chart-4: 25 65% 55%;
     --chart-5: 280 45% 60%;
 
     /* Sidebar */
-    --sidebar-background: 215 50% 8%;
-    --sidebar-foreground: 35 20% 90%;
-    --sidebar-primary: 40 58% 50%;
-    --sidebar-primary-foreground: 215 45% 10%;
-    --sidebar-accent: 215 35% 15%;
-    --sidebar-accent-foreground: 35 20% 90%;
-    --sidebar-border: 215 30% 15%;
-    --sidebar-ring: 40 58% 50%;
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 100 10% 90%;
+    --sidebar-primary: 210 45% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 13%;
+    --sidebar-accent-foreground: 100 10% 90%;
+    --sidebar-border: 0 0% 13%;
+    --sidebar-ring: 210 45% 50%;
   }
 }
 
@@ -230,20 +230,21 @@
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
   }
 
-  /* Gradient utility matching brand colors */
+  /* Gradient utility matching brand colors — olive green */
   .gradient-primary {
     background: linear-gradient(
       135deg,
-      hsl(213, 52%, 24%) 0%,
-      hsl(213, 48%, 35%) 100%
+      hsl(96, 61%, 26%) 0%,
+      hsl(96, 50%, 36%) 100%
     );
   }
 
+  /* Gradient utility — accent blue */
   .gradient-accent {
     background: linear-gradient(
       135deg,
-      hsl(40, 62%, 55%) 0%,
-      hsl(35, 70%, 50%) 100%
+      hsl(210, 40%, 55%) 0%,
+      hsl(210, 50%, 45%) 100%
     );
   }
 }

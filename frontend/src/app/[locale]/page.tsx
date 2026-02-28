@@ -13,6 +13,7 @@ import {
   Heart,
   Star,
 } from "lucide-react";
+import Image from "next/image";
 
 /**
  * Home page for Ach Gadol - Big Brother for Lone Soldiers.
@@ -36,17 +37,17 @@ const FEATURE_KEYS = [
 const FEATURE_LINKS = ["/rights", "/check", "/chat", "/volunteer"] as const;
 
 const FEATURE_COLORS = [
+  "from-green-500/10 to-green-600/5 border-green-200/50 dark:border-green-800/50",
   "from-blue-500/10 to-blue-600/5 border-blue-200/50 dark:border-blue-800/50",
-  "from-amber-500/10 to-amber-600/5 border-amber-200/50 dark:border-amber-800/50",
   "from-emerald-500/10 to-emerald-600/5 border-emerald-200/50 dark:border-emerald-800/50",
-  "from-purple-500/10 to-purple-600/5 border-purple-200/50 dark:border-purple-800/50",
+  "from-amber-500/10 to-amber-600/5 border-amber-200/50 dark:border-amber-800/50",
 ] as const;
 
 const FEATURE_ICON_COLORS = [
+  "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
   "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
-  "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+  "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
 ] as const;
 
 export default function HomePage() {
@@ -61,17 +62,29 @@ export default function HomePage() {
       <section className="relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.03)] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.04)] via-transparent to-transparent" />
           <div className="absolute -top-24 end-0 h-[500px] w-[500px] rounded-full bg-[hsl(var(--accent)/0.08)] blur-3xl" />
           <div className="absolute -bottom-24 start-0 h-[400px] w-[400px] rounded-full bg-[hsl(var(--primary)/0.06)] blur-3xl" />
         </div>
 
         <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8 lg:pb-32 lg:pt-36">
           <div className="mx-auto max-w-4xl text-center">
+            {/* Logo icon above title */}
+            <div className="mb-6 flex justify-center">
+              <Image
+                src="/logo-full.jpg"
+                alt="אח גדול"
+                width={120}
+                height={83}
+                className="h-20 w-auto sm:h-24"
+                priority
+              />
+            </div>
+
             {/* Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent)/0.3)] bg-[hsl(var(--accent)/0.08)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--accent-foreground))]">
-              <Shield className="h-4 w-4 text-[hsl(var(--accent))]" />
-              <span>אח גדול למען חיילים בודדים</span>
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.3)] bg-[hsl(var(--primary)/0.08)] px-4 py-1.5 text-sm font-medium text-foreground">
+              <Shield className="h-4 w-4 text-[hsl(var(--primary))]" />
+              <span>Big Brother Organization for Lone Soldiers</span>
             </div>
 
             {/* Title */}
@@ -110,15 +123,15 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
             <StatsCard
-              icon={<Heart className="h-6 w-6 text-[hsl(var(--accent))]" />}
+              icon={<Heart className="h-6 w-6 text-[hsl(var(--primary))]" />}
               value={tHero("stats_soldiers")}
             />
             <StatsCard
-              icon={<Users className="h-6 w-6 text-[hsl(var(--primary))]" />}
+              icon={<Users className="h-6 w-6 text-[hsl(var(--accent))]" />}
               value={tHero("stats_volunteers")}
             />
             <StatsCard
-              icon={<Star className="h-6 w-6 text-[hsl(var(--accent))]" />}
+              icon={<Star className="h-6 w-6 text-[hsl(var(--primary))]" />}
               value={tHero("stats_rights")}
             />
           </div>
