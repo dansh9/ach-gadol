@@ -26,6 +26,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Prevent abuse: limit message length
+    if (message.length > 2000) {
+      return NextResponse.json(
+        { error: "Message too long (max 2000 characters)" },
+        { status: 400 }
+      );
+    }
+
     const supabase = createAdminClient();
     let activeSessionId = sessionId;
 

@@ -10,9 +10,10 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient();
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q");
-    const limit = parseInt(searchParams.get("limit") || "5", 10);
+    const rawLimit = parseInt(searchParams.get("limit") || "5", 10);
+    const limit = Math.min(Math.max(isNaN(rawLimit) ? 5 : rawLimit, 1), 50);
 
-    if (!query) {
+    if (!query || query.length > 500) {
       return NextResponse.json(
         { error: "Query parameter 'q' is required" },
         { status: 400 }
