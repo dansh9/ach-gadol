@@ -11,8 +11,8 @@ import {
   Shield,
   ChevronDown,
   ChevronUp,
-  Banknote,
   Info,
+  ExternalLink,
   ClipboardCheck,
   Zap,
   Heart,
@@ -31,6 +31,9 @@ interface Right {
   conditionsEn?: string;
   sourceHe?: string;
   sourceEn?: string;
+  sourceUrl?: string;
+  howToGetHe?: string;
+  howToGetEn?: string;
 }
 
 interface RightsCategory {
@@ -57,6 +60,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "All recognized lone soldiers",
         sourceHe: "צה\"ל — מדור כוח אדם",
         sourceEn: "IDF — Personnel Division",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "פנו למדור כוח אדם ביחידה. התוספת מחושבת אוטומטית לאחר הכרה כחייל בודד.",
+        howToGetEn: "Contact your unit's Personnel Division. The allowance is calculated automatically after lone soldier recognition.",
       },
       {
         id: "combat_allowance",
@@ -69,6 +75,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers in combat roles",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
+        howToGetEn: "Automatically calculated based on your unit role classification.",
       },
       {
         id: "combat_support_allowance",
@@ -81,6 +90,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers in combat support roles",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
+        howToGetEn: "Automatically calculated based on your unit role classification.",
       },
       {
         id: "food_allowance",
@@ -93,6 +105,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers at bases without dining facilities",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "פנו למדור כוח אדם ביחידה עם אישור שהבסיס ללא חדר אוכל.",
+        howToGetEn: "Contact your unit's Personnel Division with confirmation that the base has no dining facility.",
       },
       {
         id: "holiday_vouchers",
@@ -105,6 +120,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "For Rosh Hashana and Passover (~250 x 2)",
         sourceHe: "משרד הקליטה / צה\"ל",
         sourceEn: "Ministry of Immigration / IDF",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "השוברים מחולקים אוטומטית לפני החגים דרך היחידה. יש לוודא שהפרטים מעודכנים.",
+        howToGetEn: "Vouchers are distributed automatically before holidays through your unit. Ensure your details are up to date.",
       },
       {
         id: "immigration_ministry",
@@ -117,6 +135,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "New immigrants (Olim) only",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Aliyah and Integration",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "פנו לסניף משרד הקליטה הקרוב עם תעודת עולה ואישור חייל בודד. ניתן לפנות גם דרך טלפון *3721.",
+        howToGetEn: "Visit your nearest Ministry of Immigration office with Oleh certificate and lone soldier confirmation. Call *3721.",
       },
       {
         id: "housing_ministry",
@@ -129,6 +150,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers paying rent",
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_construction_and_housing",
+        howToGetHe: "הגישו בקשה באתר משרד השיכון או בסניף הקרוב. יש לצרף חוזה שכירות ואישור חייל בודד. טלפון *5442.",
+        howToGetEn: "Apply via the Ministry of Housing website or nearest branch. Attach rental contract and lone soldier certificate. Call *5442.",
       },
       {
         id: "electricity_discount",
@@ -141,6 +165,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers in private apartments",
         sourceHe: "חברת החשמל",
         sourceEn: "Israel Electric Corporation",
+        sourceUrl: "https://www.iec.co.il/",
+        howToGetHe: "פנו לחברת החשמל עם אישור חייל בודד וחשבון חשמל על שמכם. ניתן להגיש בקשה מקוונת.",
+        howToGetEn: "Contact Israel Electric Corporation with lone soldier certificate and an electricity bill in your name. Online application available.",
       },
       {
         id: "property_tax",
@@ -153,6 +180,8 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Apartment registered to the lone soldier",
         sourceHe: "רשות מקומית",
         sourceEn: "Local Municipality",
+        howToGetHe: "פנו למחלקת הארנונה ברשות המקומית עם אישור חייל בודד וחוזה שכירות/נסח טאבו.",
+        howToGetEn: "Contact the local municipality's property tax department with lone soldier certificate and rental contract/land registry.",
       },
     ],
   },
@@ -172,6 +201,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers renting an apartment (up to NIS 1,800/mo)",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "פנו למדור כוח אדם ביחידה עם חוזה שכירות ואישור חייל בודד. הסבסוד מועבר ישירות לחשבון הבנק.",
+        howToGetEn: "Contact your unit's Personnel Division with rental contract and lone soldier certificate. Subsidy is transferred directly to your bank account.",
       },
       {
         id: "dirat_alach",
@@ -183,6 +215,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "New immigrant lone soldiers",
         sourceHe: "עמותת עלאך",
         sourceEn: "Alach Association",
+        sourceUrl: "https://www.alach.org/",
+        howToGetHe: "הגישו בקשה דרך אתר עמותת עלאך או פנו לנציג העמותה בבסיס. יש לצרף אישור חייל בודד ותעודת עולה.",
+        howToGetEn: "Apply through the Alach Association website or contact their representative at your base. Attach lone soldier certificate and Oleh ID.",
       },
       {
         id: "beit_hachayal",
@@ -194,6 +229,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Recognized lone soldiers — 7 branches nationwide",
         sourceHe: "בית החייל",
         sourceEn: "Beit HaChayal",
+        sourceUrl: "https://www.beithachayal.mod.gov.il/",
+        howToGetHe: "פנו ישירות לסניף בית החייל הקרוב עם תעודה צבאית ואישור חייל בודד. ניתן להירשם גם דרך מדור כוח אדם.",
+        howToGetEn: "Contact your nearest Beit HaChayal branch with military ID and lone soldier certificate. You can also register through your Personnel Division.",
       },
       {
         id: "kibbutz",
@@ -206,6 +244,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers assigned to a kibbutz (free housing + NIS 150 pocket money)",
         sourceHe: "תנועה קיבוצית",
         sourceEn: "Kibbutz Movement",
+        sourceUrl: "https://www.kibbutz.org.il/",
+        howToGetHe: "פנו לתנועה הקיבוצית או לסוכנות היהודית לשיבוץ לקיבוץ. התהליך כולל ראיון והתאמה.",
+        howToGetEn: "Contact the Kibbutz Movement or Jewish Agency for kibbutz placement. The process includes an interview and matching.",
       },
       {
         id: "adoptive_family",
@@ -217,6 +258,8 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers — matched with a host family",
         sourceHe: "ארגוני מתנדבים",
         sourceEn: "Volunteer Organizations",
+        howToGetHe: "פנו לקצין העיר ביחידה או לעמותות חיילים בודדים. השיבוץ למשפחה מתבצע בהתאם לאזור המגורים.",
+        howToGetEn: "Contact your unit's City Officer or lone soldier organizations. Family matching is based on your area of residence.",
       },
     ],
   },
@@ -236,6 +279,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "30 days per year for soldiers with parents abroad",
         sourceHe: "צה\"ל — פקודת מטכ\"ל",
         sourceEn: "IDF — General Staff Order",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "הגישו בקשה דרך המפקד הישיר. יש למלא טופס בקשה לחופשת חו\"ל ולצרף אישור הורים בחו\"ל.",
+        howToGetEn: "Submit a request through your direct commander. Fill out the overseas leave form and attach proof of parents abroad.",
       },
       {
         id: "flight_funding",
@@ -247,6 +293,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Partial or full flight funding to visit family",
         sourceHe: "משרד הקליטה / צה\"ל",
         sourceEn: "Ministry of Immigration / IDF",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "פנו למשרד הקליטה עם אישור חייל בודד ומסמך נסיעה. חלק מהמימון ניתן גם דרך צה\"ל — בדקו עם מדור כוח אדם.",
+        howToGetEn: "Contact the Ministry of Immigration with lone soldier certificate and travel document. Some funding is also available through IDF — check with Personnel Division.",
       },
       {
         id: "family_visit",
@@ -259,6 +308,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "4 days when family visits Israel",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "הגישו בקשה דרך המפקד הישיר כשמשפחה מגיעה לביקור. יש לתאם מראש ולצרף אישור כניסה של בני המשפחה.",
+        howToGetEn: "Submit a request through your direct commander when family visits. Coordinate in advance and attach family entry confirmation.",
       },
       {
         id: "regular_leave",
@@ -271,6 +323,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "1 additional day every 2 months",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "ימי החופשה מחושבים אוטומטית. תאמו עם המפקד הישיר לניצול הימים.",
+        howToGetEn: "Leave days are calculated automatically. Coordinate with your direct commander to use them.",
       },
       {
         id: "early_leave",
@@ -282,6 +337,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Early release before holidays",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "הזכות ניתנת אוטומטית לחיילים בודדים מוכרים. תאמו עם המפקד לגבי שעת היציאה.",
+        howToGetEn: "This right is granted automatically to recognized lone soldiers. Coordinate with your commander regarding departure time.",
       },
     ],
   },
@@ -300,6 +358,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Upon discharge — amount based on service duration",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "המענק מועבר אוטומטית לחשבון הבנק עם השחרור. ודאו שפרטי הבנק מעודכנים במערכת צה\"ל.",
+        howToGetEn: "The grant is transferred automatically to your bank account upon discharge. Ensure your bank details are updated in the IDF system.",
       },
       {
         id: "personal_deposit",
@@ -311,6 +372,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Can be used for 6 purposes: education, housing, business, travel, wedding, vehicle. Valid 5 years.",
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_defense",
+        howToGetHe: "הפיקדון נפתח אוטומטית. למימוש — הגישו בקשה דרך אתר משרד הביטחון או בסניפי בנק הפועלים. יש לבחור ייעוד ולצרף מסמכים תומכים.",
+        howToGetEn: "The deposit is opened automatically. To withdraw — apply via the Ministry of Defense website or Bank Hapoalim branches. Choose a purpose and attach supporting documents.",
       },
       {
         id: "free_accommodation",
@@ -322,6 +386,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Free accommodation for 3 months after discharge",
         sourceHe: "צה\"ל / עמותות",
         sourceEn: "IDF / NGOs",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "פנו למדור כוח אדם לפני השחרור לתיאום מגורים. ניתן גם לפנות לעמותות כמו עלאך ובית החייל.",
+        howToGetEn: "Contact Personnel Division before discharge to arrange accommodation. You can also reach out to organizations like Alach and Beit HaChayal.",
       },
       {
         id: "rent_assistance",
@@ -334,6 +401,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Up to NIS 12,000 rent assistance post-discharge",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "פנו לסניף משרד הקליטה הקרוב עם תעודת שחרור ותעודת עולה. ניתן לפנות גם דרך טלפון *3721.",
+        howToGetEn: "Visit your nearest Ministry of Immigration office with discharge certificate and Oleh ID. You can also call *3721.",
       },
       {
         id: "rent_grant",
@@ -346,6 +416,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "One-time NIS 5,000 grant for renting an apartment",
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_construction_and_housing",
+        howToGetHe: "הגישו בקשה דרך אתר משרד השיכון עם תעודת שחרור וחוזה שכירות. טלפון *5442.",
+        howToGetEn: "Apply via the Ministry of Housing website with discharge certificate and rental contract. Call *5442.",
       },
       {
         id: "extended_benefits",
@@ -357,6 +430,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Eligibility for extended benefits up to 10 years post-discharge",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "הזכאות היא אוטומטית לעולים חדשים. פנו למשרד הקליטה לבירור הטבות ספציפיות. טלפון *3721.",
+        howToGetEn: "Eligibility is automatic for new immigrants. Contact the Ministry of Immigration for specific benefit details. Call *3721.",
       },
       {
         id: "career_assessment",
@@ -368,6 +444,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional career counseling and job guidance",
         sourceHe: "משרד הקליטה / עמותות",
         sourceEn: "Ministry of Immigration / NGOs",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "פנו למרכזי התעסוקה של משרד הקליטה או לעמותות כמו כנפיים. ניתן לתאם פגישת ייעוץ בטלפון *3721.",
+        howToGetEn: "Contact Ministry of Immigration employment centers or organizations like Knafayim. Schedule a counseling session at *3721.",
       },
       {
         id: "education_funding",
@@ -379,6 +458,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Assistance for academic and vocational education",
         sourceHe: "משרד הקליטה / משרד החינוך",
         sourceEn: "Ministry of Immigration / Ministry of Education",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_aliyah_and_integration",
+        howToGetHe: "פנו למשרד הקליטה עם אישור קבלה למוסד לימודים. ניתן לממש גם מתוך הפיקדון האישי.",
+        howToGetEn: "Contact the Ministry of Immigration with your acceptance letter. Funding can also come from your personal deposit.",
       },
       {
         id: "knafayim",
@@ -390,6 +472,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Scholarships and financial support for discharged lone soldiers",
         sourceHe: "עמותת כנפיים",
         sourceEn: "Knafayim Foundation",
+        sourceUrl: "https://www.knafayim.org.il/",
+        howToGetHe: "הגישו בקשה דרך אתר עמותת כנפיים. המלגות מחולקות בתחילת שנת הלימודים.",
+        howToGetEn: "Apply through the Knafayim Foundation website. Scholarships are awarded at the beginning of the academic year.",
       },
     ],
   },
@@ -408,6 +493,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Subsidized accommodation during reserve duty",
         sourceHe: "צה\"ל",
         sourceEn: "IDF",
+        sourceUrl: "https://www.idf.il/",
+        howToGetHe: "פנו למפקד היחידה או למדור כוח אדם עם צו מילואים. המגורים מסופקים דרך צה\"ל.",
+        howToGetEn: "Contact your unit commander or Personnel Division with your reserve duty order. Accommodation is provided through the IDF.",
       },
       {
         id: "reserve_expenses",
@@ -419,6 +507,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Reimbursement for rent and living expenses during reserves",
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_defense",
+        howToGetHe: "הגישו בקשה להחזר הוצאות דרך אתר משרד הביטחון — אגף שיקום. יש לצרף קבלות ואישורי תשלום.",
+        howToGetEn: "Submit expense reimbursement request through the Ministry of Defense website — Rehabilitation Division. Attach receipts and payment confirmations.",
       },
       {
         id: "reserve_mental_health",
@@ -430,6 +521,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional mental health support for reservists",
         sourceHe: "צה\"ל / משרד הבריאות",
         sourceEn: "IDF / Ministry of Health",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_health",
+        howToGetHe: "פנו לקו הסיוע הנפשי של צה\"ל או למרכזי בריאות הנפש של משרד הבריאות. הטיפול ניתן בחינם ובסודיות.",
+        howToGetEn: "Contact the IDF mental health hotline or Ministry of Health mental health centers. Treatment is free and confidential.",
       },
       {
         id: "reserve_career",
@@ -441,6 +535,9 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional guidance and job placement",
         sourceHe: "משרד הביטחון / עמותות",
         sourceEn: "Ministry of Defense / NGOs",
+        sourceUrl: "https://www.gov.il/he/departments/ministry_of_defense",
+        howToGetHe: "פנו לאגף שיקום במשרד הביטחון או לעמותות תעסוקה למשרתי מילואים. ניתן לתאם פגישה טלפונית.",
+        howToGetEn: "Contact the Ministry of Defense Rehabilitation Division or employment organizations for reservists. Phone appointments available.",
       },
     ],
   },
@@ -534,9 +631,9 @@ function RightCard({
 
         {/* Expanded Details */}
         {expanded && (
-          <div className="mt-2 space-y-2 border-t border-border/30 pt-2">
+          <div className="mt-2 space-y-2.5 border-t border-border/30 pt-2">
             <div className="flex items-start gap-2">
-              <span className="text-xs font-semibold text-muted-foreground">
+              <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
                 {tRights("conditions")}:
               </span>
               <div>
@@ -548,12 +645,47 @@ function RightCard({
                 </p>
               </div>
             </div>
+
+            {/* How to get this benefit */}
+            {(right.howToGetHe || right.howToGetEn) && (
+              <div className="flex items-start gap-2">
+                <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+                  איך לקבל:
+                </span>
+                <div>
+                  {right.howToGetHe && (
+                    <p className="text-xs text-foreground">
+                      {right.howToGetHe}
+                    </p>
+                  )}
+                  {right.howToGetEn && (
+                    <p className="text-xs text-muted-foreground">
+                      {right.howToGetEn}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Source with link */}
             <div className="flex items-start gap-2">
-              <span className="text-xs font-semibold text-muted-foreground">
+              <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
                 {tRights("source")}:
               </span>
               <div>
-                <p className="text-xs text-foreground">{right.sourceHe}</p>
+                {right.sourceUrl ? (
+                  <a
+                    href={right.sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs font-medium text-[hsl(var(--primary))] hover:underline"
+                  >
+                    <span>{right.sourceHe}</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                ) : (
+                  <p className="text-xs text-foreground">{right.sourceHe}</p>
+                )}
                 <p className="text-xs text-muted-foreground">
                   {right.sourceEn}
                 </p>
@@ -580,11 +712,6 @@ export default function RightsPage() {
       <section className="border-b border-border/40 bg-[hsl(var(--primary)/0.03)]">
         <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.06)] px-3 py-1 text-sm font-medium text-foreground">
-              <Banknote className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-              <span>{tRights("badge_count")}</span>
-            </div>
-
             <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
               {tRights("title")}
             </h1>

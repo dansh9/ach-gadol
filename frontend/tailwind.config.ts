@@ -19,6 +19,8 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: [
+          "Open Sans",
+          "Open Sans Hebrew",
           "system-ui",
           "-apple-system",
           "BlinkMacSystemFont",
@@ -26,8 +28,6 @@ const config: Config = {
           "Roboto",
           "Helvetica Neue",
           "Arial",
-          "Noto Sans",
-          "Noto Sans Hebrew",
           "sans-serif",
         ],
       },
