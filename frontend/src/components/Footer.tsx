@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { Heart } from "lucide-react";
 import Image from "next/image";
@@ -8,6 +9,10 @@ import Image from "next/image";
 export default function Footer() {
   const t = useTranslations("footer");
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  // Hide footer on chat page — it has its own full-height layout
+  if (pathname.endsWith("/chat")) return null;
 
   return (
     <footer className="border-t border-border/40 bg-[hsl(var(--primary))]">
