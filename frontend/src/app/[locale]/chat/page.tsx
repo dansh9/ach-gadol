@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
+import ReactMarkdown from "react-markdown";
 import {
   Send,
   ClipboardCheck,
@@ -66,13 +67,19 @@ function parseSuggestions(content: string): {
   };
 }
 
-/* ===== Citation rendering ===== */
+/* ===== Markdown-rendered bot content with citation support ===== */
 
-function renderMessageContent(
-  content: string,
-  sourceMap?: Record<string, { title: string; url?: string }>,
-  locale?: string
-) {
+function BotMessageContent({
+  content,
+  sourceMap,
+  locale,
+  isStreaming,
+}: {
+  content: string;
+  sourceMap?: Record<string, { title: string; url?: string }>;
+  locale: string;
+  isStreaming?: boolean;
+}) {
   if (!content) return null;
 
   const cleaned = content
@@ -80,52 +87,115 @@ function renderMessageContent(
     .replace(/\[\[CONFIDENCE:?[\d.]*$/, "")
     .trim();
 
-  const parts = cleaned.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|\[\d+\])/g);
+  // Replace citation numbers [1], [2] etc. with special markers before markdown parsing
+  // so they survive the markdown transformation
+  const withCitations = cleaned.replace(/\[(\d+)\]/g, (match, num) => {
+    if (sourceMap && sourceMap[num]) {
+      const source = sourceMap[num];
+      const href = source.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+      return `[⁠${num}⁠](${href} "${source.title}")`;
+    }
+    return match;
+  });
 
   return (
-    <>
-      {parts.map((part, i) => {
-        const mdMatch = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
-        if (mdMatch) {
-          return (
-            <a
-              key={i}
-              href={mdMatch[2]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-0.5 text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary)/0.3)] underline-offset-2 transition-colors hover:decoration-[hsl(var(--primary))]"
-            >
-              {mdMatch[1]}
-              <ExternalLink className="inline h-3 w-3 flex-shrink-0" />
-            </a>
-          );
-        }
-
-        const numMatch = part.match(/^\[(\d+)\]$/);
-        if (numMatch && sourceMap) {
-          const num = numMatch[1];
-          const source = sourceMap[num];
-          if (source) {
-            const href = source.url || `/${locale}${FALLBACK_SOURCE_URL}`;
-            const isExternal = !!source.url;
+    <div className="prose-chat">
+      <ReactMarkdown
+        components={{
+          // Style links
+          a: ({ children, href, title, ...props }) => {
+            // Detect citation links (contain invisible chars ⁠)
+            const text = String(children);
+            const isCitation = text.includes("⁠");
+            if (isCitation) {
+              const num = text.replace(/⁠/g, "");
+              return (
+                <a
+                  href={href || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mx-0.5 inline-flex items-center justify-center rounded-md bg-[hsl(var(--primary)/0.12)] px-1.5 py-0 text-[11px] font-semibold leading-5 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.25)] no-underline"
+                  title={title || ""}
+                >
+                  {num}
+                </a>
+              );
+            }
             return (
               <a
-                key={i}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-0.5 inline-flex items-center justify-center rounded-md bg-[hsl(var(--primary)/0.12)] px-1.5 py-0 text-[11px] font-semibold leading-5 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.25)] no-underline"
-                title={`${source.title}${isExternal ? " ↗" : ""}`}
+                className="inline-flex items-center gap-0.5 text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary)/0.3)] underline-offset-2 transition-colors hover:decoration-[hsl(var(--primary))]"
+                {...props}
               >
-                {num}
+                {children}
+                <ExternalLink className="inline h-3 w-3 flex-shrink-0" />
               </a>
             );
-          }
-        }
-
-        return <span key={i}>{part}</span>;
-      })}
-    </>
+          },
+          // Style headings
+          h1: ({ children }) => (
+            <h3 className="mb-2 mt-4 text-[16px] font-bold text-foreground first:mt-0">
+              {children}
+            </h3>
+          ),
+          h2: ({ children }) => (
+            <h3 className="mb-2 mt-3 text-[15px] font-bold text-foreground first:mt-0">
+              {children}
+            </h3>
+          ),
+          h3: ({ children }) => (
+            <h4 className="mb-1.5 mt-3 text-[15px] font-semibold text-foreground first:mt-0">
+              {children}
+            </h4>
+          ),
+          // Style paragraphs
+          p: ({ children }) => (
+            <p className="mb-2 last:mb-0 text-[15px] leading-[1.75]">
+              {children}
+            </p>
+          ),
+          // Style lists
+          ul: ({ children }) => (
+            <ul className="mb-2 list-none space-y-1 ps-0">
+              {children}
+            </ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="mb-2 list-decimal space-y-1 ps-5 marker:text-[hsl(var(--primary)/0.6)] marker:font-semibold">
+              {children}
+            </ol>
+          ),
+          li: ({ children }) => (
+            <li className="text-[15px] leading-[1.7] ps-1 before:content-['•_'] before:text-[hsl(var(--primary)/0.5)] before:font-bold [&_ul]:before:content-none [ol_&]:before:content-none">
+              {children}
+            </li>
+          ),
+          // Style bold/strong
+          strong: ({ children }) => (
+            <strong className="font-semibold text-foreground">{children}</strong>
+          ),
+          // Style code
+          code: ({ children }) => (
+            <code className="rounded bg-muted px-1.5 py-0.5 text-[13px] font-mono text-foreground">
+              {children}
+            </code>
+          ),
+          // Style blockquotes
+          blockquote: ({ children }) => (
+            <blockquote className="border-s-3 border-[hsl(var(--primary)/0.3)] ps-3 italic text-muted-foreground">
+              {children}
+            </blockquote>
+          ),
+        }}
+      >
+        {withCitations}
+      </ReactMarkdown>
+      {isStreaming && (
+        <span className="ml-0.5 inline-block h-[18px] w-[2px] animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
+      )}
+    </div>
   );
 }
 
@@ -180,12 +250,12 @@ function MessageRow({
               <span className="h-2 w-2 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:300ms]" />
             </div>
           ) : (
-            <div className="whitespace-pre-line text-[15px] leading-[1.75] text-foreground">
-              {renderMessageContent(mainContent, message.sourceMap, locale)}
-              {message.isStreaming && (
-                <span className="ml-0.5 inline-block h-[18px] w-[2px] animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
-              )}
-            </div>
+            <BotMessageContent
+              content={mainContent}
+              sourceMap={message.sourceMap}
+              locale={locale}
+              isStreaming={message.isStreaming}
+            />
           )}
 
           {/* Sources */}
