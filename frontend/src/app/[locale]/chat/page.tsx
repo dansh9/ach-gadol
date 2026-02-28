@@ -25,7 +25,7 @@ interface Message {
   content: string;
   timestamp: Date;
   sources?: string[];
-  sourceMap?: Record<string, { title: string }>;
+  sourceMap?: Record<string, { title: string; url?: string }>;
   confidence?: number;
   isStreaming?: boolean;
 }
@@ -37,13 +37,9 @@ interface QuickAction {
   message: string;
 }
 
-/* ===== Source → Rights page URL mapping ===== */
+/* ===== Fallback URL for sources without an external link ===== */
 
-const SOURCE_URL_MAP: Record<string, string> = {
-  "Lone Soldier Rights Overview": "/rights",
-  "How to Apply for Rent Assistance": "/rights?tab=housing",
-  "Release Process and Enhanced Pikadon": "/rights?tab=post_service",
-};
+const FALLBACK_SOURCE_URL = "/rights";
 
 /* ===== Confidence Indicator ===== */
 
@@ -74,11 +70,11 @@ function ConfidenceDot({ confidence }: { confidence: number }) {
 
 /**
  * Parse message content and render [N] citation numbers as clickable links
- * that navigate to the relevant section on the rights page.
+ * that navigate to the external source (e.g. Kol-Zchut).
  */
 function renderMessageContent(
   content: string,
-  sourceMap?: Record<string, { title: string }>,
+  sourceMap?: Record<string, { title: string; url?: string }>,
   locale?: string
 ) {
   if (!content) return null;
@@ -104,8 +100,9 @@ function renderMessageContent(
           const num = match[1];
           const source = sourceMap[num];
           if (source) {
-            const baseUrl = SOURCE_URL_MAP[source.title] || "/rights";
-            const href = `/${locale}${baseUrl}`;
+            // Use external source URL if available, otherwise fall back to internal rights page
+            const href = source.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+            const isExternal = !!source.url;
             return (
               <a
                 key={i}
@@ -113,7 +110,7 @@ function renderMessageContent(
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mx-0.5 inline-flex items-center justify-center rounded bg-[hsl(var(--primary)/0.15)] px-1 py-0 text-[10px] font-bold leading-4 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.3)] no-underline"
-                title={source.title}
+                title={`${source.title}${isExternal ? " ↗" : ""}`}
               >
                 {num}
               </a>
@@ -182,8 +179,11 @@ function MessageBubble({ message }: { message: Message }) {
             </p>
             <div className="mt-1 flex flex-wrap gap-1">
               {message.sources.map((source, i) => {
-                const baseUrl = SOURCE_URL_MAP[source] || "/rights";
-                const href = `/${locale}${baseUrl}`;
+                // Find external URL from sourceMap by matching title
+                const mapEntry = message.sourceMap
+                  ? Object.values(message.sourceMap).find((s) => s.title === source)
+                  : null;
+                const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
                 return (
                   <a
                     key={i}

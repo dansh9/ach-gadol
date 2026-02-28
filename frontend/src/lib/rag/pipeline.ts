@@ -12,7 +12,7 @@ import { detectLanguage } from "./language";
 export interface RagResult {
   reply: string;
   sources: string[];
-  sourceMap: Record<string, { title: string }>;
+  sourceMap: Record<string, { title: string; url?: string }>;
   confidence: number;
   language: string;
 }
@@ -184,6 +184,7 @@ interface CachedChunk {
   metadata: Record<string, unknown>;
   embedding: number[];
   document_title: string;
+  source_url: string;
 }
 
 let _chunkCache: CachedChunk[] | null = null;
@@ -203,15 +204,15 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
       .from("kb_chunks")
       .select("chunk_text, kb_document_id, embedding, metadata")
       .not("embedding", "is", null),
-    supabase.from("kb_documents").select("id, title"),
+    supabase.from("kb_documents").select("id, title, source_url"),
   ]);
 
   if (!chunksResult.data || chunksResult.data.length === 0) return [];
 
-  const docTitleMap: Record<string, string> = {};
+  const docMap: Record<string, { title: string; source_url: string }> = {};
   if (docsResult.data) {
-    docsResult.data.forEach((d: { id: string; title: string }) => {
-      docTitleMap[d.id] = d.title;
+    docsResult.data.forEach((d: { id: string; title: string; source_url?: string }) => {
+      docMap[d.id] = { title: d.title, source_url: d.source_url || "" };
     });
   }
 
@@ -229,13 +230,24 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
         typeof chunk.embedding === "string"
           ? (JSON.parse(chunk.embedding) as number[])
           : chunk.embedding,
-      document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
+      document_title: docMap[chunk.kb_document_id]?.title || "Unknown",
+      source_url: docMap[chunk.kb_document_id]?.source_url || "",
     })
   );
   _chunkCacheTime = Date.now();
 
   return _chunkCache;
 }
+
+/* Fallback source URLs for KB documents that don't have source_url populated */
+const KB_SOURCE_URLS: Record<string, string> = {
+  "Lone Soldier Rights Overview":
+    "https://www.kolzchut.org.il/he/חיילים_בודדים",
+  "How to Apply for Rent Assistance":
+    "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
+  "Release Process and Enhanced Pikadon":
+    "https://www.kolzchut.org.il/he/פיקדון_אישי_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+};
 
 function cosineSimilarity(a: number[], b: number[]): number {
   let dot = 0,
@@ -278,6 +290,7 @@ export async function runRagPipeline(
     chunk_text: string;
     metadata?: Record<string, unknown>;
     document_title?: string;
+    source_url?: string;
   }[] = [];
 
   try {
@@ -292,6 +305,7 @@ export async function runRagPipeline(
         chunk_text: chunk.chunk_text,
         metadata: chunk.metadata,
         document_title: chunk.document_title,
+        source_url: chunk.source_url,
         similarity: cosineSimilarity(embedding, chunk.embedding),
       }))
       .filter((c) => c.similarity > matchThreshold)
@@ -302,16 +316,22 @@ export async function runRagPipeline(
       chunk_text: s.chunk_text,
       metadata: s.metadata,
       document_title: s.document_title,
+      source_url: s.source_url,
     }));
   } catch (embeddingError) {
     // If embedding fails (no OpenAI key), continue without KB context
     console.warn("Embedding/search failed, continuing without KB:", embeddingError);
   }
 
-  // 5. Build source map for citation links
-  const sourceMap: Record<string, { title: string }> = {};
+  // 5. Build source map for citation links (includes external source URLs)
+  const sourceMap: Record<string, { title: string; url?: string }> = {};
   kbChunks.forEach((chunk, i) => {
-    sourceMap[String(i + 1)] = { title: chunk.document_title || `Source ${i + 1}` };
+    const title = chunk.document_title || `Source ${i + 1}`;
+    const url = chunk.source_url || KB_SOURCE_URLS[title] || "";
+    sourceMap[String(i + 1)] = {
+      title,
+      ...(url ? { url } : {}),
+    };
   });
 
   // 6. Build system prompt with KB context
