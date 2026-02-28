@@ -19,6 +19,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Coerce boolean fields to proper booleans (prevents type confusion)
+    if (answers.isCombat !== null && answers.isCombat !== undefined) {
+      answers.isCombat = Boolean(answers.isCombat);
+    }
+    if (answers.isImmigrant !== null && answers.isImmigrant !== undefined) {
+      answers.isImmigrant = Boolean(answers.isImmigrant);
+    }
+    if (answers.parentsAbroad !== null && answers.parentsAbroad !== undefined) {
+      answers.parentsAbroad = Boolean(answers.parentsAbroad);
+    }
+
     // Calculate eligibility
     const results = calculateEligibility(answers);
     const totalMonthly = results.reduce(

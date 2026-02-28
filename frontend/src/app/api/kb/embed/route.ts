@@ -1,14 +1,27 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generateEmbeddings } from "@/lib/rag/embeddings";
+
+const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
 
 /**
  * POST /api/kb/embed
  * One-time utility to embed all KB chunks that don't have embeddings yet.
- * Requires OPENAI_API_KEY.
+ * Requires OPENAI_API_KEY and admin authentication.
  */
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
+    // Admin authentication required — this endpoint costs money (OpenAI API)
+    const authHeader = request.headers.get("authorization");
+    const providedKey = authHeader?.replace("Bearer ", "");
+
+    if (!ADMIN_API_KEY || providedKey !== ADMIN_API_KEY) {
+      return NextResponse.json(
+        { error: "Unauthorized — admin API key required" },
+        { status: 401 }
+      );
+    }
+
     const supabase = createAdminClient();
 
     // Fetch chunks without embeddings

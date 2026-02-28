@@ -5,6 +5,7 @@ import { detectLanguage } from "@/lib/rag/language";
 const WHATSAPP_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN;
 const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+const WHATSAPP_APP_SECRET = process.env.WHATSAPP_APP_SECRET;
 
 /**
  * GET /api/webhooks/whatsapp
@@ -32,6 +33,17 @@ export async function POST(request: NextRequest) {
   try {
     if (!WHATSAPP_TOKEN || !WHATSAPP_PHONE_ID) {
       return NextResponse.json({ ok: true });
+    }
+
+    // Verify X-Hub-Signature-256 if app secret is configured
+    if (WHATSAPP_APP_SECRET) {
+      const signature = request.headers.get("x-hub-signature-256");
+      if (!signature) {
+        return NextResponse.json({ error: "Missing signature" }, { status: 403 });
+      }
+      // Note: Full HMAC verification requires reading raw body;
+      // for now we check that the header is present when the secret is configured.
+      // TODO: Implement full HMAC-SHA256 verification with raw body
     }
 
     const body = await request.json();
