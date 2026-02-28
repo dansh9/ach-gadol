@@ -12,6 +12,7 @@ import { detectLanguage } from "./language";
 export interface RagResult {
   reply: string;
   sources: string[];
+  sourceMap: Record<string, { title: string }>;
   confidence: number;
   language: string;
 }
@@ -147,16 +148,18 @@ function matchDemoTopic(message: string): string | null {
  * Run demo mode: keyword-match → pre-written KB-based responses.
  * Used when ANTHROPIC_API_KEY is not configured.
  */
-function runDemoMode(message: string, language: string): RagResult {
+function runDemoMode(message: string, language: string, onToken?: (token: string) => void): RagResult {
   const topic = matchDemoTopic(message);
   const lang = language in DEFAULT_RESPONSES ? language : "en";
 
   if (topic && DEMO_RESPONSES[topic]) {
     const topicResponses = DEMO_RESPONSES[topic];
     const response = topicResponses[lang] || topicResponses.en;
+    if (onToken) onToken(response.reply);
     return {
       reply: response.reply,
       sources: response.sources,
+      sourceMap: {},
       confidence: 0.7,
       language,
     };
@@ -164,9 +167,11 @@ function runDemoMode(message: string, language: string): RagResult {
 
   // Default response
   const defaultResp = DEFAULT_RESPONSES[lang] || DEFAULT_RESPONSES.en;
+  if (onToken) onToken(defaultResp.reply);
   return {
     reply: defaultResp.reply,
     sources: [],
+    sourceMap: {},
     confidence: 0.5,
     language,
   };
@@ -179,7 +184,8 @@ function runDemoMode(message: string, language: string): RagResult {
 export async function runRagPipeline(
   message: string,
   conversationHistory: ConversationMessage[] = [],
-  preferredLanguage?: string
+  preferredLanguage?: string,
+  onToken?: (token: string) => void
 ): Promise<RagResult> {
   // 1. Detect language
   const language = preferredLanguage || detectLanguage(message);
@@ -188,7 +194,7 @@ export async function runRagPipeline(
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
   if (!anthropicKey) {
     console.log("No ANTHROPIC_API_KEY — running in demo mode");
-    return runDemoMode(message, language);
+    return runDemoMode(message, language, onToken);
   }
 
   // 3. Search KB using multilingual embeddings
@@ -290,28 +296,51 @@ export async function runRagPipeline(
     console.warn("Embedding/search failed, continuing without KB:", embeddingError);
   }
 
-  // 5. Build system prompt with KB context
+  // 5. Build source map for citation links
+  const sourceMap: Record<string, { title: string }> = {};
+  kbChunks.forEach((chunk, i) => {
+    sourceMap[String(i + 1)] = { title: chunk.document_title || `Source ${i + 1}` };
+  });
+
+  // 6. Build system prompt with KB context
   const systemPrompt = buildSystemPrompt(language, kbChunks);
 
-  // 6. Build conversation messages
+  // 7. Build conversation messages
   const messages = buildMessages(conversationHistory, message);
 
-  // 7. Call Claude
+  // 8. Call Claude (streaming or non-streaming)
   try {
     const anthropic = new Anthropic({ apiKey: anthropicKey });
 
-    const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 1024,
-      system: systemPrompt,
-      messages,
-    });
+    let rawReply = "";
 
-    // 8. Parse response
-    const rawReply =
-      response.content[0].type === "text" ? response.content[0].text : "";
+    if (onToken) {
+      // Streaming mode — sends tokens to client as they arrive
+      const stream = anthropic.messages.stream({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages,
+      });
 
-    // Extract confidence score from [[CONFIDENCE:X.XX]]
+      stream.on("text", (text) => {
+        rawReply += text;
+        onToken(text);
+      });
+
+      await stream.finalMessage();
+    } else {
+      // Non-streaming mode
+      const response = await anthropic.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages,
+      });
+      rawReply = response.content[0].type === "text" ? response.content[0].text : "";
+    }
+
+    // 9. Parse response
     const confidenceMatch = rawReply.match(/\[\[CONFIDENCE:([\d.]+)\]\]/);
     const rawConfidence = confidenceMatch
       ? parseFloat(confidenceMatch[1])
@@ -340,11 +369,12 @@ export async function runRagPipeline(
     return {
       reply: cleanReply,
       sources,
+      sourceMap,
       confidence,
       language,
     };
   } catch (claudeError) {
     console.error("Claude API call failed, falling back to demo mode:", claudeError);
-    return runDemoMode(message, language);
+    return runDemoMode(message, language, onToken);
   }
 }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import {
   Wallet,
@@ -704,7 +705,10 @@ function RightCard({
 
 export default function RightsPage() {
   const tRights = useTranslations("rights");
-  const [activeCategory, setActiveCategory] = useState(RIGHTS_DATA[0].id);
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const initialTab = RIGHTS_DATA.find((c) => c.id === tabParam)?.id || RIGHTS_DATA[0].id;
+  const [activeCategory, setActiveCategory] = useState(initialTab);
 
   const currentCategory = RIGHTS_DATA.find((c) => c.id === activeCategory)!;
 

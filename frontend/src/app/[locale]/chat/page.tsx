@@ -25,7 +25,9 @@ interface Message {
   content: string;
   timestamp: Date;
   sources?: string[];
+  sourceMap?: Record<string, { title: string }>;
   confidence?: number;
+  isStreaming?: boolean;
 }
 
 interface QuickAction {
@@ -34,6 +36,14 @@ interface QuickAction {
   icon: typeof ClipboardCheck;
   message: string;
 }
+
+/* ===== Source → Rights page URL mapping ===== */
+
+const SOURCE_URL_MAP: Record<string, string> = {
+  "Lone Soldier Rights Overview": "/rights",
+  "How to Apply for Rent Assistance": "/rights?tab=housing",
+  "Release Process and Enhanced Pikadon": "/rights?tab=post_service",
+};
 
 /* ===== Confidence Indicator ===== */
 
@@ -60,10 +70,67 @@ function ConfidenceDot({ confidence }: { confidence: number }) {
   );
 }
 
+/* ===== Citation rendering ===== */
+
+/**
+ * Parse message content and render [N] citation numbers as clickable links
+ * that navigate to the relevant section on the rights page.
+ */
+function renderMessageContent(
+  content: string,
+  sourceMap?: Record<string, { title: string }>,
+  locale?: string
+) {
+  if (!content) return null;
+
+  // Strip confidence marker that may appear during streaming
+  const cleaned = content
+    .replace(/\[\[CONFIDENCE:[\d.]*\]\]/, "")
+    .replace(/\[\[CONFIDENCE:?[\d.]*$/, "")
+    .trim();
+
+  if (!sourceMap || Object.keys(sourceMap).length === 0) {
+    return <>{cleaned}</>;
+  }
+
+  // Split content by [N] patterns (keep the delimiters)
+  const parts = cleaned.split(/(\[\d+\])/g);
+
+  return (
+    <>
+      {parts.map((part, i) => {
+        const match = part.match(/^\[(\d+)\]$/);
+        if (match) {
+          const num = match[1];
+          const source = sourceMap[num];
+          if (source) {
+            const baseUrl = SOURCE_URL_MAP[source.title] || "/rights";
+            const href = `/${locale}${baseUrl}`;
+            return (
+              <a
+                key={i}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-0.5 inline-flex items-center justify-center rounded bg-[hsl(var(--primary)/0.15)] px-1 py-0 text-[10px] font-bold leading-4 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.3)] no-underline"
+                title={source.title}
+              >
+                {num}
+              </a>
+            );
+          }
+        }
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
 /* ===== Message Bubble Component ===== */
 
 function MessageBubble({ message }: { message: Message }) {
   const isBot = message.role === "bot";
+  const locale = useLocale();
 
   return (
     <div className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}>
@@ -90,46 +157,68 @@ function MessageBubble({ message }: { message: Message }) {
             : "rounded-se-sm bg-[hsl(var(--primary))] text-primary-foreground"
         }`}
       >
-        <p className="whitespace-pre-line text-sm leading-relaxed">
-          {message.content}
-        </p>
+        {/* Loading state — before first token arrives */}
+        {isBot && message.isStreaming && !message.content ? (
+          <div className="flex items-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin text-[hsl(var(--primary))]" />
+            <span className="text-sm text-muted-foreground">...</span>
+          </div>
+        ) : (
+          /* Message content with clickable citations */
+          <div className="whitespace-pre-line text-sm leading-relaxed">
+            {renderMessageContent(message.content, message.sourceMap, locale)}
+            {/* Blinking cursor during streaming */}
+            {message.isStreaming && (
+              <span className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
+            )}
+          </div>
+        )}
 
-        {/* Sources */}
-        {isBot && message.sources && message.sources.length > 0 && (
+        {/* Sources — only shown when streaming is complete */}
+        {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
           <div className="mt-2 border-t border-border/30 pt-2">
             <p className="text-[10px] font-medium text-muted-foreground">
               Sources:
             </p>
             <div className="mt-1 flex flex-wrap gap-1">
-              {message.sources.map((source, i) => (
-                <span
-                  key={i}
-                  className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground"
-                >
-                  <ExternalLink className="h-2.5 w-2.5" />
-                  {source}
-                </span>
-              ))}
+              {message.sources.map((source, i) => {
+                const baseUrl = SOURCE_URL_MAP[source] || "/rights";
+                const href = `/${locale}${baseUrl}`;
+                return (
+                  <a
+                    key={i}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
+                  >
+                    <ExternalLink className="h-2.5 w-2.5" />
+                    {source}
+                  </a>
+                );
+              })}
             </div>
           </div>
         )}
 
-        {/* Timestamp + Confidence */}
-        <div className="mt-1 flex items-center gap-1.5">
-          {isBot && message.confidence !== undefined && (
-            <ConfidenceDot confidence={message.confidence} />
-          )}
-          <p
-            className={`text-[10px] ${
-              isBot ? "text-muted-foreground" : "text-primary-foreground/60"
-            }`}
-          >
-            {message.timestamp.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </p>
-        </div>
+        {/* Timestamp + Confidence — only when done */}
+        {!message.isStreaming && (
+          <div className="mt-1 flex items-center gap-1.5">
+            {isBot && message.confidence !== undefined && (
+              <ConfidenceDot confidence={message.confidence} />
+            )}
+            <p
+              className={`text-[10px] ${
+                isBot ? "text-muted-foreground" : "text-primary-foreground/60"
+              }`}
+            >
+              {message.timestamp.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -222,7 +311,18 @@ export default function ChatPage() {
         content: text.trim(),
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, userMsg]);
+
+      // Add placeholder bot message for streaming
+      const botMsgId = `bot-${Date.now()}`;
+      const botMsg: Message = {
+        id: botMsgId,
+        role: "bot",
+        content: "",
+        timestamp: new Date(),
+        isStreaming: true,
+      };
+
+      setMessages((prev) => [...prev, userMsg, botMsg]);
       setInput("");
       setIsTyping(true);
       setShowEscalation(false);
@@ -239,42 +339,122 @@ export default function ChatPage() {
           }),
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to send message");
+        if (!response.ok || !response.body) {
+          throw new Error("Failed to send message");
         }
 
-        // Update session ID
-        if (data.sessionId && !sessionId) {
-          setSessionId(data.sessionId);
+        // Read SSE stream
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const events = buffer.split("\n\n");
+          buffer = events.pop() || "";
+
+          for (const event of events) {
+            if (!event.startsWith("data: ")) continue;
+            try {
+              const data = JSON.parse(event.slice(6));
+
+              if (data.type === "session" && data.sessionId && !sessionId) {
+                setSessionId(data.sessionId);
+              } else if (data.type === "token") {
+                // Append token to the streaming bot message
+                setMessages((prev) => {
+                  const lastMsg = prev[prev.length - 1];
+                  if (lastMsg.id === botMsgId) {
+                    return [
+                      ...prev.slice(0, -1),
+                      { ...lastMsg, content: lastMsg.content + data.text },
+                    ];
+                  }
+                  return prev;
+                });
+              } else if (data.type === "done") {
+                // Finalize the bot message with sources and confidence
+                setMessages((prev) => {
+                  const lastMsg = prev[prev.length - 1];
+                  if (lastMsg.id === botMsgId) {
+                    const cleanContent = lastMsg.content
+                      .replace(/\[\[CONFIDENCE:[\d.]*\]\]/, "")
+                      .trim();
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMsg,
+                        content: cleanContent,
+                        sources: data.sources,
+                        sourceMap: data.sourceMap,
+                        confidence: data.confidence,
+                        isStreaming: false,
+                      },
+                    ];
+                  }
+                  return prev;
+                });
+
+                if (data.confidence < 0.5) {
+                  setShowEscalation(true);
+                }
+              } else if (data.type === "error") {
+                setMessages((prev) => {
+                  const lastMsg = prev[prev.length - 1];
+                  if (lastMsg.id === botMsgId) {
+                    return [
+                      ...prev.slice(0, -1),
+                      {
+                        ...lastMsg,
+                        content: tChat("error_message"),
+                        isStreaming: false,
+                        confidence: 0,
+                      },
+                    ];
+                  }
+                  return prev;
+                });
+              }
+            } catch {
+              // Skip malformed JSON
+            }
+          }
         }
 
-        // Add bot response
-        const botMsg: Message = {
-          id: `bot-${Date.now()}`,
-          role: "bot",
-          content: data.reply,
-          timestamp: new Date(),
-          sources: data.sources,
-          confidence: data.confidence,
-        };
-        setMessages((prev) => [...prev, botMsg]);
-
-        // Show escalation banner for low confidence
-        if (data.confidence < 0.5) {
-          setShowEscalation(true);
-        }
+        // Ensure streaming flag is cleared even if no "done" event
+        setMessages((prev) => {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg.id === botMsgId && lastMsg.isStreaming) {
+            const cleanContent = lastMsg.content
+              .replace(/\[\[CONFIDENCE:[\d.]*\]\]/, "")
+              .trim();
+            return [
+              ...prev.slice(0, -1),
+              { ...lastMsg, content: cleanContent, isStreaming: false },
+            ];
+          }
+          return prev;
+        });
       } catch (error) {
         console.error("Send message error:", error);
-        const errorMsg: Message = {
-          id: `error-${Date.now()}`,
-          role: "bot",
-          content: tChat("error_message"),
-          timestamp: new Date(),
-          confidence: 0,
-        };
-        setMessages((prev) => [...prev, errorMsg]);
+        setMessages((prev) => {
+          const lastMsg = prev[prev.length - 1];
+          if (lastMsg.id === botMsgId) {
+            return [
+              ...prev.slice(0, -1),
+              {
+                ...lastMsg,
+                content: tChat("error_message"),
+                isStreaming: false,
+                confidence: 0,
+              },
+            ];
+          }
+          return prev;
+        });
       } finally {
         setIsTyping(false);
       }
@@ -336,23 +516,6 @@ export default function ChatPage() {
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}
-
-            {/* Typing Indicator */}
-            {isTyping && (
-              <div className="flex gap-3">
-                <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)]">
-                  <Bot className="h-4 w-4 text-[hsl(var(--primary))]" />
-                </div>
-                <div className="rounded-2xl rounded-ss-sm border border-border/50 bg-card px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin text-[hsl(var(--primary))]" />
-                    <span className="text-sm text-muted-foreground">
-                      {tChat("typing")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
 
             <div ref={messagesEndRef} />
           </div>
