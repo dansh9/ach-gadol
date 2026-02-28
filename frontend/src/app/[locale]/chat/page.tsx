@@ -165,9 +165,9 @@ function MessageRow({
   return (
     <div className="group">
       <div className="flex items-start gap-3">
-        {/* Soldier avatar */}
-        <div className="flex-shrink-0 mt-0.5">
-          <SoldierAvatar className="h-8 w-8 rounded-full" />
+        {/* Ach Gadol logo avatar */}
+        <div className="flex-shrink-0 mt-0.5 h-8 w-8 overflow-hidden rounded-full ring-2 ring-[hsl(var(--primary)/0.1)]">
+          <SoldierAvatar className="h-8 w-8 rounded-full" size={40} />
         </div>
 
         {/* Content */}
@@ -536,9 +536,9 @@ export default function ChatPage() {
         {isWelcomeState ? (
           /* ===== Welcome State ===== */
           <div className="flex h-full flex-col items-center justify-center px-4 pb-8">
-            {/* Greeting */}
-            <div className="mb-2">
-              <SoldierAvatar className="h-16 w-16 rounded-full ring-4 ring-[hsl(var(--primary)/0.1)]" />
+            {/* Greeting — Ach Gadol logo */}
+            <div className="mb-3 h-20 w-20 overflow-hidden rounded-full ring-4 ring-[hsl(var(--primary)/0.1)] shadow-lg">
+              <SoldierAvatar className="h-20 w-20 rounded-full" size={96} />
             </div>
             <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
               {tChat("title")}
