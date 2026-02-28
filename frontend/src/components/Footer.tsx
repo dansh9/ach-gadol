@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Heart } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   const t = useTranslations("footer");
@@ -12,11 +13,15 @@ export default function Footer() {
     <footer className="border-t border-border/40 bg-[hsl(var(--primary))]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 md:grid-cols-3">
-          {/* About Section */}
+          {/* About Section with logo */}
           <div className="space-y-4">
-            <h3 className="text-lg font-bold text-primary-foreground">
-              אח גדול
-            </h3>
+            <Image
+              src="/logo-transparent.png"
+              alt="אח גדול למען חיילים בודדים"
+              width={120}
+              height={110}
+              className="h-24 w-auto brightness-0 invert"
+            />
             <p className="text-sm leading-relaxed text-primary-foreground/80">
               {t("about")}
             </p>
