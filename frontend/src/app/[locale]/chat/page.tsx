@@ -69,8 +69,9 @@ function ConfidenceDot({ confidence }: { confidence: number }) {
 /* ===== Citation rendering ===== */
 
 /**
- * Parse message content and render [N] citation numbers as clickable links
- * that navigate to the external source (e.g. Kol-Zchut).
+ * Parse message content and render:
+ *   - [N] citation numbers as small clickable badges linking to KB sources
+ *   - [text](url) markdown links as clickable external links (e.g. Kol-Zchut)
  */
 function renderMessageContent(
   content: string,
@@ -85,22 +86,36 @@ function renderMessageContent(
     .replace(/\[\[CONFIDENCE:?[\d.]*$/, "")
     .trim();
 
-  if (!sourceMap || Object.keys(sourceMap).length === 0) {
-    return <>{cleaned}</>;
-  }
-
-  // Split content by [N] patterns (keep the delimiters)
-  const parts = cleaned.split(/(\[\d+\])/g);
+  // Split by both [N] citations AND [text](url) markdown links (keep delimiters)
+  // Order matters: match markdown links first (they also start with [)
+  const parts = cleaned.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|\[\d+\])/g);
 
   return (
     <>
       {parts.map((part, i) => {
-        const match = part.match(/^\[(\d+)\]$/);
-        if (match) {
-          const num = match[1];
+        // Match markdown links: [link text](url)
+        const mdMatch = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
+        if (mdMatch) {
+          return (
+            <a
+              key={i}
+              href={mdMatch[2]}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-0.5 text-[hsl(var(--primary))] underline decoration-[hsl(var(--primary)/0.3)] underline-offset-2 transition-colors hover:decoration-[hsl(var(--primary))]"
+            >
+              {mdMatch[1]}
+              <ExternalLink className="inline h-3 w-3 flex-shrink-0" />
+            </a>
+          );
+        }
+
+        // Match [N] citation numbers
+        const numMatch = part.match(/^\[(\d+)\]$/);
+        if (numMatch && sourceMap) {
+          const num = numMatch[1];
           const source = sourceMap[num];
           if (source) {
-            // Use external source URL if available, otherwise fall back to internal rights page
             const href = source.url || `/${locale}${FALLBACK_SOURCE_URL}`;
             const isExternal = !!source.url;
             return (
@@ -117,6 +132,7 @@ function renderMessageContent(
             );
           }
         }
+
         return <span key={i}>{part}</span>;
       })}
     </>
