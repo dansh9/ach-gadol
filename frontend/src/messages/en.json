@@ -204,6 +204,9 @@
     "documents_count": "documents",
     "search_kb": "Search knowledge base...",
     "no_documents": "No documents to display",
-    "ai_suggestion_label": "AI Suggestion:"
+    "ai_suggestion_label": "AI Suggestion:",
+    "load_error": "Failed to load data",
+    "retry": "Retry",
+    "untitled_case": "Untitled Case"
   }
 }

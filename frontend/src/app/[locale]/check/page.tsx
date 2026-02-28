@@ -53,7 +53,13 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 function StepIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div
+      className="flex items-center justify-center gap-2"
+      role="progressbar"
+      aria-valuenow={currentStep + 1}
+      aria-valuemin={1}
+      aria-valuemax={totalSteps}
+    >
       {Array.from({ length: totalSteps }, (_, i) => (
         <div
           key={i}
@@ -81,6 +87,8 @@ function OptionButton({
 }) {
   return (
     <button
+      role="radio"
+      aria-checked={isSelected}
       onClick={onClick}
       className={`w-full rounded-xl border-2 px-5 py-4 text-start text-sm font-medium transition-all sm:text-base ${
         isSelected
@@ -116,7 +124,7 @@ function YesNoButtons({
   tCheck: ReturnType<typeof useTranslations>;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div role="radiogroup" className="grid grid-cols-2 gap-3">
       <OptionButton
         label={tCheck("yes")}
         isSelected={value === true}

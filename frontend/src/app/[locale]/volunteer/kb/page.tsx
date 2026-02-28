@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { BookOpen, Loader2, Search, ExternalLink, CheckCircle2 } from "lucide-react";
+import { BookOpen, Loader2, Search, ExternalLink, CheckCircle2, AlertTriangle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface KbDocument {
@@ -21,27 +21,32 @@ export default function VolunteerKbPage() {
   const [documents, setDocuments] = useState<KbDocument[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState(false);
+
+  async function fetchDocuments() {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("kb_documents")
+        .select("id, title, source_url, language, content, is_active, verified_at, created_at")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        setError(true);
+      } else if (data) {
+        setDocuments(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch KB documents:", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchDocuments() {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("kb_documents")
-          .select("id, title, source_url, language, content, is_active, verified_at, created_at")
-          .eq("is_active", true)
-          .order("created_at", { ascending: false })
-          .limit(50);
-
-        if (!error && data) {
-          setDocuments(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch KB documents:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchDocuments();
   }, []);
 
@@ -79,6 +84,17 @@ export default function VolunteerKbPage() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">
+          <AlertTriangle className="mb-4 h-12 w-12 text-amber-500/50" />
+          <p className="text-muted-foreground">{t("load_error")}</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); fetchDocuments(); }}
+            className="mt-4 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[hsl(var(--primary)/0.9)]"
+          >
+            {t("retry")}
+          </button>
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">

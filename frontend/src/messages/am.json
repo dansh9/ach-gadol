@@ -204,6 +204,9 @@
     "documents_count": "ሰነዶች",
     "search_kb": "በእውቀት ቤት ውስጥ ፈልግ...",
     "no_documents": "የሚታዩ ሰነዶች የሉም",
-    "ai_suggestion_label": "የ AI ጥቆማ:"
+    "ai_suggestion_label": "የ AI ጥቆማ:",
+    "load_error": "ውሂብ መጫን አልተሳካም",
+    "retry": "እንደገና ሞክር",
+    "untitled_case": "ርዕስ የሌለው ጉዳይ"
   }
 }

@@ -204,6 +204,9 @@
     "documents_count": "مستندات",
     "search_kb": "البحث في قاعدة المعرفة...",
     "no_documents": "لا توجد مستندات للعرض",
-    "ai_suggestion_label": "اقتراح الذكاء الاصطناعي:"
+    "ai_suggestion_label": "اقتراح الذكاء الاصطناعي:",
+    "load_error": "فشل في تحميل البيانات",
+    "retry": "إعادة المحاولة",
+    "untitled_case": "حالة بدون عنوان"
   }
 }

@@ -7,11 +7,12 @@ export async function PATCH(
 ) {
   try {
     const supabase = createAdminClient();
+    const { id } = params;
     const body = await request.json();
 
-    if (!body.status || !["approved", "rejected", "changes_requested"].includes(body.status)) {
+    if (!body.status || !["approved", "rejected"].includes(body.status)) {
       return NextResponse.json(
-        { error: "status must be approved, rejected, or changes_requested" },
+        { error: "status must be 'approved' or 'rejected'" },
         { status: 400 }
       );
     }
@@ -20,11 +21,9 @@ export async function PATCH(
       .from("approval_queue")
       .update({
         status: body.status,
-        decided_by: body.reviewerId,
-        decision_comment: body.comment || null,
-        decided_at: new Date().toISOString(),
+        reviewed_at: new Date().toISOString(),
       })
-      .eq("id", params.id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -35,6 +34,9 @@ export async function PATCH(
     return NextResponse.json({ approval: data });
   } catch (error) {
     console.error("Approval PATCH error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

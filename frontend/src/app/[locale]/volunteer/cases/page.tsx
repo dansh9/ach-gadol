@@ -114,7 +114,7 @@ export default function VolunteerCasesPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <h3 className="font-medium text-foreground">
-                      {c.title || "Untitled Case"}
+                      {c.title || t("untitled_case")}
                     </h3>
                     {c.notes && (
                       <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">

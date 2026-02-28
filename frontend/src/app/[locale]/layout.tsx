@@ -28,11 +28,15 @@ export async function generateMetadata({
   return {
     title: t("title"),
     description: t("description"),
+    metadataBase: new URL("https://frontend-swart-chi-12.vercel.app"),
     openGraph: {
       title: t("title"),
       description: t("description"),
       locale: locale,
       type: "website",
+    },
+    other: {
+      "theme-color": "#496c1a",
     },
   };
 }

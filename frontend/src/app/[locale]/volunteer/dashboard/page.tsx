@@ -10,6 +10,7 @@ import {
   BookOpen,
   ArrowRight,
   Loader2,
+  AlertTriangle,
 } from "lucide-react";
 
 interface DashboardStats {
@@ -23,21 +24,26 @@ export default function VolunteerDashboardPage() {
   const t = useTranslations("volunteer_dashboard");
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  async function fetchStats() {
+    try {
+      const res = await fetch("/api/dashboard/stats");
+      if (res.ok) {
+        const data = await res.json();
+        setStats(data);
+      } else {
+        setError(true);
+      }
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const res = await fetch("/api/dashboard/stats");
-        if (res.ok) {
-          const data = await res.json();
-          setStats(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchStats();
   }, []);
 
@@ -84,6 +90,17 @@ export default function VolunteerDashboardPage() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">
+          <AlertTriangle className="mb-4 h-12 w-12 text-amber-500/50" />
+          <p className="text-muted-foreground">{t("load_error")}</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); fetchStats(); }}
+            className="mt-4 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[hsl(var(--primary)/0.9)]"
+          >
+            {t("retry")}
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

@@ -204,6 +204,9 @@
     "documents_count": "מסמכים",
     "search_kb": "חפש במאגר הידע...",
     "no_documents": "אין מסמכים להצגה",
-    "ai_suggestion_label": "הצעת AI:"
+    "ai_suggestion_label": "הצעת AI:",
+    "load_error": "שגיאה בטעינת נתונים",
+    "retry": "נסה שוב",
+    "untitled_case": "תיק ללא כותרת"
   }
 }
