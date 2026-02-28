@@ -15,6 +15,7 @@ import {
   Loader2,
   MessageCircle,
   ExternalLink,
+  ArrowUpRight,
 } from "lucide-react";
 
 /* ===== Types ===== */
@@ -28,6 +29,7 @@ interface Message {
   sourceMap?: Record<string, { title: string; url?: string }>;
   confidence?: number;
   isStreaming?: boolean;
+  suggestions?: string[];
 }
 
 interface QuickAction {
@@ -40,6 +42,34 @@ interface QuickAction {
 /* ===== Fallback URL for sources without an external link ===== */
 
 const FALLBACK_SOURCE_URL = "/rights";
+
+/* ===== Parse follow-up suggestions from bot content ===== */
+
+/**
+ * Splits bot response into main content and follow-up suggestions.
+ * Suggestions are lines starting with ">> ".
+ */
+function parseSuggestions(content: string): {
+  mainContent: string;
+  suggestions: string[];
+} {
+  const lines = content.split("\n");
+  const mainLines: string[] = [];
+  const suggestions: string[] = [];
+
+  for (const line of lines) {
+    if (line.startsWith(">> ")) {
+      suggestions.push(line.slice(3).trim());
+    } else {
+      mainLines.push(line);
+    }
+  }
+
+  return {
+    mainContent: mainLines.join("\n").trimEnd(),
+    suggestions,
+  };
+}
 
 /* ===== Confidence Indicator ===== */
 
@@ -142,10 +172,23 @@ function renderMessageContent(
 
 /* ===== Message Bubble Component ===== */
 
-function MessageBubble({ message }: { message: Message }) {
+function MessageBubble({
+  message,
+  onSuggestionClick,
+  isLastBot,
+}: {
+  message: Message;
+  onSuggestionClick?: (text: string) => void;
+  isLastBot?: boolean;
+}) {
   const isBot = message.role === "bot";
   const locale = useLocale();
   const tChat = useTranslations("chat");
+
+  // Parse suggestions from content for bot messages
+  const { mainContent, suggestions } = isBot
+    ? parseSuggestions(message.content)
+    : { mainContent: message.content, suggestions: [] };
 
   return (
     <div className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}>
@@ -164,77 +207,95 @@ function MessageBubble({ message }: { message: Message }) {
         )}
       </div>
 
-      {/* Bubble */}
-      <div
-        className={`max-w-[80%] rounded-2xl px-4 py-3 sm:max-w-[70%] ${
-          isBot
-            ? "rounded-ss-sm border border-border/50 bg-card text-foreground"
-            : "rounded-se-sm bg-[hsl(var(--primary))] text-primary-foreground"
-        }`}
-      >
-        {/* Loading state — before first token arrives */}
-        {isBot && message.isStreaming && !message.content ? (
-          <div className="flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin text-[hsl(var(--primary))]" />
-            <span className="text-sm text-muted-foreground">...</span>
-          </div>
-        ) : (
-          /* Message content with clickable citations */
-          <div className="whitespace-pre-line text-sm leading-relaxed">
-            {renderMessageContent(message.content, message.sourceMap, locale)}
-            {/* Blinking cursor during streaming */}
-            {message.isStreaming && (
-              <span className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
-            )}
-          </div>
-        )}
-
-        {/* Sources — only shown when streaming is complete */}
-        {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
-          <div className="mt-2 border-t border-border/30 pt-2">
-            <p className="text-[10px] font-medium text-muted-foreground">
-              {tChat("sources_label")}
-            </p>
-            <div className="mt-1 flex flex-wrap gap-1">
-              {message.sources.map((source, i) => {
-                // Find external URL from sourceMap by matching title
-                const mapEntry = message.sourceMap
-                  ? Object.values(message.sourceMap).find((s) => s.title === source)
-                  : null;
-                const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
-                return (
-                  <a
-                    key={i}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
-                  >
-                    <ExternalLink className="h-2.5 w-2.5" />
-                    {source}
-                  </a>
-                );
-              })}
+      {/* Bubble + Suggestions */}
+      <div className={`max-w-[85%] sm:max-w-[75%] ${isBot ? "" : ""}`}>
+        <div
+          className={`rounded-2xl px-4 py-3 ${
+            isBot
+              ? "rounded-ss-sm border border-border/50 bg-card text-foreground"
+              : "rounded-se-sm bg-[hsl(var(--primary))] text-primary-foreground"
+          }`}
+        >
+          {/* Loading state — before first token arrives */}
+          {isBot && message.isStreaming && !message.content ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin text-[hsl(var(--primary))]" />
+              <span className="text-sm text-muted-foreground">...</span>
             </div>
-          </div>
-        )}
+          ) : (
+            /* Message content with clickable citations */
+            <div className="whitespace-pre-line text-sm leading-relaxed">
+              {renderMessageContent(mainContent, message.sourceMap, locale)}
+              {/* Blinking cursor during streaming */}
+              {message.isStreaming && (
+                <span className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
+              )}
+            </div>
+          )}
 
-        {/* Timestamp + Confidence — only when done */}
-        {!message.isStreaming && (
-          <div className="mt-1 flex items-center gap-1.5">
-            {isBot && message.confidence !== undefined && (
-              <ConfidenceDot confidence={message.confidence} />
-            )}
-            <p
-              className={`text-[10px] ${
-                isBot ? "text-muted-foreground" : "text-primary-foreground/60"
-              }`}
-            >
-              {message.timestamp.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
+          {/* Sources — only shown when streaming is complete */}
+          {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
+            <div className="mt-2 border-t border-border/30 pt-2">
+              <p className="text-[10px] font-medium text-muted-foreground">
+                {tChat("sources_label")}
+              </p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {message.sources.map((source, i) => {
+                  // Find external URL from sourceMap by matching title
+                  const mapEntry = message.sourceMap
+                    ? Object.values(message.sourceMap).find((s) => s.title === source)
+                    : null;
+                  const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+                  return (
+                    <a
+                      key={i}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
+                    >
+                      <ExternalLink className="h-2.5 w-2.5" />
+                      {source}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Timestamp + Confidence — only when done */}
+          {!message.isStreaming && (
+            <div className="mt-1 flex items-center gap-1.5">
+              {isBot && message.confidence !== undefined && (
+                <ConfidenceDot confidence={message.confidence} />
+              )}
+              <p
+                className={`text-[10px] ${
+                  isBot ? "text-muted-foreground" : "text-primary-foreground/60"
+                }`}
+              >
+                {message.timestamp.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Follow-up Suggestions — shown below the bubble for the last bot message */}
+        {isBot && !message.isStreaming && isLastBot && suggestions.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {suggestions.map((suggestion, i) => (
+              <button
+                key={i}
+                onClick={() => onSuggestionClick?.(suggestion)}
+                className="inline-flex items-center gap-1 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.05)] px-3 py-1.5 text-xs font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.12)] hover:shadow-sm"
+              >
+                <ArrowUpRight className="h-3 w-3" />
+                <span>{suggestion}</span>
+              </button>
+            ))}
           </div>
         )}
       </div>
@@ -377,6 +438,11 @@ export default function ChatPage() {
       setIsTyping(true);
       setShowEscalation(false);
       userScrolledUp.current = false; // Reset so we auto-scroll to the new response
+
+      // Reset textarea height
+      if (inputRef.current) {
+        inputRef.current.style.height = "auto";
+      }
 
       try {
         const response = await fetch("/api/chat/send", {
@@ -521,6 +587,10 @@ export default function ChatPage() {
     sendMessage(action.message);
   }
 
+  function handleSuggestionClick(text: string) {
+    sendMessage(text);
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -528,13 +598,19 @@ export default function ChatPage() {
     }
   }
 
-  /** Auto-resize the textarea to fit content (up to ~6 lines) */
+  /** Auto-resize the textarea to fit content (up to ~4 lines) */
   function handleTextareaInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setInput(e.target.value);
     const el = e.target;
     el.style.height = "auto";
-    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+    el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
   }
+
+  // Find the last bot message index for showing suggestions
+  const lastBotIdx = messages.reduceRight(
+    (found, msg, idx) => (found === -1 && msg.role === "bot" ? idx : found),
+    -1
+  );
 
   return (
     <div className="flex h-[calc(100dvh-4rem)] flex-col">
@@ -568,12 +644,17 @@ export default function ChatPage() {
         </div>
       </div>
 
-      {/* ===== Messages Area ===== */}
+      {/* ===== Messages + Input Area (unified scroll container) ===== */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
           <div className="space-y-4" aria-live="polite">
-            {messages.map((message) => (
-              <MessageBubble key={message.id} message={message} />
+            {messages.map((message, idx) => (
+              <MessageBubble
+                key={message.id}
+                message={message}
+                onSuggestionClick={handleSuggestionClick}
+                isLastBot={idx === lastBotIdx}
+              />
             ))}
 
             <div ref={messagesEndRef} />
@@ -605,22 +686,19 @@ export default function ChatPage() {
         {showEscalation && <EscalationBanner />}
       </div>
 
-      {/* ===== Disclaimer ===== */}
-      <div className="flex-shrink-0 border-t border-border/20 bg-amber-50/50 dark:bg-amber-900/5">
-        <div className="mx-auto max-w-4xl px-4 py-1.5 sm:px-6">
-          <div className="flex items-center justify-center gap-1.5">
-            <AlertTriangle className="h-3 w-3 text-amber-600 dark:text-amber-400" />
-            <p className="text-[10px] text-amber-700 dark:text-amber-300">
+      {/* ===== Input Area (sticky bottom, integrated feel) ===== */}
+      <div className="flex-shrink-0 bg-background">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          {/* Disclaimer inline */}
+          <div className="flex items-center justify-center gap-1.5 pb-2 pt-1.5">
+            <AlertTriangle className="h-3 w-3 text-amber-600/60 dark:text-amber-400/60" />
+            <p className="text-[10px] text-amber-700/70 dark:text-amber-300/60">
               {tChat("disclaimer")}
             </p>
           </div>
-        </div>
-      </div>
 
-      {/* ===== Input Area ===== */}
-      <div className="flex-shrink-0 border-t border-border/40 bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
-          <div className="flex items-end gap-2">
+          {/* Input row */}
+          <div className="relative mb-3 flex items-end gap-2 rounded-2xl border border-border bg-card p-2 shadow-sm transition-colors focus-within:border-[hsl(var(--primary)/0.4)] focus-within:shadow-md">
             <textarea
               ref={inputRef}
               value={input}
@@ -628,18 +706,18 @@ export default function ChatPage() {
               onKeyDown={handleKeyDown}
               placeholder={tChat("placeholder")}
               disabled={isTyping}
-              rows={2}
+              rows={1}
               aria-label={tChat("placeholder")}
-              className="flex-1 resize-none rounded-xl border border-border bg-card px-4 py-3 text-base leading-relaxed text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] disabled:opacity-50"
-              style={{ minHeight: "3.5rem", maxHeight: "10rem" }}
+              className="flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-relaxed text-foreground placeholder-muted-foreground outline-none disabled:opacity-50"
+              style={{ maxHeight: "7.5rem" }}
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="mb-1 inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--primary))] text-primary-foreground shadow-md transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--primary))] text-primary-foreground transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
               aria-label={tChat("send")}
             >
-              <Send className="h-5 w-5" />
+              <Send className="h-4 w-4" />
             </button>
           </div>
         </div>
