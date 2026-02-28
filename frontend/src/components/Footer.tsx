@@ -68,9 +68,9 @@ export default function Footer() {
             {t("rights_reserved")} &copy; {currentYear}
           </p>
           <div className="flex items-center gap-1 text-xs text-primary-foreground/50">
-            <span>Built with</span>
+            <span>{t("built_with")}</span>
             <Heart className="h-3 w-3 fill-[hsl(var(--accent))] text-[hsl(var(--accent))]" />
-            <span>for Lone Soldiers</span>
+            <span>{t("built_for")}</span>
           </div>
         </div>
       </div>

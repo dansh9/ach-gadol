@@ -31,7 +31,10 @@
     "volunteers_count": "Bénévoles actifs",
     "soldiers_yearly": "Soldats accompagnés chaque année",
     "presidential_award": "Lauréats du Prix présidentiel du bénévolat",
-    "mission": "Notre mission est d'être le grand frère de chaque soldat seul — accompagner, soutenir et garantir l'accès à tous les droits et ressources auxquels ils ont droit."
+    "mission": "Notre mission est d'être le grand frère de chaque soldat seul — accompagner, soutenir et garantir l'accès à tous les droits et ressources auxquels ils ont droit.",
+    "history_title": "Histoire",
+    "volunteers_title": "Bénévoles",
+    "join_volunteers": "Rejoignez nos bénévoles"
   },
   "rights": {
     "title": "Droits et avantages du soldat seul",
@@ -87,7 +90,10 @@
     "results_title": "Vos résultats",
     "your_rights": "Droits auxquels vous avez droit",
     "total_monthly": "Total mensuel estimé",
-    "disclaimer": "Ces résultats sont fournis à titre indicatif uniquement et ne constituent pas un avis juridique. L'éligibilité finale est déterminée par les autorités compétentes."
+    "disclaimer": "Ces résultats sont fournis à titre indicatif uniquement et ne constituent pas un avis juridique. L'éligibilité finale est déterminée par les autorités compétentes.",
+    "check_again": "Vérifier à nouveau",
+    "ask_question_button": "Poser une question",
+    "view_all_rights": "Voir tous les droits"
   },
   "chat": {
     "title": "Demandez à Ach Gadol",
@@ -106,7 +112,11 @@
     "quick_forms_msg": "Quels formulaires dois-je remplir en tant que soldat seul ?",
     "quick_volunteer_msg": "Je voudrais parler à un bénévole",
     "contact_volunteer": "Contacter un bénévole",
-    "error_message": "Désolé, une erreur est survenue. Veuillez réessayer ou contacter un bénévole pour obtenir de l'aide."
+    "error_message": "Désolé, une erreur est survenue. Veuillez réessayer ou contacter un bénévole pour obtenir de l'aide.",
+    "sources_label": "Sources :",
+    "confidence_high": "Confiance élevée",
+    "confidence_medium": "Confiance moyenne",
+    "confidence_low": "Confiance faible"
   },
   "resources": {
     "title": "Ressources utiles",
@@ -122,7 +132,9 @@
     "disclaimer": "Les informations sur ce site sont fournies à titre informatif uniquement et ne constituent pas un avis juridique.",
     "privacy": "Politique de confidentialité",
     "accessibility": "Accessibilité",
-    "contact": "Nous contacter"
+    "contact": "Nous contacter",
+    "built_with": "Créé avec",
+    "built_for": "pour les soldats seuls"
   },
   "features": {
     "title": "Comment nous aidons",
@@ -191,6 +203,7 @@
     "kb_title": "Base de connaissances",
     "documents_count": "documents",
     "search_kb": "Rechercher dans la base...",
-    "no_documents": "Aucun document à afficher"
+    "no_documents": "Aucun document à afficher",
+    "ai_suggestion_label": "Suggestion IA :"
   }
 }

@@ -110,7 +110,7 @@ export default function VolunteerApprovalsPage() {
                   {approval.ai_suggestion && (
                     <div className="mt-3 rounded-lg bg-muted/50 p-3">
                       <p className="text-xs font-medium text-muted-foreground">
-                        AI Suggestion:
+                        {t("ai_suggestion_label")}
                       </p>
                       <p className="mt-1 text-sm text-foreground">
                         {typeof approval.ai_suggestion === "object"
