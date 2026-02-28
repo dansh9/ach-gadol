@@ -36,20 +36,6 @@ const FEATURE_KEYS = [
 
 const FEATURE_LINKS = ["/rights", "/check", "/chat", "/volunteer"] as const;
 
-const FEATURE_COLORS = [
-  "from-green-500/10 to-green-600/5 border-green-200/50 dark:border-green-800/50",
-  "from-blue-500/10 to-blue-600/5 border-blue-200/50 dark:border-blue-800/50",
-  "from-emerald-500/10 to-emerald-600/5 border-emerald-200/50 dark:border-emerald-800/50",
-  "from-amber-500/10 to-amber-600/5 border-amber-200/50 dark:border-amber-800/50",
-] as const;
-
-const FEATURE_ICON_COLORS = [
-  "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-  "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
-  "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
-] as const;
-
 export default function HomePage() {
   const tHero = useTranslations("hero");
   const tFeatures = useTranslations("features");
@@ -59,56 +45,49 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* ===== Hero Section ===== */}
-      <section className="relative overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.04)] via-transparent to-transparent" />
-          <div className="absolute -top-24 end-0 h-[500px] w-[500px] rounded-full bg-[hsl(var(--accent)/0.08)] blur-3xl" />
-          <div className="absolute -bottom-24 start-0 h-[400px] w-[400px] rounded-full bg-[hsl(var(--primary)/0.06)] blur-3xl" />
-        </div>
-
-        <div className="mx-auto max-w-7xl px-4 pb-16 pt-20 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8 lg:pb-32 lg:pt-36">
-          <div className="mx-auto max-w-4xl text-center">
-            {/* Logo icon above title */}
-            <div className="mb-6 flex justify-center">
+      <section className="bg-[hsl(var(--primary)/0.03)]">
+        <div className="mx-auto max-w-5xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            {/* Logo */}
+            <div className="mb-5 flex justify-center">
               <Image
                 src="/logo-full.jpg"
                 alt="אח גדול"
-                width={120}
-                height={83}
-                className="h-20 w-auto sm:h-24"
+                width={100}
+                height={69}
+                className="h-16 w-auto sm:h-20"
                 priority
               />
             </div>
 
             {/* Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.3)] bg-[hsl(var(--primary)/0.08)] px-4 py-1.5 text-sm font-medium text-foreground">
-              <Shield className="h-4 w-4 text-[hsl(var(--primary))]" />
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.06)] px-3 py-1 text-sm font-medium text-foreground">
+              <Shield className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
               <span>{tHero("badge")}</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {tHero("title")}
             </h1>
 
             {/* Subtitle */}
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {tHero("subtitle")}
             </p>
 
             {/* CTA Buttons */}
-            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/check"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-[hsl(var(--primary)/0.25)] transition-all hover:shadow-xl hover:shadow-[hsl(var(--primary)/0.3)] hover:brightness-110 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-7 py-3.5 text-base font-semibold text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-110 sm:w-auto"
               >
                 <ClipboardCheck className="h-5 w-5" />
                 {tHero("cta_check")}
               </Link>
               <Link
                 href="/chat"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-8 py-4 text-base font-semibold text-white shadow-lg shadow-[hsl(var(--accent)/0.25)] transition-all hover:shadow-xl hover:shadow-[hsl(var(--accent)/0.3)] hover:brightness-110 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-7 py-3.5 text-base font-semibold text-white shadow-md transition-all hover:shadow-lg hover:brightness-110 sm:w-auto"
               >
                 <MessageCircle className="h-5 w-5" />
                 {tHero("cta_chat")}
@@ -119,19 +98,19 @@ export default function HomePage() {
       </section>
 
       {/* ===== Stats Section ===== */}
-      <section className="border-y border-border/40 bg-[hsl(var(--primary)/0.03)]">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
+      <section className="border-y border-border/40">
+        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <div className="grid grid-cols-3 gap-4">
             <StatsCard
-              icon={<Heart className="h-6 w-6 text-[hsl(var(--primary))]" />}
+              icon={<Heart className="h-5 w-5 text-[hsl(var(--primary))]" />}
               value={tHero("stats_soldiers")}
             />
             <StatsCard
-              icon={<Users className="h-6 w-6 text-[hsl(var(--accent))]" />}
+              icon={<Users className="h-5 w-5 text-[hsl(var(--primary))]" />}
               value={tHero("stats_volunteers")}
             />
             <StatsCard
-              icon={<Star className="h-6 w-6 text-[hsl(var(--primary))]" />}
+              icon={<Star className="h-5 w-5 text-[hsl(var(--primary))]" />}
               value={tHero("stats_rights")}
             />
           </div>
@@ -139,47 +118,45 @@ export default function HomePage() {
       </section>
 
       {/* ===== Features Section ===== */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-10 sm:py-14">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               {tFeatures("title")}
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-2 text-base text-muted-foreground">
               {tFeatures("subtitle")}
             </p>
           </div>
 
           {/* Features Grid */}
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-8">
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {FEATURE_KEYS.map((key, index) => {
               const Icon = FEATURE_ICONS[index];
               return (
                 <Link
                   key={key}
                   href={FEATURE_LINKS[index]}
-                  className={`group relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 transition-all hover:-translate-y-1 hover:shadow-lg sm:p-8 ${FEATURE_COLORS[index]}`}
+                  className="group rounded-xl border border-border/50 bg-card p-5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6"
                 >
                   {/* Icon */}
-                  <div
-                    className={`mb-4 inline-flex rounded-xl p-3 ${FEATURE_ICON_COLORS[index]}`}
-                  >
-                    <Icon className="h-6 w-6" />
+                  <div className="mb-3 inline-flex rounded-lg bg-[hsl(var(--primary)/0.08)] p-2.5">
+                    <Icon className="h-5 w-5 text-[hsl(var(--primary))]" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-foreground">
+                  <h3 className="text-lg font-bold text-foreground">
                     {tFeatures(`${key}.title`)}
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-2 leading-relaxed text-muted-foreground">
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                     {tFeatures(`${key}.description`)}
                   </p>
 
                   {/* Arrow indicator */}
-                  <div className="mt-4 flex items-center gap-1 text-sm font-medium text-[hsl(var(--primary))] opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-3 flex items-center gap-1 text-sm font-medium text-[hsl(var(--primary))] opacity-0 transition-opacity group-hover:opacity-100">
                     <span>{tCommon("learn_more")}</span>
                     <ArrowLeft className="h-4 w-4 rtl:hidden" />
                     <ArrowRight className="hidden h-4 w-4 rtl:inline-block" />
@@ -193,35 +170,29 @@ export default function HomePage() {
 
       {/* ===== CTA Section ===== */}
       <section className="border-t border-border/40">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-[hsl(var(--primary))] px-6 py-16 text-center shadow-2xl sm:px-12 sm:py-20">
-            {/* Background decoration */}
-            <div className="absolute -end-20 -top-20 h-64 w-64 rounded-full bg-white/5 blur-2xl" />
-            <div className="absolute -bottom-20 -start-20 h-64 w-64 rounded-full bg-[hsl(var(--accent)/0.15)] blur-2xl" />
-
-            <div className="relative">
-              <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-                {tCta("title")}
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-primary-foreground/80">
-                {tCta("subtitle")}
-              </p>
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/check"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 text-base font-semibold text-[hsl(var(--primary))] shadow-lg transition-all hover:bg-white/90 hover:shadow-xl sm:w-auto"
-                >
-                  <ClipboardCheck className="h-5 w-5" />
-                  {tCta("check_button")}
-                </Link>
-                <Link
-                  href="/chat"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white/30 px-8 py-4 text-base font-semibold text-primary-foreground transition-all hover:border-white/50 hover:bg-white/10 sm:w-auto"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  {tCta("chat_button")}
-                </Link>
-              </div>
+        <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="rounded-2xl bg-[hsl(var(--primary))] px-6 py-10 text-center sm:px-10 sm:py-12">
+            <h2 className="text-2xl font-bold tracking-tight text-primary-foreground sm:text-3xl">
+              {tCta("title")}
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-base text-primary-foreground/80">
+              {tCta("subtitle")}
+            </p>
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/check"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-7 py-3.5 text-base font-semibold text-[hsl(var(--primary))] shadow-md transition-all hover:bg-white/90 hover:shadow-lg sm:w-auto"
+              >
+                <ClipboardCheck className="h-5 w-5" />
+                {tCta("check_button")}
+              </Link>
+              <Link
+                href="/chat"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white/30 px-7 py-3.5 text-base font-semibold text-primary-foreground transition-all hover:border-white/50 hover:bg-white/10 sm:w-auto"
+              >
+                <MessageCircle className="h-5 w-5" />
+                {tCta("chat_button")}
+              </Link>
             </div>
           </div>
         </div>
@@ -240,11 +211,11 @@ function StatsCard({
   value: string;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.08)]">
+    <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.08)]">
         {icon}
       </div>
-      <span className="text-lg font-bold text-foreground sm:text-xl">
+      <span className="text-sm font-bold text-foreground sm:text-base">
         {value}
       </span>
     </div>

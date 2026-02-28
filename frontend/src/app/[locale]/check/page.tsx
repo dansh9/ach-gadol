@@ -38,15 +38,15 @@ const CATEGORY_ICONS: Record<string, typeof Wallet> = {
 
 const CATEGORY_COLORS: Record<string, string> = {
   financial:
-    "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
+    "bg-[hsl(var(--primary)/0.08)] text-[hsl(var(--primary))]",
   housing:
-    "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+    "bg-[hsl(var(--primary)/0.08)] text-[hsl(var(--primary))]",
   vacations:
-    "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400",
+    "bg-[hsl(var(--primary)/0.08)] text-[hsl(var(--primary))]",
   post_service:
-    "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+    "bg-[hsl(var(--primary)/0.08)] text-[hsl(var(--primary))]",
   reserves:
-    "bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400",
+    "bg-[hsl(var(--primary)/0.08)] text-[hsl(var(--primary))]",
 };
 
 /* ===== Step Components ===== */
@@ -266,32 +266,28 @@ export default function CheckPage() {
   if (showResults) {
     return (
       <div className="flex flex-col">
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.05)] via-transparent to-transparent" />
-          </div>
-
-          <div className="mx-auto max-w-4xl px-4 pb-8 pt-20 sm:px-6 sm:pb-12 sm:pt-28 lg:px-8">
+        <section>
+          <div className="mx-auto max-w-4xl px-4 pb-6 pt-10 sm:px-6 sm:pb-8 sm:pt-14 lg:px-8">
             {/* Results Header */}
             <div className="text-center">
-              <div className="mb-4 inline-flex rounded-full bg-emerald-100 p-3 dark:bg-emerald-900/30">
-                <Sparkles className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
+              <div className="mb-3 inline-flex rounded-full bg-[hsl(var(--primary)/0.08)] p-3">
+                <Sparkles className="h-7 w-7 text-[hsl(var(--primary))]" />
               </div>
-              <h1 className="text-3xl font-extrabold text-foreground sm:text-4xl">
+              <h1 className="text-2xl font-extrabold text-foreground sm:text-3xl">
                 {tCheck("results_title")}
               </h1>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-1 text-muted-foreground">
                 {tCheck("your_rights")}
               </p>
             </div>
 
             {/* Total Monthly */}
             {totalMonthly > 0 && (
-              <div className="mt-8 rounded-2xl border border-emerald-200/50 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 p-6 text-center dark:border-emerald-800/50">
+              <div className="mt-6 rounded-xl border border-border/50 bg-card p-5 text-center">
                 <p className="text-sm font-medium text-muted-foreground">
                   {tCheck("total_monthly")}
                 </p>
-                <div className="mt-1 text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 sm:text-5xl">
+                <div className="mt-1 text-3xl font-extrabold text-[hsl(var(--primary))] sm:text-4xl">
                   {totalMonthly.toLocaleString("he-IL", {
                     maximumFractionDigits: 0,
                   })}{" "}
@@ -301,7 +297,7 @@ export default function CheckPage() {
             )}
 
             {/* Grouped Rights */}
-            <div className="mt-8 space-y-6">
+            <div className="mt-6 space-y-5">
               {Object.entries(groupedRights).map(([category, rights]) => {
                 const Icon = CATEGORY_ICONS[category] ?? Shield;
                 const colorClass =
@@ -337,7 +333,7 @@ export default function CheckPage() {
                           </div>
                           {right.monthlyAmount && (
                             <div className="flex-shrink-0 text-end">
-                              <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
+                              <span className="text-lg font-bold text-[hsl(var(--primary))]">
                                 {right.monthlyAmount.toLocaleString("he-IL")}
                               </span>
                               <span className="text-xs text-muted-foreground">
@@ -348,7 +344,7 @@ export default function CheckPage() {
                           )}
                           {right.oneTimeAmount && !right.monthlyAmount && (
                             <div className="flex-shrink-0 text-end">
-                              <span className="text-lg font-bold text-amber-600 dark:text-amber-400">
+                              <span className="text-lg font-bold text-[hsl(var(--accent))]">
                                 {right.oneTimeAmount.toLocaleString("he-IL")}
                               </span>
                               <span className="text-xs text-muted-foreground">
@@ -366,34 +362,34 @@ export default function CheckPage() {
             </div>
 
             {/* Disclaimer */}
-            <div className="mt-8 rounded-xl border border-amber-200/50 bg-amber-50 p-4 dark:border-amber-800/50 dark:bg-amber-900/10">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600 dark:text-amber-400" />
-                <p className="text-sm text-amber-800 dark:text-amber-200">
+            <div className="mt-5 rounded-lg border border-amber-200/50 bg-amber-50 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                <p className="text-xs text-amber-800 dark:text-amber-200">
                   {tCheck("disclaimer")}
                 </p>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+            <div className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
               <button
                 onClick={handleReset}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-border px-6 py-3 text-sm font-semibold text-foreground transition-all hover:bg-muted sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-muted sm:w-auto"
               >
                 <RotateCcw className="h-4 w-4" />
                 Check Again
               </button>
               <Link
                 href="/chat"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:brightness-110 sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:brightness-110 sm:w-auto"
               >
                 <MessageCircle className="h-4 w-4" />
                 Ask a Question
               </Link>
               <Link
                 href="/rights"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-[hsl(var(--accent))] bg-[hsl(var(--accent)/0.08)] px-6 py-3 text-sm font-semibold text-[hsl(var(--accent-foreground))] transition-all hover:bg-[hsl(var(--accent)/0.15)] sm:w-auto"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:brightness-110 sm:w-auto"
               >
                 <Shield className="h-4 w-4" />
                 View All Rights
@@ -408,34 +404,29 @@ export default function CheckPage() {
   // ===== Questionnaire View =====
   return (
     <div className="flex flex-col">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--primary)/0.05)] via-transparent to-transparent" />
-          <div className="absolute -top-24 end-0 h-[400px] w-[400px] rounded-full bg-[hsl(var(--accent)/0.06)] blur-3xl" />
-        </div>
-
-        <div className="mx-auto max-w-2xl px-4 pb-16 pt-20 sm:px-6 sm:pb-24 sm:pt-28 lg:px-8">
+      <section>
+        <div className="mx-auto max-w-2xl px-4 pb-10 pt-10 sm:px-6 sm:pb-14 sm:pt-14 lg:px-8">
           {/* Header */}
           <div className="text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent)/0.3)] bg-[hsl(var(--accent)/0.08)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--accent-foreground))]">
-              <ClipboardCheck className="h-4 w-4 text-[hsl(var(--accent))]" />
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.06)] px-3 py-1 text-sm font-medium text-foreground">
+              <ClipboardCheck className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
               <span>
                 {step + 1} / {totalSteps}
               </span>
             </div>
-            <h1 className="text-3xl font-extrabold leading-tight text-foreground sm:text-4xl">
+            <h1 className="text-2xl font-extrabold leading-tight text-foreground sm:text-3xl">
               {tCheck("title")}
             </h1>
-            <p className="mt-2 text-muted-foreground">{tCheck("subtitle")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{tCheck("subtitle")}</p>
           </div>
 
           {/* Progress */}
-          <div className="mt-8">
+          <div className="mt-6">
             <StepIndicator currentStep={step} totalSteps={totalSteps} />
           </div>
 
           {/* Question Card */}
-          <div className="mt-8 rounded-2xl border border-border/50 bg-card p-6 shadow-lg sm:p-8">
+          <div className="mt-6 rounded-xl border border-border/50 bg-card p-5 shadow-sm sm:p-6">
             <h2 className="mb-6 text-xl font-bold text-foreground">
               {STEPS[step].question}
             </h2>
@@ -539,7 +530,7 @@ export default function CheckPage() {
           </div>
 
           {/* Disclaimer */}
-          <div className="mt-6 rounded-xl border border-amber-200/50 bg-amber-50 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
+          <div className="mt-5 rounded-lg border border-amber-200/50 bg-amber-50 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
             <div className="flex items-start gap-2">
               <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
               <p className="text-xs text-amber-800 dark:text-amber-200">
