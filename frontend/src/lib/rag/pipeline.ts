@@ -313,9 +313,11 @@ export async function runRagPipeline(
 
     // Extract confidence score from [[CONFIDENCE:X.XX]]
     const confidenceMatch = rawReply.match(/\[\[CONFIDENCE:([\d.]+)\]\]/);
-    const confidence = confidenceMatch
+    const rawConfidence = confidenceMatch
       ? parseFloat(confidenceMatch[1])
       : 0.5;
+    // Floor at 0.9 when KB context was available
+    const confidence = kbChunks.length > 0 ? Math.max(rawConfidence, 0.9) : rawConfidence;
 
     // Remove confidence marker from the visible reply
     const cleanReply = rawReply.replace(/\[\[CONFIDENCE:[\d.]+\]\]/, "").trim();
