@@ -192,20 +192,33 @@ export async function runRagPipeline(
   }
 
   // 3. Translate query to English for KB search (KB content is in English)
+  //    Uses GPT-4o-mini for speed (~1s vs ~3s for Claude)
   let searchQuery = message;
-  if (language !== "en") {
+  if (language !== "en" && process.env.OPENAI_API_KEY) {
     try {
-      const anthropic = new Anthropic({ apiKey: anthropicKey });
-      const translationResp = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 200,
-        system: "Translate the following text to English. Return ONLY the translation, nothing else.",
-        messages: [{ role: "user", content: message }],
+      const transResp = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          max_tokens: 200,
+          temperature: 0,
+          messages: [
+            { role: "system", content: "Translate to English. Return ONLY the translation." },
+            { role: "user", content: message },
+          ],
+        }),
       });
-      const translated = translationResp.content[0].type === "text" ? translationResp.content[0].text : message;
-      if (translated && translated.length > 0) {
-        searchQuery = translated;
-        console.log("Translated query for KB search:", searchQuery);
+      if (transResp.ok) {
+        const transData = await transResp.json();
+        const translated = transData.choices?.[0]?.message?.content?.trim();
+        if (translated) {
+          searchQuery = translated;
+          console.log("Translated query for KB search:", searchQuery);
+        }
       }
     } catch (translateError) {
       console.warn("Translation failed, using original message for search:", translateError);
