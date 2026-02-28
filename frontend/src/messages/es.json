@@ -204,6 +204,9 @@
     "documents_count": "documentos",
     "search_kb": "Buscar en la base...",
     "no_documents": "No hay documentos para mostrar",
-    "ai_suggestion_label": "Sugerencia de IA:"
+    "ai_suggestion_label": "Sugerencia de IA:",
+    "load_error": "Error al cargar datos",
+    "retry": "Reintentar",
+    "untitled_case": "Caso sin título"
   }
 }

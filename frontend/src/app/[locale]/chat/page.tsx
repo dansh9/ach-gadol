@@ -529,7 +529,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col">
+    <div className="flex h-[calc(100dvh-4rem)] flex-col">
       {/* ===== Chat Header ===== */}
       <div className="flex-shrink-0 border-b border-border/40 bg-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
@@ -563,7 +563,7 @@ export default function ChatPage() {
       {/* ===== Messages Area ===== */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-          <div className="space-y-4">
+          <div className="space-y-4" aria-live="polite">
             {messages.map((message) => (
               <MessageBubble key={message.id} message={message} />
             ))}

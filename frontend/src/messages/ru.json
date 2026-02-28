@@ -204,6 +204,9 @@
     "documents_count": "документов",
     "search_kb": "Поиск в базе знаний...",
     "no_documents": "Нет документов для отображения",
-    "ai_suggestion_label": "Предложение ИИ:"
+    "ai_suggestion_label": "Предложение ИИ:",
+    "load_error": "Ошибка загрузки данных",
+    "retry": "Повторить",
+    "untitled_case": "Дело без названия"
   }
 }

@@ -49,6 +49,7 @@ export default function Navigation({ locale }: { locale: string }) {
         <Link
           href="/"
           className="flex shrink-0 items-center gap-2"
+          aria-label="Ach Gadol — Home"
         >
           {/* Icon logo for mobile */}
           <Image
