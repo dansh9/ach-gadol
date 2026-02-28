@@ -13,9 +13,9 @@ import {
   Users,
   AlertTriangle,
   Loader2,
-  MessageCircle,
   ExternalLink,
   ArrowUpRight,
+  Phone,
 } from "lucide-react";
 
 /* ===== Types ===== */
@@ -35,6 +35,7 @@ interface Message {
 interface QuickAction {
   id: string;
   label: string;
+  description: string;
   icon: typeof ClipboardCheck;
   message: string;
 }
@@ -45,10 +46,6 @@ const FALLBACK_SOURCE_URL = "/rights";
 
 /* ===== Parse follow-up suggestions from bot content ===== */
 
-/**
- * Splits bot response into main content and follow-up suggestions.
- * Suggestions are lines starting with ">> ".
- */
 function parseSuggestions(content: string): {
   mainContent: string;
   suggestions: string[];
@@ -99,11 +96,6 @@ function ConfidenceDot({ confidence }: { confidence: number }) {
 
 /* ===== Citation rendering ===== */
 
-/**
- * Parse message content and render:
- *   - [N] citation numbers as small clickable badges linking to KB sources
- *   - [text](url) markdown links as clickable external links (e.g. Kol-Zchut)
- */
 function renderMessageContent(
   content: string,
   sourceMap?: Record<string, { title: string; url?: string }>,
@@ -111,20 +103,16 @@ function renderMessageContent(
 ) {
   if (!content) return null;
 
-  // Strip confidence marker that may appear during streaming
   const cleaned = content
     .replace(/\[\[CONFIDENCE:[\d.]*\]\]/, "")
     .replace(/\[\[CONFIDENCE:?[\d.]*$/, "")
     .trim();
 
-  // Split by both [N] citations AND [text](url) markdown links (keep delimiters)
-  // Order matters: match markdown links first (they also start with [)
   const parts = cleaned.split(/(\[[^\]]+\]\(https?:\/\/[^)]+\)|\[\d+\])/g);
 
   return (
     <>
       {parts.map((part, i) => {
-        // Match markdown links: [link text](url)
         const mdMatch = part.match(/^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/);
         if (mdMatch) {
           return (
@@ -141,7 +129,6 @@ function renderMessageContent(
           );
         }
 
-        // Match [N] citation numbers
         const numMatch = part.match(/^\[(\d+)\]$/);
         if (numMatch && sourceMap) {
           const num = numMatch[1];
@@ -185,63 +172,60 @@ function MessageBubble({
   const locale = useLocale();
   const tChat = useTranslations("chat");
 
-  // Parse suggestions from content for bot messages
   const { mainContent, suggestions } = isBot
     ? parseSuggestions(message.content)
     : { mainContent: message.content, suggestions: [] };
 
   return (
-    <div className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}>
+    <div className={`flex gap-2.5 ${isBot ? "" : "flex-row-reverse"}`}>
       {/* Avatar */}
       <div
-        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
+        className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${
           isBot
-            ? "bg-[hsl(var(--primary)/0.1)]"
+            ? "bg-[hsl(var(--primary)/0.12)] ring-2 ring-[hsl(var(--primary)/0.06)]"
             : "bg-[hsl(var(--accent)/0.15)]"
         }`}
       >
         {isBot ? (
-          <Bot className="h-4 w-4 text-[hsl(var(--primary))]" />
+          <Bot className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
         ) : (
-          <User className="h-4 w-4 text-[hsl(var(--accent))]" />
+          <User className="h-3.5 w-3.5 text-[hsl(var(--accent))]" />
         )}
       </div>
 
       {/* Bubble + Suggestions */}
-      <div className={`max-w-[85%] sm:max-w-[75%] ${isBot ? "" : ""}`}>
+      <div className="max-w-[82%] sm:max-w-[72%]">
         <div
-          className={`rounded-2xl px-4 py-3 ${
+          className={`rounded-2xl px-4 py-2.5 ${
             isBot
-              ? "rounded-ss-sm border border-border/50 bg-card text-foreground"
-              : "rounded-se-sm bg-[hsl(var(--primary))] text-primary-foreground"
+              ? "rounded-ss-md bg-card text-foreground shadow-sm ring-1 ring-border/40"
+              : "rounded-se-md bg-[hsl(var(--primary))] text-primary-foreground shadow-sm"
           }`}
         >
-          {/* Loading state — before first token arrives */}
+          {/* Loading dots before first token */}
           {isBot && message.isStreaming && !message.content ? (
-            <div className="flex items-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin text-[hsl(var(--primary))]" />
-              <span className="text-sm text-muted-foreground">...</span>
+            <div className="flex items-center gap-1 py-1">
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:0ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:300ms]" />
             </div>
           ) : (
-            /* Message content with clickable citations */
-            <div className="whitespace-pre-line text-sm leading-relaxed">
+            <div className="whitespace-pre-line text-[14px] leading-[1.65]">
               {renderMessageContent(mainContent, message.sourceMap, locale)}
-              {/* Blinking cursor during streaming */}
               {message.isStreaming && (
-                <span className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
+                <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.5)]" />
               )}
             </div>
           )}
 
-          {/* Sources — only shown when streaming is complete */}
+          {/* Sources */}
           {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
-            <div className="mt-2 border-t border-border/30 pt-2">
-              <p className="text-[10px] font-medium text-muted-foreground">
+            <div className="mt-2 border-t border-border/20 pt-2">
+              <p className="text-[10px] font-medium text-muted-foreground/70">
                 {tChat("sources_label")}
               </p>
               <div className="mt-1 flex flex-wrap gap-1">
                 {message.sources.map((source, i) => {
-                  // Find external URL from sourceMap by matching title
                   const mapEntry = message.sourceMap
                     ? Object.values(message.sourceMap).find((s) => s.title === source)
                     : null;
@@ -252,7 +236,7 @@ function MessageBubble({
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-0.5 rounded bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
+                      className="inline-flex items-center gap-0.5 rounded-md bg-muted/60 px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
                     >
                       <ExternalLink className="h-2.5 w-2.5" />
                       {source}
@@ -263,15 +247,15 @@ function MessageBubble({
             </div>
           )}
 
-          {/* Timestamp + Confidence — only when done */}
+          {/* Timestamp + Confidence */}
           {!message.isStreaming && (
-            <div className="mt-1 flex items-center gap-1.5">
+            <div className="mt-1.5 flex items-center gap-1.5">
               {isBot && message.confidence !== undefined && (
                 <ConfidenceDot confidence={message.confidence} />
               )}
               <p
                 className={`text-[10px] ${
-                  isBot ? "text-muted-foreground" : "text-primary-foreground/60"
+                  isBot ? "text-muted-foreground/50" : "text-primary-foreground/50"
                 }`}
               >
                 {message.timestamp.toLocaleTimeString([], {
@@ -283,14 +267,14 @@ function MessageBubble({
           )}
         </div>
 
-        {/* Follow-up Suggestions — shown below the bubble for the last bot message */}
+        {/* Follow-up Suggestions */}
         {isBot && !message.isStreaming && isLastBot && suggestions.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {suggestions.map((suggestion, i) => (
               <button
                 key={i}
                 onClick={() => onSuggestionClick?.(suggestion)}
-                className="inline-flex items-center gap-1 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.05)] px-3 py-1.5 text-xs font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.12)] hover:shadow-sm"
+                className="inline-flex items-center gap-1 rounded-xl border border-[hsl(var(--primary)/0.15)] bg-[hsl(var(--primary)/0.04)] px-3 py-1.5 text-xs font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.1)] hover:shadow-sm active:scale-[0.98]"
               >
                 <ArrowUpRight className="h-3 w-3" />
                 <span>{suggestion}</span>
@@ -309,8 +293,8 @@ function EscalationBanner() {
   const tChat = useTranslations("chat");
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6">
-      <div className="rounded-xl border border-amber-200/50 bg-amber-50 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
+    <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
+      <div className="rounded-xl border border-amber-200/50 bg-amber-50/80 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
           <div>
@@ -321,7 +305,7 @@ function EscalationBanner() {
               href="/resources"
               className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300"
             >
-              <Users className="h-3 w-3" />
+              <Phone className="h-3 w-3" />
               {tChat("contact_volunteer")}
             </Link>
           </div>
@@ -345,18 +329,21 @@ export default function ChatPage() {
     {
       id: "rights",
       label: tChat("quick_rights"),
+      description: tChat("quick_rights_msg"),
       icon: ClipboardCheck,
       message: tChat("quick_rights_msg"),
     },
     {
       id: "forms",
       label: tChat("quick_forms"),
+      description: tChat("quick_forms_msg"),
       icon: FileText,
       message: tChat("quick_forms_msg"),
     },
     {
       id: "volunteer",
       label: tChat("quick_volunteer"),
+      description: tChat("quick_volunteer_msg"),
       icon: Users,
       message: tChat("quick_volunteer_msg"),
     },
@@ -376,14 +363,13 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
 
-  // Detect if user has scrolled up (so we don't force them back down)
+  // Detect if user has scrolled up
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
       const { scrollTop, scrollHeight, clientHeight } = container;
-      // "Near bottom" = within 150px of the bottom
       userScrolledUp.current = scrollHeight - scrollTop - clientHeight > 150;
     };
 
@@ -391,20 +377,17 @@ export default function ChatPage() {
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Smart auto-scroll: only scroll if user is near the bottom
+  // Smart auto-scroll
   useEffect(() => {
     if (userScrolledUp.current) return;
 
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    // During streaming: instant scroll (no queuing of smooth animations)
-    // After streaming: smooth scroll for new messages
     const lastMsg = messages[messages.length - 1];
     const isCurrentlyStreaming = lastMsg?.isStreaming;
 
     if (isCurrentlyStreaming) {
-      // Instant snap to bottom during streaming — no jank
       container.scrollTop = container.scrollHeight;
     } else {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -415,7 +398,6 @@ export default function ChatPage() {
     async (text: string) => {
       if (!text.trim() || isTyping) return;
 
-      // Add user message
       const userMsg: Message = {
         id: `user-${Date.now()}`,
         role: "user",
@@ -423,7 +405,6 @@ export default function ChatPage() {
         timestamp: new Date(),
       };
 
-      // Add placeholder bot message for streaming
       const botMsgId = `bot-${Date.now()}`;
       const botMsg: Message = {
         id: botMsgId,
@@ -437,9 +418,8 @@ export default function ChatPage() {
       setInput("");
       setIsTyping(true);
       setShowEscalation(false);
-      userScrolledUp.current = false; // Reset so we auto-scroll to the new response
+      userScrolledUp.current = false;
 
-      // Reset textarea height
       if (inputRef.current) {
         inputRef.current.style.height = "auto";
       }
@@ -460,7 +440,6 @@ export default function ChatPage() {
           throw new Error("Failed to send message");
         }
 
-        // Read SSE stream
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = "";
@@ -481,7 +460,6 @@ export default function ChatPage() {
               if (data.type === "session" && data.sessionId && !sessionId) {
                 setSessionId(data.sessionId);
               } else if (data.type === "token") {
-                // Append token to the streaming bot message
                 setMessages((prev) => {
                   const lastMsg = prev[prev.length - 1];
                   if (lastMsg.id === botMsgId) {
@@ -493,7 +471,6 @@ export default function ChatPage() {
                   return prev;
                 });
               } else if (data.type === "done") {
-                // Finalize the bot message with sources and confidence
                 setMessages((prev) => {
                   const lastMsg = prev[prev.length - 1];
                   if (lastMsg.id === botMsgId) {
@@ -541,7 +518,6 @@ export default function ChatPage() {
           }
         }
 
-        // Ensure streaming flag is cleared even if no "done" event
         setMessages((prev) => {
           const lastMsg = prev[prev.length - 1];
           if (lastMsg.id === botMsgId && lastMsg.isStreaming) {
@@ -598,7 +574,6 @@ export default function ChatPage() {
     }
   }
 
-  /** Auto-resize the textarea to fit content (up to ~4 lines) */
   function handleTextareaInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setInput(e.target.value);
     const el = e.target;
@@ -606,99 +581,90 @@ export default function ChatPage() {
     el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
   }
 
-  // Find the last bot message index for showing suggestions
   const lastBotIdx = messages.reduceRight(
     (found, msg, idx) => (found === -1 && msg.role === "bot" ? idx : found),
     -1
   );
 
+  const isWelcomeState = messages.length <= 1 && !isTyping;
+
   return (
-    <div className="flex h-[calc(100dvh-4rem)] flex-col">
-      {/* ===== Chat Header ===== */}
-      <div className="flex-shrink-0 border-b border-border/40 bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)]">
-              <Bot className="h-5 w-5 text-[hsl(var(--primary))]" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold text-foreground">
-                {tChat("title")}
-              </h1>
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="h-3 w-3 text-[hsl(var(--accent))]" />
-                <span className="text-xs text-muted-foreground">
-                  {tChat("powered_by")}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <Link
-            href="/resources"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <MessageCircle className="h-3.5 w-3.5" />
-            <span>{tChat("escalate").split("?")[0]}?</span>
-          </Link>
-        </div>
-      </div>
-
-      {/* ===== Messages + Input Area (unified scroll container) ===== */}
+    <div className="flex h-[calc(100dvh-4rem)] flex-col bg-gradient-to-b from-background via-background to-muted/20">
+      {/* ===== Messages Area ===== */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
-          <div className="space-y-4" aria-live="polite">
-            {messages.map((message, idx) => (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                onSuggestionClick={handleSuggestionClick}
-                isLastBot={idx === lastBotIdx}
-              />
-            ))}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Quick Actions (shown only at beginning) */}
-          {messages.length <= 1 && !isTyping && (
-            <div className="mt-6">
-              <p className="mb-3 text-center text-xs font-medium text-muted-foreground">
-                {tChat("quick_actions")}
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {quickActions.map((action) => (
-                  <button
-                    key={action.id}
-                    onClick={() => handleQuickAction(action)}
-                    className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.05)] px-4 py-2 text-sm font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.1)] hover:shadow-sm"
-                  >
-                    <action.icon className="h-4 w-4" />
-                    <span>{action.label}</span>
-                  </button>
-                ))}
-              </div>
+        {isWelcomeState ? (
+          /* ===== Welcome / Empty State ===== */
+          <div className="flex h-full flex-col items-center justify-center px-4 pb-4">
+            {/* Bot avatar & branding */}
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[hsl(var(--primary)/0.1)] ring-4 ring-[hsl(var(--primary)/0.05)]">
+              <Bot className="h-8 w-8 text-[hsl(var(--primary))]" />
             </div>
-          )}
-        </div>
+            <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+              {tChat("title")}
+            </h1>
+            <div className="mt-1 flex items-center gap-1.5">
+              <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--accent))]" />
+              <span className="text-sm text-muted-foreground">
+                {tChat("powered_by")}
+              </span>
+            </div>
+
+            {/* Welcome message */}
+            <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+              {tChat("welcome")}
+            </p>
+
+            {/* Quick Action Cards */}
+            <div className="mt-6 grid w-full max-w-md grid-cols-1 gap-2 sm:grid-cols-3 sm:max-w-xl">
+              {quickActions.map((action) => (
+                <button
+                  key={action.id}
+                  onClick={() => handleQuickAction(action)}
+                  className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card p-3.5 text-start shadow-sm transition-all hover:border-[hsl(var(--primary)/0.3)] hover:bg-[hsl(var(--primary)/0.04)] hover:shadow-md active:scale-[0.98] sm:flex-col sm:items-start sm:gap-2 sm:p-4"
+                >
+                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--primary)/0.08)] transition-colors group-hover:bg-[hsl(var(--primary)/0.14)]">
+                    <action.icon className="h-4.5 w-4.5 text-[hsl(var(--primary))]" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-foreground">{action.label}</p>
+                    <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground hidden sm:block">
+                      {action.description}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            {/* Disclaimer */}
+            <p className="mt-6 max-w-sm text-center text-[10px] leading-relaxed text-muted-foreground/50">
+              {tChat("disclaimer")}
+            </p>
+          </div>
+        ) : (
+          /* ===== Chat Messages ===== */
+          <div className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
+            <div className="space-y-4" aria-live="polite">
+              {messages.map((message, idx) => (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  onSuggestionClick={handleSuggestionClick}
+                  isLastBot={idx === lastBotIdx}
+                />
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+        )}
 
         {/* Escalation Banner */}
         {showEscalation && <EscalationBanner />}
       </div>
 
-      {/* ===== Input Area (sticky bottom, integrated feel) ===== */}
-      <div className="flex-shrink-0 bg-background">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          {/* Disclaimer inline */}
-          <div className="flex items-center justify-center gap-1.5 pb-2 pt-1.5">
-            <AlertTriangle className="h-3 w-3 text-amber-600/60 dark:text-amber-400/60" />
-            <p className="text-[10px] text-amber-700/70 dark:text-amber-300/60">
-              {tChat("disclaimer")}
-            </p>
-          </div>
-
-          {/* Input row */}
-          <div className="relative mb-3 flex items-end gap-2 rounded-2xl border border-border bg-card p-2 shadow-sm transition-colors focus-within:border-[hsl(var(--primary)/0.4)] focus-within:shadow-md">
+      {/* ===== Input Area ===== */}
+      <div className="flex-shrink-0 border-t border-border/30 bg-background/80 backdrop-blur-lg">
+        <div className="mx-auto max-w-3xl px-3 py-2.5 sm:px-5">
+          <div className="flex items-end gap-2 rounded-2xl border border-border/60 bg-card px-3 py-2 shadow-sm transition-all focus-within:border-[hsl(var(--primary)/0.4)] focus-within:ring-2 focus-within:ring-[hsl(var(--primary)/0.08)]">
             <textarea
               ref={inputRef}
               value={input}
@@ -708,16 +674,20 @@ export default function ChatPage() {
               disabled={isTyping}
               rows={1}
               aria-label={tChat("placeholder")}
-              className="flex-1 resize-none bg-transparent px-2 py-2 text-sm leading-relaxed text-foreground placeholder-muted-foreground outline-none disabled:opacity-50"
+              className="flex-1 resize-none bg-transparent py-1.5 text-[14px] leading-relaxed text-foreground placeholder-muted-foreground/60 outline-none disabled:opacity-50"
               style={{ maxHeight: "7.5rem" }}
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--primary))] text-primary-foreground transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mb-0.5 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--primary))] text-primary-foreground shadow-sm transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30"
               aria-label={tChat("send")}
             >
-              <Send className="h-4 w-4" />
+              {isTyping ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Send className="h-3.5 w-3.5" />
+              )}
             </button>
           </div>
         </div>
