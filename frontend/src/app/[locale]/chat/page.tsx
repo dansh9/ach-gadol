@@ -277,7 +277,7 @@ export default function ChatPage() {
   const locale = useLocale();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const userScrolledUp = useRef(false);
 
   const quickActions: QuickAction[] = [
@@ -521,11 +521,19 @@ export default function ChatPage() {
     sendMessage(action.message);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
+  }
+
+  /** Auto-resize the textarea to fit content (up to ~6 lines) */
+  function handleTextareaInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
   }
 
   return (
@@ -612,21 +620,23 @@ export default function ChatPage() {
       {/* ===== Input Area ===== */}
       <div className="flex-shrink-0 border-t border-border/40 bg-background/95 backdrop-blur-sm">
         <div className="mx-auto max-w-4xl px-4 py-3 sm:px-6">
-          <div className="flex items-center gap-2">
-            <input
+          <div className="flex items-end gap-2">
+            <textarea
               ref={inputRef}
-              type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleTextareaInput}
               onKeyDown={handleKeyDown}
               placeholder={tChat("placeholder")}
               disabled={isTyping}
-              className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] disabled:opacity-50"
+              rows={2}
+              aria-label={tChat("placeholder")}
+              className="flex-1 resize-none rounded-xl border border-border bg-card px-4 py-3 text-base leading-relaxed text-foreground placeholder-muted-foreground outline-none transition-colors focus:border-[hsl(var(--primary))] focus:ring-2 focus:ring-[hsl(var(--primary)/0.2)] disabled:opacity-50"
+              style={{ minHeight: "3.5rem", maxHeight: "10rem" }}
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--primary))] text-primary-foreground shadow-md transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mb-1 inline-flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--primary))] text-primary-foreground shadow-md transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
               aria-label={tChat("send")}
             >
               <Send className="h-5 w-5" />
