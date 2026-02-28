@@ -191,41 +191,11 @@ export async function runRagPipeline(
     return runDemoMode(message, language);
   }
 
-  // 3. Translate query to English for KB search (KB content is in English)
-  //    Uses GPT-4o-mini for speed (~1s vs ~3s for Claude)
-  let searchQuery = message;
-  if (language !== "en" && process.env.OPENAI_API_KEY) {
-    try {
-      const transResp = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          max_tokens: 200,
-          temperature: 0,
-          messages: [
-            { role: "system", content: "Translate to English. Return ONLY the translation." },
-            { role: "user", content: message },
-          ],
-        }),
-      });
-      if (transResp.ok) {
-        const transData = await transResp.json();
-        const translated = transData.choices?.[0]?.message?.content?.trim();
-        if (translated) {
-          searchQuery = translated;
-          console.log("Translated query for KB search:", searchQuery);
-        }
-      }
-    } catch (translateError) {
-      console.warn("Translation failed, using original message for search:", translateError);
-    }
-  }
+  // 3. Search KB using multilingual embeddings
+  //    text-embedding-3-small is multilingual — use lower threshold for non-English
+  const matchThreshold = language === "en" ? 0.3 : 0.15;
 
-  // 4. Generate embedding for the (translated) query and find relevant KB chunks
+  // 4. Generate embedding for the query and find relevant KB chunks
   let kbChunks: {
     chunk_text: string;
     metadata?: Record<string, unknown>;
@@ -233,7 +203,7 @@ export async function runRagPipeline(
   }[] = [];
 
   try {
-    const embedding = await generateEmbedding(searchQuery);
+    const embedding = await generateEmbedding(message);
 
     // 4. Fetch all KB chunks with their embeddings and compute similarity
     const supabase = createAdminClient();
@@ -241,7 +211,7 @@ export async function runRagPipeline(
     // First try the RPC function
     const { data: rpcData, error: rpcError } = await supabase.rpc("match_kb_chunks", {
       query_embedding: embedding,
-      match_threshold: 0.3,
+      match_threshold: matchThreshold,
       match_count: 5,
     });
 
@@ -302,7 +272,7 @@ export async function runRagPipeline(
               similarity: cosineSimilarity(embedding, chunkEmb),
             };
           })
-          .filter((c: { similarity: number }) => c.similarity > 0.3)
+          .filter((c: { similarity: number }) => c.similarity > matchThreshold)
           .sort((a: { similarity: number }, b: { similarity: number }) => b.similarity - a.similarity)
           .slice(0, 5);
 
