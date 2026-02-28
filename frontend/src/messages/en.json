@@ -96,7 +96,16 @@
     "welcome": "Hi there! I'm the Ach Gadol chatbot. I'm happy to help with any questions about lone soldier rights, grants, housing, or anything else. How can I help?",
     "escalate": "Want to speak with a real volunteer? Click here.",
     "powered_by": "Powered by AI",
-    "disclaimer": "The chatbot provides general information only and does not replace professional advice. If in doubt, reach out to our volunteers."
+    "disclaimer": "The chatbot provides general information only and does not replace professional advice. If in doubt, reach out to our volunteers.",
+    "quick_actions": "Quick Actions",
+    "quick_rights": "What am I entitled to?",
+    "quick_forms": "Help with forms",
+    "quick_volunteer": "Talk to a volunteer",
+    "quick_rights_msg": "What rights am I entitled to as a lone soldier?",
+    "quick_forms_msg": "What forms do I need to fill out as a lone soldier?",
+    "quick_volunteer_msg": "I'd like to speak with a volunteer",
+    "contact_volunteer": "Contact a volunteer",
+    "error_message": "Sorry, something went wrong. Please try again or contact a volunteer for help."
   },
   "resources": {
     "title": "Useful Resources",

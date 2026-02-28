@@ -96,7 +96,16 @@
     "welcome": "¡Hola! Soy el chatbot de Ach Gadol. Estoy aquí para ayudarte con cualquier pregunta sobre derechos de soldados solitarios, subsidios, vivienda o cualquier otro tema. ¿En qué puedo ayudarte?",
     "escalate": "¿Quieres hablar con un voluntario real? Haz clic aquí.",
     "powered_by": "Impulsado por IA",
-    "disclaimer": "El chatbot proporciona información general únicamente y no reemplaza el asesoramiento profesional. En caso de duda, contacta a nuestros voluntarios."
+    "disclaimer": "El chatbot proporciona información general únicamente y no reemplaza el asesoramiento profesional. En caso de duda, contacta a nuestros voluntarios.",
+    "quick_actions": "Acciones rápidas",
+    "quick_rights": "¿A qué tengo derecho?",
+    "quick_forms": "Ayuda con formularios",
+    "quick_volunteer": "Hablar con un voluntario",
+    "quick_rights_msg": "¿Cuáles son mis derechos como soldado solitario?",
+    "quick_forms_msg": "¿Qué formularios necesito completar como soldado solitario?",
+    "quick_volunteer_msg": "Me gustaría hablar con un voluntario",
+    "contact_volunteer": "Contactar un voluntario",
+    "error_message": "Lo siento, algo salió mal. Por favor, inténtalo de nuevo o contacta a un voluntario para obtener ayuda."
   },
   "resources": {
     "title": "Recursos útiles",

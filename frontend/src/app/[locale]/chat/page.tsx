@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
 import {
   Send,
@@ -30,37 +30,10 @@ interface Message {
 
 interface QuickAction {
   id: string;
-  labelHe: string;
-  labelEn: string;
+  label: string;
   icon: typeof ClipboardCheck;
   message: string;
 }
-
-/* ===== Quick Actions ===== */
-
-const QUICK_ACTIONS: QuickAction[] = [
-  {
-    id: "rights",
-    labelHe: "מה מגיע לי?",
-    labelEn: "What am I entitled to?",
-    icon: ClipboardCheck,
-    message: "מה הזכויות שמגיעות לי כחייל בודד?",
-  },
-  {
-    id: "forms",
-    labelHe: "עזרה עם טפסים",
-    labelEn: "Help with forms",
-    icon: FileText,
-    message: "אילו טפסים אני צריך למלא כחייל בודד?",
-  },
-  {
-    id: "volunteer",
-    labelHe: "דברו עם מתנדב",
-    labelEn: "Talk to a volunteer",
-    icon: Users,
-    message: "אני רוצה לדבר עם מתנדב",
-  },
-];
 
 /* ===== Confidence Indicator ===== */
 
@@ -181,7 +154,7 @@ function EscalationBanner() {
               className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300"
             >
               <Users className="h-3 w-3" />
-              Contact a volunteer
+              {tChat("contact_volunteer")}
             </Link>
           </div>
         </div>
@@ -194,8 +167,30 @@ function EscalationBanner() {
 
 export default function ChatPage() {
   const tChat = useTranslations("chat");
+  const locale = useLocale();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const quickActions: QuickAction[] = [
+    {
+      id: "rights",
+      label: tChat("quick_rights"),
+      icon: ClipboardCheck,
+      message: tChat("quick_rights_msg"),
+    },
+    {
+      id: "forms",
+      label: tChat("quick_forms"),
+      icon: FileText,
+      message: tChat("quick_forms_msg"),
+    },
+    {
+      id: "volunteer",
+      label: tChat("quick_volunteer"),
+      icon: Users,
+      message: tChat("quick_volunteer_msg"),
+    },
+  ];
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -239,7 +234,7 @@ export default function ChatPage() {
           body: JSON.stringify({
             sessionId,
             message: text.trim(),
-            language: "he",
+            language: locale,
             channel: "website",
           }),
         });
@@ -275,8 +270,7 @@ export default function ChatPage() {
         const errorMsg: Message = {
           id: `error-${Date.now()}`,
           role: "bot",
-          content:
-            "סליחה, משהו השתבש. אנא נסה שוב או פנה למתנדב לעזרה.",
+          content: tChat("error_message"),
           timestamp: new Date(),
           confidence: 0,
         };
@@ -285,7 +279,7 @@ export default function ChatPage() {
         setIsTyping(false);
       }
     },
-    [isTyping, sessionId]
+    [isTyping, sessionId, locale, tChat]
   );
 
   function handleSend() {
@@ -367,17 +361,17 @@ export default function ChatPage() {
           {messages.length <= 1 && !isTyping && (
             <div className="mt-6">
               <p className="mb-3 text-center text-xs font-medium text-muted-foreground">
-                Quick Actions
+                {tChat("quick_actions")}
               </p>
               <div className="flex flex-wrap justify-center gap-2">
-                {QUICK_ACTIONS.map((action) => (
+                {quickActions.map((action) => (
                   <button
                     key={action.id}
                     onClick={() => handleQuickAction(action)}
                     className="inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.05)] px-4 py-2 text-sm font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.1)] hover:shadow-sm"
                   >
                     <action.icon className="h-4 w-4" />
-                    <span>{action.labelHe}</span>
+                    <span>{action.label}</span>
                   </button>
                 ))}
               </div>

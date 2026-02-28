@@ -96,7 +96,16 @@
     "welcome": "Bonjour ! Je suis le chatbot d'Ach Gadol. Je suis là pour vous aider avec toutes vos questions sur les droits des soldats seuls, les subventions, le logement ou tout autre sujet. Comment puis-je vous aider ?",
     "escalate": "Vous souhaitez parler à un vrai bénévole ? Cliquez ici.",
     "powered_by": "Propulsé par l'IA",
-    "disclaimer": "Le chatbot fournit des informations générales uniquement et ne remplace pas un conseil professionnel. En cas de doute, contactez nos bénévoles."
+    "disclaimer": "Le chatbot fournit des informations générales uniquement et ne remplace pas un conseil professionnel. En cas de doute, contactez nos bénévoles.",
+    "quick_actions": "Actions rapides",
+    "quick_rights": "À quoi ai-je droit ?",
+    "quick_forms": "Aide avec les formulaires",
+    "quick_volunteer": "Parler à un bénévole",
+    "quick_rights_msg": "Quels sont mes droits en tant que soldat seul ?",
+    "quick_forms_msg": "Quels formulaires dois-je remplir en tant que soldat seul ?",
+    "quick_volunteer_msg": "Je voudrais parler à un bénévole",
+    "contact_volunteer": "Contacter un bénévole",
+    "error_message": "Désolé, une erreur est survenue. Veuillez réessayer ou contacter un bénévole pour obtenir de l'aide."
   },
   "resources": {
     "title": "Ressources utiles",
