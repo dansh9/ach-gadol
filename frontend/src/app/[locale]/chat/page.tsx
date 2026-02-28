@@ -274,7 +274,9 @@ export default function ChatPage() {
   const tChat = useTranslations("chat");
   const locale = useLocale();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const userScrolledUp = useRef(false);
 
   const quickActions: QuickAction[] = [
     {
@@ -311,10 +313,40 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showEscalation, setShowEscalation] = useState(false);
 
-  // Auto-scroll to bottom
+  // Detect if user has scrolled up (so we don't force them back down)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      // "Near bottom" = within 150px of the bottom
+      userScrolledUp.current = scrollHeight - scrollTop - clientHeight > 150;
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Smart auto-scroll: only scroll if user is near the bottom
+  useEffect(() => {
+    if (userScrolledUp.current) return;
+
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // During streaming: instant scroll (no queuing of smooth animations)
+    // After streaming: smooth scroll for new messages
+    const lastMsg = messages[messages.length - 1];
+    const isCurrentlyStreaming = lastMsg?.isStreaming;
+
+    if (isCurrentlyStreaming) {
+      // Instant snap to bottom during streaming — no jank
+      container.scrollTop = container.scrollHeight;
+    } else {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -342,6 +374,7 @@ export default function ChatPage() {
       setInput("");
       setIsTyping(true);
       setShowEscalation(false);
+      userScrolledUp.current = false; // Reset so we auto-scroll to the new response
 
       try {
         const response = await fetch("/api/chat/send", {
@@ -526,7 +559,7 @@ export default function ChatPage() {
       </div>
 
       {/* ===== Messages Area ===== */}
-      <div className="flex-1 overflow-y-auto">
+      <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
           <div className="space-y-4">
             {messages.map((message) => (
