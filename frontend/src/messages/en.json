@@ -31,7 +31,10 @@
     "volunteers_count": "Active Volunteers",
     "soldiers_yearly": "Soldiers Supported Annually",
     "presidential_award": "Recipients of the Presidential Volunteer Award",
-    "mission": "Our mission is to be the big brother for every lone soldier — to accompany, support, and ensure access to all the rights and resources they deserve."
+    "mission": "Our mission is to be the big brother for every lone soldier — to accompany, support, and ensure access to all the rights and resources they deserve.",
+    "history_title": "History",
+    "volunteers_title": "Volunteers",
+    "join_volunteers": "Join Our Volunteers"
   },
   "rights": {
     "title": "Lone Soldier Rights & Benefits",
@@ -87,7 +90,10 @@
     "results_title": "Your Results",
     "your_rights": "Rights You're Entitled To",
     "total_monthly": "Estimated Monthly Total",
-    "disclaimer": "These results are for general estimation only and do not constitute legal advice. Final eligibility is determined by the relevant authorities."
+    "disclaimer": "These results are for general estimation only and do not constitute legal advice. Final eligibility is determined by the relevant authorities.",
+    "check_again": "Check Again",
+    "ask_question_button": "Ask a Question",
+    "view_all_rights": "View All Rights"
   },
   "chat": {
     "title": "Ask Ach Gadol",
@@ -106,7 +112,11 @@
     "quick_forms_msg": "What forms do I need to fill out as a lone soldier?",
     "quick_volunteer_msg": "I'd like to speak with a volunteer",
     "contact_volunteer": "Contact a volunteer",
-    "error_message": "Sorry, something went wrong. Please try again or contact a volunteer for help."
+    "error_message": "Sorry, something went wrong. Please try again or contact a volunteer for help.",
+    "sources_label": "Sources:",
+    "confidence_high": "High confidence",
+    "confidence_medium": "Medium confidence",
+    "confidence_low": "Low confidence"
   },
   "resources": {
     "title": "Useful Resources",
@@ -122,7 +132,9 @@
     "disclaimer": "The information on this site is for general informational purposes only and does not constitute legal advice.",
     "privacy": "Privacy Policy",
     "accessibility": "Accessibility",
-    "contact": "Contact Us"
+    "contact": "Contact Us",
+    "built_with": "Built with",
+    "built_for": "for Lone Soldiers"
   },
   "features": {
     "title": "How We Help",
@@ -191,6 +203,7 @@
     "kb_title": "Knowledge Base",
     "documents_count": "documents",
     "search_kb": "Search knowledge base...",
-    "no_documents": "No documents to display"
+    "no_documents": "No documents to display",
+    "ai_suggestion_label": "AI Suggestion:"
   }
 }

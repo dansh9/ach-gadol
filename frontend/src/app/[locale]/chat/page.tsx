@@ -44,6 +44,7 @@ const FALLBACK_SOURCE_URL = "/rights";
 /* ===== Confidence Indicator ===== */
 
 function ConfidenceDot({ confidence }: { confidence: number }) {
+  const tChat = useTranslations("chat");
   const color =
     confidence >= 0.8
       ? "bg-emerald-500"
@@ -53,10 +54,10 @@ function ConfidenceDot({ confidence }: { confidence: number }) {
 
   const label =
     confidence >= 0.8
-      ? "High confidence"
+      ? tChat("confidence_high")
       : confidence >= 0.5
-        ? "Medium confidence"
-        : "Low confidence";
+        ? tChat("confidence_medium")
+        : tChat("confidence_low");
 
   return (
     <span
@@ -144,6 +145,7 @@ function renderMessageContent(
 function MessageBubble({ message }: { message: Message }) {
   const isBot = message.role === "bot";
   const locale = useLocale();
+  const tChat = useTranslations("chat");
 
   return (
     <div className={`flex gap-3 ${isBot ? "" : "flex-row-reverse"}`}>
@@ -191,7 +193,7 @@ function MessageBubble({ message }: { message: Message }) {
         {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
           <div className="mt-2 border-t border-border/30 pt-2">
             <p className="text-[10px] font-medium text-muted-foreground">
-              Sources:
+              {tChat("sources_label")}
             </p>
             <div className="mt-1 flex flex-wrap gap-1">
               {message.sources.map((source, i) => {

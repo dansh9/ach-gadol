@@ -31,7 +31,10 @@
     "volunteers_count": "Voluntarios activos",
     "soldiers_yearly": "Soldados apoyados anualmente",
     "presidential_award": "Galardonados con el Premio Presidencial de Voluntariado",
-    "mission": "Nuestra misión es ser el hermano mayor de cada soldado solitario — acompañar, apoyar y garantizar el acceso a todos los derechos y recursos que merecen."
+    "mission": "Nuestra misión es ser el hermano mayor de cada soldado solitario — acompañar, apoyar y garantizar el acceso a todos los derechos y recursos que merecen.",
+    "history_title": "Historia",
+    "volunteers_title": "Voluntarios",
+    "join_volunteers": "Únete a nuestros voluntarios"
   },
   "rights": {
     "title": "Derechos y beneficios del soldado solitario",
@@ -87,7 +90,10 @@
     "results_title": "Tus resultados",
     "your_rights": "Derechos a los que tienes derecho",
     "total_monthly": "Total mensual estimado",
-    "disclaimer": "Estos resultados son solo una estimación general y no constituyen asesoramiento legal. La elegibilidad final es determinada por las autoridades correspondientes."
+    "disclaimer": "Estos resultados son solo una estimación general y no constituyen asesoramiento legal. La elegibilidad final es determinada por las autoridades correspondientes.",
+    "check_again": "Verificar de nuevo",
+    "ask_question_button": "Hacer una pregunta",
+    "view_all_rights": "Ver todos los derechos"
   },
   "chat": {
     "title": "Pregunta a Ach Gadol",
@@ -106,7 +112,11 @@
     "quick_forms_msg": "¿Qué formularios necesito completar como soldado solitario?",
     "quick_volunteer_msg": "Me gustaría hablar con un voluntario",
     "contact_volunteer": "Contactar un voluntario",
-    "error_message": "Lo siento, algo salió mal. Por favor, inténtalo de nuevo o contacta a un voluntario para obtener ayuda."
+    "error_message": "Lo siento, algo salió mal. Por favor, inténtalo de nuevo o contacta a un voluntario para obtener ayuda.",
+    "sources_label": "Fuentes:",
+    "confidence_high": "Confianza alta",
+    "confidence_medium": "Confianza media",
+    "confidence_low": "Confianza baja"
   },
   "resources": {
     "title": "Recursos útiles",
@@ -122,7 +132,9 @@
     "disclaimer": "La información en este sitio es solo con fines informativos generales y no constituye asesoramiento legal.",
     "privacy": "Política de privacidad",
     "accessibility": "Accesibilidad",
-    "contact": "Contáctanos"
+    "contact": "Contáctanos",
+    "built_with": "Creado con",
+    "built_for": "para soldados solitarios"
   },
   "features": {
     "title": "Cómo ayudamos",
@@ -191,6 +203,7 @@
     "kb_title": "Base de conocimiento",
     "documents_count": "documentos",
     "search_kb": "Buscar en la base...",
-    "no_documents": "No hay documentos para mostrar"
+    "no_documents": "No hay documentos para mostrar",
+    "ai_suggestion_label": "Sugerencia de IA:"
   }
 }

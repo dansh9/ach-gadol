@@ -136,6 +136,7 @@ function YesNoButtons({
 export default function CheckPage() {
   const tCheck = useTranslations("check");
   const tRights = useTranslations("rights");
+  const tCommon = useTranslations("common");
 
   const [step, setStep] = useState(0);
   const [showResults, setShowResults] = useState(false);
@@ -378,21 +379,21 @@ export default function CheckPage() {
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-all hover:bg-muted sm:w-auto"
               >
                 <RotateCcw className="h-4 w-4" />
-                Check Again
+                {tCheck("check_again")}
               </button>
               <Link
                 href="/chat"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:brightness-110 sm:w-auto"
               >
                 <MessageCircle className="h-4 w-4" />
-                Ask a Question
+                {tCheck("ask_question_button")}
               </Link>
               <Link
                 href="/rights"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:brightness-110 sm:w-auto"
               >
                 <Shield className="h-4 w-4" />
-                View All Rights
+                {tCheck("view_all_rights")}
               </Link>
             </div>
           </div>
@@ -503,7 +504,7 @@ export default function CheckPage() {
               >
                 <ChevronRight className="h-4 w-4 rtl:hidden" />
                 <ChevronLeft className="hidden h-4 w-4 rtl:inline-block" />
-                {tCheck("yes") === "Yes" ? "Back" : "חזרה"}
+                {tCommon("back")}
               </button>
 
               <button
@@ -513,9 +514,7 @@ export default function CheckPage() {
               >
                 {step === totalSteps - 1
                   ? tCheck("check_button")
-                  : tCheck("yes") === "Yes"
-                    ? "Next"
-                    : "הבא"}
+                  : tCommon("next")}
                 {step < totalSteps - 1 && (
                   <>
                     <ChevronLeft className="h-4 w-4 rtl:hidden" />
