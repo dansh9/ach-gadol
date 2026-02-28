@@ -191,7 +191,7 @@ export async function runRagPipeline(
     return runDemoMode(message, language);
   }
 
-  // 3. Generate embedding for the query
+  // 3. Generate embedding for the query and find relevant KB chunks
   let kbChunks: {
     chunk_text: string;
     metadata?: Record<string, unknown>;
@@ -201,16 +201,18 @@ export async function runRagPipeline(
   try {
     const embedding = await generateEmbedding(message);
 
-    // 4. Vector search for relevant KB chunks
+    // 4. Fetch all KB chunks with their embeddings and compute similarity
     const supabase = createAdminClient();
-    const { data, error } = await supabase.rpc("match_kb_chunks", {
+
+    // First try the RPC function
+    const { data: rpcData, error: rpcError } = await supabase.rpc("match_kb_chunks", {
       query_embedding: embedding,
-      match_threshold: 0.5,
+      match_threshold: 0.3,
       match_count: 5,
     });
 
-    if (!error && data) {
-      kbChunks = data.map(
+    if (!rpcError && rpcData && rpcData.length > 0) {
+      kbChunks = rpcData.map(
         (chunk: {
           chunk_text: string;
           metadata: Record<string, unknown>;
@@ -222,6 +224,56 @@ export async function runRagPipeline(
           document_title: chunk.document_title,
         })
       );
+    } else {
+      // Fallback: fetch chunks and join with document titles manually
+      console.log("RPC failed or returned 0 results, using fallback search. RPC error:", rpcError?.message);
+
+      const { data: allChunks } = await supabase
+        .from("kb_chunks")
+        .select("id, chunk_text, chunk_index, kb_document_id, embedding, metadata")
+        .not("embedding", "is", null);
+
+      if (allChunks && allChunks.length > 0) {
+        // Fetch document titles
+        const docIds = Array.from(new Set(allChunks.map((c: { kb_document_id: string }) => c.kb_document_id)));
+        const { data: docs } = await supabase
+          .from("kb_documents")
+          .select("id, title")
+          .in("id", docIds);
+
+        const docTitleMap: Record<string, string> = {};
+        if (docs) docs.forEach((d: { id: string; title: string }) => { docTitleMap[d.id] = d.title; });
+
+        // Compute cosine similarity in-app
+        const cosineSimilarity = (a: number[], b: number[]): number => {
+          let dot = 0, normA = 0, normB = 0;
+          for (let i = 0; i < a.length; i++) {
+            dot += a[i] * b[i];
+            normA += a[i] * a[i];
+            normB += b[i] * b[i];
+          }
+          return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+        };
+
+        const scored = allChunks
+          .map((chunk: { chunk_text: string; embedding: number[]; kb_document_id: string; metadata: Record<string, unknown> }) => ({
+            chunk_text: chunk.chunk_text,
+            metadata: chunk.metadata,
+            document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
+            similarity: cosineSimilarity(embedding, chunk.embedding),
+          }))
+          .filter((c: { similarity: number }) => c.similarity > 0.3)
+          .sort((a: { similarity: number }, b: { similarity: number }) => b.similarity - a.similarity)
+          .slice(0, 5);
+
+        kbChunks = scored.map((s: { chunk_text: string; metadata: Record<string, unknown>; document_title: string }) => ({
+          chunk_text: s.chunk_text,
+          metadata: s.metadata,
+          document_title: s.document_title,
+        }));
+
+        console.log("Fallback search found", kbChunks.length, "relevant chunks");
+      }
     }
   } catch (embeddingError) {
     // If embedding fails (no OpenAI key), continue without KB context
