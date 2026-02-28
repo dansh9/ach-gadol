@@ -34,7 +34,24 @@
     "mission": "Notre mission est d'être le grand frère de chaque soldat seul — accompagner, soutenir et garantir l'accès à tous les droits et ressources auxquels ils ont droit.",
     "history_title": "Histoire",
     "volunteers_title": "Bénévoles",
-    "join_volunteers": "Rejoignez nos bénévoles"
+    "join_volunteers": "Rejoignez nos bénévoles",
+    "award_presidential_title": "Prix présidentiel du bénévolat",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "Prix du ministre de l'Immigration",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "Fondation de l'organisation",
+    "milestone_2012": "500 soldats soutenus",
+    "milestone_2014": "Prix présidentiel",
+    "milestone_2017": "Prix du ministre de l'Immigration",
+    "milestone_2020": "200+ bénévoles actifs",
+    "milestone_2024": "1,500+ soldats par an",
+    "volunteer_mentoring_title": "Mentorat personnel",
+    "volunteer_mentoring_desc": "Les bénévoles accompagnent les soldats seuls tout au long de leur service",
+    "volunteer_rights_title": "Défense des droits",
+    "volunteer_rights_desc": "Aider les soldats à accéder à toutes les prestations auxquelles ils ont droit",
+    "volunteer_community_title": "Communauté solidaire",
+    "volunteer_community_desc": "Créer une communauté chaleureuse de soldats et de bénévoles",
+    "org_name": "Ach Gadol"
   },
   "rights": {
     "title": "Droits et avantages du soldat seul",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "Suggestion IA :",
     "load_error": "Erreur de chargement des données",
     "retry": "Réessayer",
-    "untitled_case": "Dossier sans titre"
+    "untitled_case": "Dossier sans titre",
+    "volunteer_landing_title": "Espace bénévoles",
+    "volunteer_landing_subtitle": "Connexion pour les bénévoles actifs d'Ach Gadol",
+    "volunteer_login_button": "Se connecter"
   }
 }

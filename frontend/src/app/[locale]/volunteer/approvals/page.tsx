@@ -29,6 +29,7 @@ export default function VolunteerApprovalsPage() {
   const t = useTranslations("volunteer_dashboard");
   const [approvals, setApprovals] = useState<Approval[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,13 +38,14 @@ export default function VolunteerApprovalsPage() {
 
   async function fetchApprovals() {
     try {
+      setError(false);
       const res = await fetch("/api/approvals?status=pending");
-      if (res.ok) {
-        const data = await res.json();
-        setApprovals(data.approvals || []);
-      }
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setApprovals(data.approvals || []);
     } catch (error) {
       console.error("Failed to fetch approvals:", error);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -81,6 +83,17 @@ export default function VolunteerApprovalsPage() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">
+          <AlertTriangle className="mb-4 h-12 w-12 text-amber-500/50" />
+          <p className="text-muted-foreground">{t("load_error")}</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); fetchApprovals(); }}
+            className="mt-4 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[hsl(var(--primary)/0.9)]"
+          >
+            {t("retry")}
+          </button>
         </div>
       ) : approvals.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">

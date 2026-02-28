@@ -34,7 +34,24 @@
     "mission": "Our mission is to be the big brother for every lone soldier — to accompany, support, and ensure access to all the rights and resources they deserve.",
     "history_title": "History",
     "volunteers_title": "Volunteers",
-    "join_volunteers": "Join Our Volunteers"
+    "join_volunteers": "Join Our Volunteers",
+    "award_presidential_title": "Presidential Volunteer Award",
+    "award_presidential_subtitle": "פרס נשיא המדינה להתנדבות",
+    "award_immigration_title": "Immigration Minister Award",
+    "award_immigration_subtitle": "פרס שר הקליטה",
+    "milestone_2009": "Organization Founded",
+    "milestone_2012": "500 Soldiers Supported",
+    "milestone_2014": "Presidential Award",
+    "milestone_2017": "Immigration Minister Award",
+    "milestone_2020": "200+ Active Volunteers",
+    "milestone_2024": "1,500+ Soldiers/Year",
+    "volunteer_mentoring_title": "Personal Mentoring",
+    "volunteer_mentoring_desc": "Volunteers mentor lone soldiers throughout their military service",
+    "volunteer_rights_title": "Rights Advocacy",
+    "volunteer_rights_desc": "Helping soldiers access every benefit they are entitled to",
+    "volunteer_community_title": "Supportive Community",
+    "volunteer_community_desc": "Building a warm and supportive community of soldiers and volunteers",
+    "org_name": "Ach Gadol"
   },
   "rights": {
     "title": "Lone Soldier Rights & Benefits",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "AI Suggestion:",
     "load_error": "Failed to load data",
     "retry": "Retry",
-    "untitled_case": "Untitled Case"
+    "untitled_case": "Untitled Case",
+    "volunteer_landing_title": "Volunteer Area",
+    "volunteer_landing_subtitle": "Login for active Ach Gadol volunteers",
+    "volunteer_login_button": "Login to Dashboard"
   }
 }

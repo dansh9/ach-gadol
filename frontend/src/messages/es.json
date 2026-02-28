@@ -34,7 +34,24 @@
     "mission": "Nuestra misión es ser el hermano mayor de cada soldado solitario — acompañar, apoyar y garantizar el acceso a todos los derechos y recursos que merecen.",
     "history_title": "Historia",
     "volunteers_title": "Voluntarios",
-    "join_volunteers": "Únete a nuestros voluntarios"
+    "join_volunteers": "Únete a nuestros voluntarios",
+    "award_presidential_title": "Premio Presidencial de Voluntariado",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "Premio del Ministro de Inmigración",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "Fundación de la organización",
+    "milestone_2012": "500 soldados apoyados",
+    "milestone_2014": "Premio Presidencial",
+    "milestone_2017": "Premio del Ministro de Inmigración",
+    "milestone_2020": "200+ voluntarios activos",
+    "milestone_2024": "1,500+ soldados por año",
+    "volunteer_mentoring_title": "Mentoría personal",
+    "volunteer_mentoring_desc": "Los voluntarios acompañan a los soldados solitarios durante todo su servicio",
+    "volunteer_rights_title": "Defensa de derechos",
+    "volunteer_rights_desc": "Ayudando a los soldados a acceder a todos los beneficios que les corresponden",
+    "volunteer_community_title": "Comunidad de apoyo",
+    "volunteer_community_desc": "Construyendo una comunidad cálida de soldados y voluntarios",
+    "org_name": "Ach Gadol"
   },
   "rights": {
     "title": "Derechos y beneficios del soldado solitario",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "Sugerencia de IA:",
     "load_error": "Error al cargar datos",
     "retry": "Reintentar",
-    "untitled_case": "Caso sin título"
+    "untitled_case": "Caso sin título",
+    "volunteer_landing_title": "Área de voluntarios",
+    "volunteer_landing_subtitle": "Acceso para voluntarios activos de Ach Gadol",
+    "volunteer_login_button": "Iniciar sesión"
   }
 }

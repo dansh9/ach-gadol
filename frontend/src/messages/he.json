@@ -34,7 +34,24 @@
     "mission": "המשימה שלנו היא להיות האח הגדול של כל חייל בודד — ללוות, לתמוך ולהנגיש את כל הזכויות והמשאבים שמגיעים לו.",
     "history_title": "היסטוריה",
     "volunteers_title": "מתנדבים",
-    "join_volunteers": "הצטרפו למתנדבים שלנו"
+    "join_volunteers": "הצטרפו למתנדבים שלנו",
+    "award_presidential_title": "פרס נשיא המדינה להתנדבות",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "פרס שר הקליטה",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "הקמת העמותה",
+    "milestone_2012": "500 חיילים נתמכים",
+    "milestone_2014": "פרס נשיא המדינה",
+    "milestone_2017": "פרס שר הקליטה",
+    "milestone_2020": "200+ מתנדבים פעילים",
+    "milestone_2024": "1,500+ חיילים בשנה",
+    "volunteer_mentoring_title": "ליווי אישי",
+    "volunteer_mentoring_desc": "מתנדבים מלווים חיילים בודדים לאורך כל השירות הצבאי",
+    "volunteer_rights_title": "מיצוי זכויות",
+    "volunteer_rights_desc": "עזרה במיצוי כל הזכויות המגיעות לחיילים בודדים",
+    "volunteer_community_title": "קהילה תומכת",
+    "volunteer_community_desc": "יצירת קהילה חמה ותומכת של חיילים בודדים ומתנדבים",
+    "org_name": "אח גדול"
   },
   "rights": {
     "title": "זכויות חיילים בודדים",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "הצעת AI:",
     "load_error": "שגיאה בטעינת נתונים",
     "retry": "נסה שוב",
-    "untitled_case": "תיק ללא כותרת"
+    "untitled_case": "תיק ללא כותרת",
+    "volunteer_landing_title": "אזור מתנדבים",
+    "volunteer_landing_subtitle": "כניסה למתנדבים פעילים של עמותת אח גדול",
+    "volunteer_login_button": "כניסה למערכת"
   }
 }

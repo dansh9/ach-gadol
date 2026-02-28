@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Phone, Globe, ExternalLink } from "lucide-react";
 
 /* ===== Data ===== */
@@ -110,6 +110,8 @@ const OFFICIAL_RESOURCES: OfficialResource[] = [
 
 export default function ResourcesPage() {
   const t = useTranslations("resources");
+  const locale = useLocale();
+  const isHe = locale === "he";
 
   return (
     <div className="flex flex-col">
@@ -142,10 +144,10 @@ export default function ResourcesPage() {
               >
                 <div className="flex-1 min-w-0">
                   <h3 className="font-semibold text-foreground">
-                    {hotline.nameHe}
+                    {isHe ? hotline.nameHe : hotline.nameEn}
                   </h3>
                   <p className="text-sm text-muted-foreground">
-                    {hotline.descriptionHe}
+                    {isHe ? hotline.descriptionHe : hotline.descriptionEn}
                   </p>
                 </div>
                 <a
@@ -178,10 +180,10 @@ export default function ResourcesPage() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-foreground">
-                      {resource.nameHe}
+                      {isHe ? resource.nameHe : resource.nameEn}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      {resource.descriptionHe}
+                      {isHe ? resource.descriptionHe : resource.descriptionEn}
                     </p>
                   </div>
                   {resource.phone && (

@@ -34,7 +34,24 @@
     "mission": "مهمتنا هي أن نكون الأخ الأكبر لكل جندي وحيد — المرافقة والدعم وضمان الوصول إلى جميع الحقوق والموارد التي يستحقونها.",
     "history_title": "التاريخ",
     "volunteers_title": "المتطوعون",
-    "join_volunteers": "انضم إلى متطوعينا"
+    "join_volunteers": "انضم إلى متطوعينا",
+    "award_presidential_title": "جائزة الرئيس للتطوع",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "جائزة وزير الاستيعاب",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "تأسيس المنظمة",
+    "milestone_2012": "500 جندي تم دعمهم",
+    "milestone_2014": "الجائزة الرئاسية",
+    "milestone_2017": "جائزة وزير الاستيعاب",
+    "milestone_2020": "200+ متطوع نشط",
+    "milestone_2024": "1,500+ جندي سنوياً",
+    "volunteer_mentoring_title": "إرشاد شخصي",
+    "volunteer_mentoring_desc": "المتطوعون يرافقون الجنود الوحيدين طوال خدمتهم العسكرية",
+    "volunteer_rights_title": "الدفاع عن الحقوق",
+    "volunteer_rights_desc": "مساعدة الجنود في الحصول على جميع المزايا المستحقة لهم",
+    "volunteer_community_title": "مجتمع داعم",
+    "volunteer_community_desc": "بناء مجتمع دافئ من الجنود والمتطوعين",
+    "org_name": "أخ جادول"
   },
   "rights": {
     "title": "حقوق ومزايا الجندي الوحيد",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "اقتراح الذكاء الاصطناعي:",
     "load_error": "فشل في تحميل البيانات",
     "retry": "إعادة المحاولة",
-    "untitled_case": "حالة بدون عنوان"
+    "untitled_case": "حالة بدون عنوان",
+    "volunteer_landing_title": "منطقة المتطوعين",
+    "volunteer_landing_subtitle": "تسجيل الدخول للمتطوعين النشطين في أخ جادول",
+    "volunteer_login_button": "تسجيل الدخول"
   }
 }
