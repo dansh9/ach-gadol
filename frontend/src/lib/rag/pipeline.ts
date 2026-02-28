@@ -177,6 +177,78 @@ function runDemoMode(message: string, language: string, onToken?: (token: string
   };
 }
 
+/* ===== KB Chunk Cache (avoids repeated Supabase fetches on warm instances) ===== */
+
+interface CachedChunk {
+  chunk_text: string;
+  metadata: Record<string, unknown>;
+  embedding: number[];
+  document_title: string;
+}
+
+let _chunkCache: CachedChunk[] | null = null;
+let _chunkCacheTime = 0;
+const CHUNK_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+async function getCachedKBChunks(): Promise<CachedChunk[]> {
+  if (_chunkCache && Date.now() - _chunkCacheTime < CHUNK_CACHE_TTL) {
+    return _chunkCache;
+  }
+
+  const supabase = createAdminClient();
+
+  // Fetch chunks and document titles in parallel
+  const [chunksResult, docsResult] = await Promise.all([
+    supabase
+      .from("kb_chunks")
+      .select("chunk_text, kb_document_id, embedding, metadata")
+      .not("embedding", "is", null),
+    supabase.from("kb_documents").select("id, title"),
+  ]);
+
+  if (!chunksResult.data || chunksResult.data.length === 0) return [];
+
+  const docTitleMap: Record<string, string> = {};
+  if (docsResult.data) {
+    docsResult.data.forEach((d: { id: string; title: string }) => {
+      docTitleMap[d.id] = d.title;
+    });
+  }
+
+  // Parse string embeddings once and cache the result
+  _chunkCache = chunksResult.data.map(
+    (chunk: {
+      chunk_text: string;
+      kb_document_id: string;
+      embedding: string | number[];
+      metadata: Record<string, unknown>;
+    }) => ({
+      chunk_text: chunk.chunk_text,
+      metadata: chunk.metadata || {},
+      embedding:
+        typeof chunk.embedding === "string"
+          ? (JSON.parse(chunk.embedding) as number[])
+          : chunk.embedding,
+      document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
+    })
+  );
+  _chunkCacheTime = Date.now();
+
+  return _chunkCache;
+}
+
+function cosineSimilarity(a: number[], b: number[]): number {
+  let dot = 0,
+    normA = 0,
+    normB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    normA += a[i] * a[i];
+    normB += b[i] * b[i];
+  }
+  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+
 /**
  * Run the full RAG pipeline for a chat message.
  * Falls back to demo mode when API keys are not configured.
@@ -201,7 +273,7 @@ export async function runRagPipeline(
   //    text-embedding-3-small is multilingual — use lower threshold for non-English
   const matchThreshold = language === "en" ? 0.3 : 0.15;
 
-  // 4. Generate embedding for the query and find relevant KB chunks
+  // 4. Generate embedding AND fetch cached KB chunks IN PARALLEL
   let kbChunks: {
     chunk_text: string;
     metadata?: Record<string, unknown>;
@@ -209,88 +281,28 @@ export async function runRagPipeline(
   }[] = [];
 
   try {
-    const embedding = await generateEmbedding(message);
+    const [embedding, allCachedChunks] = await Promise.all([
+      generateEmbedding(message),
+      getCachedKBChunks(),
+    ]);
 
-    // 4. Fetch all KB chunks with their embeddings and compute similarity
-    const supabase = createAdminClient();
+    // Compute cosine similarity (fast, in-memory with pre-parsed embeddings)
+    const scored = allCachedChunks
+      .map((chunk) => ({
+        chunk_text: chunk.chunk_text,
+        metadata: chunk.metadata,
+        document_title: chunk.document_title,
+        similarity: cosineSimilarity(embedding, chunk.embedding),
+      }))
+      .filter((c) => c.similarity > matchThreshold)
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 5);
 
-    // First try the RPC function
-    const { data: rpcData, error: rpcError } = await supabase.rpc("match_kb_chunks", {
-      query_embedding: embedding,
-      match_threshold: matchThreshold,
-      match_count: 5,
-    });
-
-    if (!rpcError && rpcData && rpcData.length > 0) {
-      kbChunks = rpcData.map(
-        (chunk: {
-          chunk_text: string;
-          metadata: Record<string, unknown>;
-          document_title: string;
-          similarity: number;
-        }) => ({
-          chunk_text: chunk.chunk_text,
-          metadata: chunk.metadata,
-          document_title: chunk.document_title,
-        })
-      );
-    } else {
-      // Fallback: fetch chunks and join with document titles manually
-      console.log("RPC failed or returned 0 results, using fallback search. RPC error:", rpcError?.message);
-
-      const { data: allChunks } = await supabase
-        .from("kb_chunks")
-        .select("id, chunk_text, chunk_index, kb_document_id, embedding, metadata")
-        .not("embedding", "is", null);
-
-      if (allChunks && allChunks.length > 0) {
-        // Fetch document titles
-        const docIds = Array.from(new Set(allChunks.map((c: { kb_document_id: string }) => c.kb_document_id)));
-        const { data: docs } = await supabase
-          .from("kb_documents")
-          .select("id, title")
-          .in("id", docIds);
-
-        const docTitleMap: Record<string, string> = {};
-        if (docs) docs.forEach((d: { id: string; title: string }) => { docTitleMap[d.id] = d.title; });
-
-        // Compute cosine similarity in-app
-        const cosineSimilarity = (a: number[], b: number[]): number => {
-          let dot = 0, normA = 0, normB = 0;
-          for (let i = 0; i < a.length; i++) {
-            dot += a[i] * b[i];
-            normA += a[i] * a[i];
-            normB += b[i] * b[i];
-          }
-          return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-        };
-
-        const scored = allChunks
-          .map((chunk: { chunk_text: string; embedding: number[] | string; kb_document_id: string; metadata: Record<string, unknown> }) => {
-            // Supabase returns vector columns as strings — parse if needed
-            const chunkEmb = typeof chunk.embedding === "string"
-              ? JSON.parse(chunk.embedding) as number[]
-              : chunk.embedding;
-            return {
-              chunk_text: chunk.chunk_text,
-              metadata: chunk.metadata,
-              document_title: docTitleMap[chunk.kb_document_id] || "Unknown",
-              similarity: cosineSimilarity(embedding, chunkEmb),
-            };
-          })
-          .filter((c: { similarity: number }) => c.similarity > matchThreshold)
-          .sort((a: { similarity: number }, b: { similarity: number }) => b.similarity - a.similarity)
-          .slice(0, 5);
-
-        kbChunks = scored.map((s: { chunk_text: string; metadata: Record<string, unknown>; document_title: string }) => ({
-          chunk_text: s.chunk_text,
-          metadata: s.metadata,
-          document_title: s.document_title,
-        }));
-
-        console.log("Fallback search found", kbChunks.length, "relevant chunks");
-      }
-    }
+    kbChunks = scored.map((s) => ({
+      chunk_text: s.chunk_text,
+      metadata: s.metadata,
+      document_title: s.document_title,
+    }));
   } catch (embeddingError) {
     // If embedding fails (no OpenAI key), continue without KB context
     console.warn("Embedding/search failed, continuing without KB:", embeddingError);
