@@ -235,47 +235,52 @@ export async function runRagPipeline(
   const messages = buildMessages(conversationHistory, message);
 
   // 7. Call Claude
-  const anthropic = new Anthropic({ apiKey: anthropicKey });
+  try {
+    const anthropic = new Anthropic({ apiKey: anthropicKey });
 
-  const response = await anthropic.messages.create({
-    model: "claude-3-5-haiku-20241022",
-    max_tokens: 1024,
-    system: systemPrompt,
-    messages,
-  });
+    const response = await anthropic.messages.create({
+      model: "claude-3-5-haiku-20241022",
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages,
+    });
 
-  // 8. Parse response
-  const rawReply =
-    response.content[0].type === "text" ? response.content[0].text : "";
+    // 8. Parse response
+    const rawReply =
+      response.content[0].type === "text" ? response.content[0].text : "";
 
-  // Extract confidence score from [[CONFIDENCE:X.XX]]
-  const confidenceMatch = rawReply.match(/\[\[CONFIDENCE:([\d.]+)\]\]/);
-  const confidence = confidenceMatch
-    ? parseFloat(confidenceMatch[1])
-    : 0.5;
+    // Extract confidence score from [[CONFIDENCE:X.XX]]
+    const confidenceMatch = rawReply.match(/\[\[CONFIDENCE:([\d.]+)\]\]/);
+    const confidence = confidenceMatch
+      ? parseFloat(confidenceMatch[1])
+      : 0.5;
 
-  // Remove confidence marker from the visible reply
-  const cleanReply = rawReply.replace(/\[\[CONFIDENCE:[\d.]+\]\]/, "").trim();
+    // Remove confidence marker from the visible reply
+    const cleanReply = rawReply.replace(/\[\[CONFIDENCE:[\d.]+\]\]/, "").trim();
 
-  // Extract source references
-  const sourceRefs: number[] = [];
-  const sourceRegex = /\[(\d+)\]/g;
-  let sourceMatch: RegExpExecArray | null;
-  while ((sourceMatch = sourceRegex.exec(cleanReply)) !== null) {
-    sourceRefs.push(parseInt(sourceMatch[1]) - 1);
+    // Extract source references
+    const sourceRefs: number[] = [];
+    const sourceRegex = /\[(\d+)\]/g;
+    let sourceMatch: RegExpExecArray | null;
+    while ((sourceMatch = sourceRegex.exec(cleanReply)) !== null) {
+      sourceRefs.push(parseInt(sourceMatch[1]) - 1);
+    }
+    const sources = Array.from(new Set(sourceRefs))
+      .filter((i) => i >= 0 && i < kbChunks.length)
+      .map(
+        (i) =>
+          kbChunks[i].document_title ||
+          `Source ${i + 1}`
+      );
+
+    return {
+      reply: cleanReply,
+      sources,
+      confidence,
+      language,
+    };
+  } catch (claudeError) {
+    console.error("Claude API call failed, falling back to demo mode:", claudeError);
+    return runDemoMode(message, language);
   }
-  const sources = Array.from(new Set(sourceRefs))
-    .filter((i) => i >= 0 && i < kbChunks.length)
-    .map(
-      (i) =>
-        kbChunks[i].document_title ||
-        `Source ${i + 1}`
-    );
-
-  return {
-    reply: cleanReply,
-    sources,
-    confidence,
-    language,
-  };
 }
