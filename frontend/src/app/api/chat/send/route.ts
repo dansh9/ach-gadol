@@ -51,26 +51,26 @@ export async function POST(request: NextRequest) {
       activeSessionId = session.id;
     }
 
-    // Store user message
-    const { error: userMsgError } = await supabase
-      .from("chat_messages")
-      .insert({
-        session_id: activeSessionId,
-        role: "user",
-        content: message.trim(),
-      });
+    // Store user message + fetch conversation history IN PARALLEL
+    const [storeResult, { data: history }] = await Promise.all([
+      supabase
+        .from("chat_messages")
+        .insert({
+          session_id: activeSessionId,
+          role: "user",
+          content: message.trim(),
+        }),
+      supabase
+        .from("chat_messages")
+        .select("role, content")
+        .eq("session_id", activeSessionId)
+        .order("created_at", { ascending: true })
+        .limit(10),
+    ]);
 
-    if (userMsgError) {
-      console.error("Failed to store user message:", userMsgError);
+    if (storeResult.error) {
+      console.error("Failed to store user message:", storeResult.error);
     }
-
-    // Fetch conversation history for context
-    const { data: history } = await supabase
-      .from("chat_messages")
-      .select("role, content")
-      .eq("session_id", activeSessionId)
-      .order("created_at", { ascending: true })
-      .limit(10);
 
     const conversationHistory = (history || [])
       .filter((msg) => msg.role === "user" || msg.role === "assistant")
@@ -109,8 +109,8 @@ export async function POST(request: NextRequest) {
             confidence: ragResult.confidence,
           });
 
-          // Store assistant message
-          const { error: botMsgError } = await supabase
+          // Store assistant message + update session IN PARALLEL (non-blocking)
+          const storeBotMsg = supabase
             .from("chat_messages")
             .insert({
               session_id: activeSessionId,
@@ -120,25 +120,23 @@ export async function POST(request: NextRequest) {
               sources: ragResult.sources,
             });
 
-          if (botMsgError) {
-            console.error("Failed to store assistant message:", botMsgError);
-          }
-
-          // Update session last activity
-          await supabase
+          const updateSession = supabase
             .from("chat_sessions")
             .update({ updated_at: new Date().toISOString() })
             .eq("id", activeSessionId);
 
-          // If confidence is low, flag for human review
           if (ragResult.confidence < 0.5) {
-            await supabase.from("approval_queue").insert({
+            // Low confidence: also flag for human review
+            const flagReview = supabase.from("approval_queue").insert({
               approval_type: "kb_update",
               risk_level: ragResult.confidence < 0.3 ? "red" : "yellow",
               ai_suggestion: { reply: ragResult.reply, question: message },
               ai_sources: ragResult.sources,
               status: "pending",
             });
+            await Promise.all([storeBotMsg, updateSession, flagReview]);
+          } else {
+            await Promise.all([storeBotMsg, updateSession]);
           }
         } catch (error) {
           console.error("Streaming pipeline error:", error);
