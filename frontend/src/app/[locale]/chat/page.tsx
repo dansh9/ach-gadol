@@ -5,8 +5,6 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/routing";
 import {
   Send,
-  Bot,
-  Sparkles,
   ClipboardCheck,
   FileText,
   Users,
@@ -16,6 +14,7 @@ import {
   ArrowUpRight,
   Phone,
 } from "lucide-react";
+import SoldierAvatar from "@/components/SoldierAvatar";
 
 /* ===== Types ===== */
 
@@ -166,9 +165,9 @@ function MessageRow({
   return (
     <div className="group">
       <div className="flex items-start gap-3">
-        {/* Bot icon */}
-        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)] mt-0.5">
-          <Bot className="h-4 w-4 text-[hsl(var(--primary))]" />
+        {/* Soldier avatar */}
+        <div className="flex-shrink-0 mt-0.5">
+          <SoldierAvatar className="h-8 w-8 rounded-full" />
         </div>
 
         {/* Content */}
@@ -538,8 +537,8 @@ export default function ChatPage() {
           /* ===== Welcome State ===== */
           <div className="flex h-full flex-col items-center justify-center px-4 pb-8">
             {/* Greeting */}
-            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)]">
-              <Sparkles className="h-6 w-6 text-[hsl(var(--primary))]" />
+            <div className="mb-2">
+              <SoldierAvatar className="h-16 w-16 rounded-full ring-4 ring-[hsl(var(--primary)/0.1)]" />
             </div>
             <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
               {tChat("title")}
