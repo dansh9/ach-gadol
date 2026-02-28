@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import {
   Heart,
@@ -41,42 +41,36 @@ const STATS = [
 
 export default function AboutPage() {
   const t = useTranslations("about");
-  const tCommon = useTranslations("common");
-  const locale = useLocale();
-  const isHe = locale === "he";
 
   const awards = [
     {
       year: "2014",
-      title: isHe ? "פרס נשיא המדינה להתנדבות" : "Presidential Volunteer Award",
-      subtitle: isHe ? "Presidential Volunteer Award" : "פרס נשיא המדינה להתנדבות",
+      title: t("award_presidential_title"),
+      subtitle: t("award_presidential_subtitle"),
       icon: Award,
     },
     {
       year: "2017",
-      title: isHe ? "פרס שר הקליטה" : "Immigration Minister Award",
-      subtitle: isHe ? "Immigration Minister Award" : "פרס שר הקליטה",
+      title: t("award_immigration_title"),
+      subtitle: t("award_immigration_subtitle"),
       icon: Star,
     },
   ];
 
   const milestones = [
-    { year: "2009", label: isHe ? "הקמת העמותה" : "Organization Founded", sublabel: isHe ? "Organization Founded" : "הקמת העמותה" },
-    { year: "2012", label: isHe ? "500 חיילים נתמכים" : "500 Soldiers Supported", sublabel: isHe ? "500 Soldiers Supported" : "500 חיילים נתמכים" },
-    { year: "2014", label: isHe ? "פרס נשיא המדינה" : "Presidential Award", sublabel: isHe ? "Presidential Award" : "פרס נשיא המדינה" },
-    { year: "2017", label: isHe ? "פרס שר הקליטה" : "Immigration Minister Award", sublabel: isHe ? "Immigration Minister Award" : "פרס שר הקליטה" },
-    { year: "2020", label: isHe ? "200+ מתנדבים פעילים" : "200+ Active Volunteers", sublabel: isHe ? "200+ Active Volunteers" : "200+ מתנדבים פעילים" },
-    { year: "2024", label: isHe ? "1,500+ חיילים בשנה" : "1,500+ Soldiers/Year", sublabel: isHe ? "1,500+ Soldiers/Year" : "1,500+ חיילים בשנה" },
+    { year: "2009", label: t("milestone_2009") },
+    { year: "2012", label: t("milestone_2012") },
+    { year: "2014", label: t("milestone_2014") },
+    { year: "2017", label: t("milestone_2017") },
+    { year: "2020", label: t("milestone_2020") },
+    { year: "2024", label: t("milestone_2024") },
   ];
 
   const volunteerCards = [
     {
       icon: Heart,
-      title: isHe ? "ליווי אישי" : "Personal Mentoring",
-      subtitle: isHe ? "Personal Mentoring" : "ליווי אישי",
-      desc: isHe
-        ? "מתנדבים מלווים חיילים בודדים לאורך כל השירות הצבאי"
-        : "Volunteers mentor lone soldiers throughout their military service",
+      title: t("volunteer_mentoring_title"),
+      desc: t("volunteer_mentoring_desc"),
       color:
         "from-rose-500/10 to-rose-600/5 border-rose-200/50 dark:border-rose-800/50",
       iconColor:
@@ -84,11 +78,8 @@ export default function AboutPage() {
     },
     {
       icon: Shield,
-      title: isHe ? "מיצוי זכויות" : "Rights Advocacy",
-      subtitle: isHe ? "Rights Advocacy" : "מיצוי זכויות",
-      desc: isHe
-        ? "עזרה במיצוי כל הזכויות המגיעות לחיילים בודדים"
-        : "Helping soldiers access every benefit they are entitled to",
+      title: t("volunteer_rights_title"),
+      desc: t("volunteer_rights_desc"),
       color:
         "from-blue-500/10 to-blue-600/5 border-blue-200/50 dark:border-blue-800/50",
       iconColor:
@@ -96,11 +87,8 @@ export default function AboutPage() {
     },
     {
       icon: Users,
-      title: isHe ? "קהילה תומכת" : "Supportive Community",
-      subtitle: isHe ? "Supportive Community" : "קהילה תומכת",
-      desc: isHe
-        ? "יצירת קהילה חמה ותומכת של חיילים בודדים ומתנדבים"
-        : "Building a warm and supportive community of soldiers and volunteers",
+      title: t("volunteer_community_title"),
+      desc: t("volunteer_community_desc"),
       color:
         "from-emerald-500/10 to-emerald-600/5 border-emerald-200/50 dark:border-emerald-800/50",
       iconColor:
@@ -122,7 +110,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-4xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--accent)/0.3)] bg-[hsl(var(--accent)/0.08)] px-4 py-1.5 text-sm font-medium text-[hsl(var(--accent-foreground))]">
               <Shield className="h-4 w-4 text-[hsl(var(--accent))]" />
-              <span>{isHe ? "אח גדול" : "Ach Gadol"}</span>
+              <span>{t("org_name")}</span>
             </div>
 
             <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl">
@@ -245,9 +233,6 @@ export default function AboutPage() {
                       <p className="text-sm text-foreground">
                         {milestone.label}
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        {milestone.sublabel}
-                      </p>
                     </div>
                   </div>
 
@@ -292,7 +277,6 @@ export default function AboutPage() {
                 <h3 className="text-xl font-bold text-foreground">
                   {item.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">{item.subtitle}</p>
                 <p className="mt-3 leading-relaxed text-muted-foreground">
                   {item.desc}
                 </p>

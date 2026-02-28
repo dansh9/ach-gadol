@@ -34,7 +34,24 @@
     "mission": "ተልዕኳችን ለእያንዳንዱ ብቸኛ ወታደር ትልቅ ወንድም መሆን ነው — ለመከተል፣ ለመደገፍ እና ለሚገባቸው ሁሉም መብቶችና ሀብቶች ተደራሽነት ለማረጋገጥ።",
     "history_title": "ታሪክ",
     "volunteers_title": "በጎ ፈቃደኞች",
-    "join_volunteers": "በጎ ፈቃደኞቻችንን ይቀላቀሉ"
+    "join_volunteers": "በጎ ፈቃደኞቻችንን ይቀላቀሉ",
+    "award_presidential_title": "የፕሬዚዳንት የበጎ ፈቃደኝነት ሽልማት",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "የስደተኞች ሚኒስትር ሽልማት",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "ድርጅቱ ተመሠረተ",
+    "milestone_2012": "500 ወታደሮች ተደግፈዋል",
+    "milestone_2014": "የፕሬዚዳንት ሽልማት",
+    "milestone_2017": "የስደተኞች ሚኒስትር ሽልማት",
+    "milestone_2020": "200+ ንቁ በጎ ፈቃደኞች",
+    "milestone_2024": "1,500+ ወታደሮች በዓመት",
+    "volunteer_mentoring_title": "ግላዊ አማካሪ",
+    "volunteer_mentoring_desc": "በጎ ፈቃደኞች ብቸኛ ወታደሮችን በጠቅላላ ሰራዊታቸው ያጅባሉ",
+    "volunteer_rights_title": "የመብቶች ጥበቃ",
+    "volunteer_rights_desc": "ወታደሮች ሊያገኙ የሚችሉትን ሁሉንም ጥቅሞች እንዲያገኙ መርዳት",
+    "volunteer_community_title": "ደጋፊ ማህበረሰብ",
+    "volunteer_community_desc": "የወታደሮችና የበጎ ፈቃደኞች ሞቅ ያለ ማህበረሰብ መገንባት",
+    "org_name": "አኽ ጋዶል"
   },
   "rights": {
     "title": "የብቸኛ ወታደር መብቶች እና ጥቅሞች",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "የ AI ጥቆማ:",
     "load_error": "ውሂብ መጫን አልተሳካም",
     "retry": "እንደገና ሞክር",
-    "untitled_case": "ርዕስ የሌለው ጉዳይ"
+    "untitled_case": "ርዕስ የሌለው ጉዳይ",
+    "volunteer_landing_title": "የበጎ ፈቃደኛ ቦታ",
+    "volunteer_landing_subtitle": "ለአኽ ጋዶል ንቁ በጎ ፈቃደኞች መግቢያ",
+    "volunteer_login_button": "ወደ ስርዓቱ ይግቡ"
   }
 }

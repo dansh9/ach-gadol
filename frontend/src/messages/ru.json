@@ -34,7 +34,24 @@
     "mission": "Наша миссия — быть старшим братом для каждого одинокого солдата: сопровождать, поддерживать и обеспечивать доступ ко всем положенным правам и ресурсам.",
     "history_title": "История",
     "volunteers_title": "Волонтёры",
-    "join_volunteers": "Присоединяйтесь к нашим волонтёрам"
+    "join_volunteers": "Присоединяйтесь к нашим волонтёрам",
+    "award_presidential_title": "Президентская премия за волонтёрство",
+    "award_presidential_subtitle": "Presidential Volunteer Award",
+    "award_immigration_title": "Премия министра абсорбции",
+    "award_immigration_subtitle": "Immigration Minister Award",
+    "milestone_2009": "Основание организации",
+    "milestone_2012": "500 солдат получили поддержку",
+    "milestone_2014": "Президентская премия",
+    "milestone_2017": "Премия министра абсорбции",
+    "milestone_2020": "200+ активных волонтёров",
+    "milestone_2024": "1,500+ солдат в год",
+    "volunteer_mentoring_title": "Личное наставничество",
+    "volunteer_mentoring_desc": "Волонтёры сопровождают одиноких солдат на протяжении всей службы",
+    "volunteer_rights_title": "Защита прав",
+    "volunteer_rights_desc": "Помощь солдатам в получении всех положенных льгот",
+    "volunteer_community_title": "Поддерживающее сообщество",
+    "volunteer_community_desc": "Создание тёплого сообщества солдат и волонтёров",
+    "org_name": "Ах Гадоль"
   },
   "rights": {
     "title": "Права и льготы одинокого солдата",
@@ -207,6 +224,9 @@
     "ai_suggestion_label": "Предложение ИИ:",
     "load_error": "Ошибка загрузки данных",
     "retry": "Повторить",
-    "untitled_case": "Дело без названия"
+    "untitled_case": "Дело без названия",
+    "volunteer_landing_title": "Зона волонтёров",
+    "volunteer_landing_subtitle": "Вход для активных волонтёров Ах Гадоль",
+    "volunteer_login_button": "Войти в систему"
   }
 }

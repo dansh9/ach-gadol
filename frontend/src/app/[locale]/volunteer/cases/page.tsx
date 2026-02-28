@@ -41,23 +41,26 @@ export default function VolunteerCasesPage() {
   const t = useTranslations("volunteer_dashboard");
   const [cases, setCases] = useState<Case[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("");
 
-  useEffect(() => {
-    async function fetchCases() {
-      try {
-        const params = statusFilter ? `?status=${statusFilter}` : "";
-        const res = await fetch(`/api/cases${params}`);
-        if (res.ok) {
-          const data = await res.json();
-          setCases(data.cases || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch cases:", error);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchCases() {
+    try {
+      setError(false);
+      const params = statusFilter ? `?status=${statusFilter}` : "";
+      const res = await fetch(`/api/cases${params}`);
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      setCases(data.cases || []);
+    } catch (error) {
+      console.error("Failed to fetch cases:", error);
+      setError(true);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchCases();
   }, [statusFilter]);
 
@@ -96,6 +99,17 @@ export default function VolunteerCasesPage() {
       {loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-[hsl(var(--primary))]" />
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">
+          <AlertTriangle className="mb-4 h-12 w-12 text-amber-500/50" />
+          <p className="text-muted-foreground">{t("load_error")}</p>
+          <button
+            onClick={() => { setError(false); setLoading(true); fetchCases(); }}
+            className="mt-4 rounded-lg bg-[hsl(var(--primary))] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[hsl(var(--primary)/0.9)]"
+          >
+            {t("retry")}
+          </button>
         </div>
       ) : cases.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-card py-20">
