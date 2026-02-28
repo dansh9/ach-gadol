@@ -2,18 +2,15 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link } from "@/i18n/routing";
 import ReactMarkdown from "react-markdown";
 import {
   Send,
   ClipboardCheck,
   FileText,
   Users,
-  AlertTriangle,
   Loader2,
   ExternalLink,
   ArrowUpRight,
-  Phone,
 } from "lucide-react";
 import SoldierAvatar from "@/components/SoldierAvatar";
 
@@ -306,34 +303,6 @@ function MessageRow({
   );
 }
 
-/* ===== Escalation Banner ===== */
-
-function EscalationBanner() {
-  const tChat = useTranslations("chat");
-
-  return (
-    <div className="mx-auto max-w-2xl px-4 pb-3 sm:px-6">
-      <div className="rounded-xl border border-amber-200/50 bg-amber-50/80 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
-        <div className="flex items-start gap-2">
-          <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
-          <div>
-            <p className="text-xs font-medium text-amber-800 dark:text-amber-200">
-              {tChat("escalate")}
-            </p>
-            <Link
-              href="/resources"
-              className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-amber-700 underline hover:text-amber-900 dark:text-amber-300"
-            >
-              <Phone className="h-3 w-3" />
-              {tChat("contact_volunteer")}
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ===== Main Page Component ===== */
 
 export default function ChatPage() {
@@ -372,7 +341,6 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [showEscalation, setShowEscalation] = useState(false);
 
   // Detect if user has scrolled up
   useEffect(() => {
@@ -428,7 +396,6 @@ export default function ChatPage() {
       setMessages((prev) => [...prev, userMsg, botMsg]);
       setInput("");
       setIsTyping(true);
-      setShowEscalation(false);
       userScrolledUp.current = false;
 
       if (inputRef.current) {
@@ -503,9 +470,6 @@ export default function ChatPage() {
                   return prev;
                 });
 
-                if (data.confidence < 0.5) {
-                  setShowEscalation(true);
-                }
               } else if (data.type === "error") {
                 setMessages((prev) => {
                   const lastMsg = prev[prev.length - 1];
@@ -638,10 +602,6 @@ export default function ChatPage() {
               ))}
             </div>
 
-            {/* Disclaimer */}
-            <p className="mt-8 max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground/40">
-              {tChat("disclaimer")}
-            </p>
           </div>
         ) : (
           /* ===== Chat Messages ===== */
@@ -660,8 +620,6 @@ export default function ChatPage() {
           </div>
         )}
 
-        {/* Escalation Banner */}
-        {showEscalation && <EscalationBanner />}
       </div>
 
       {/* ===== Input Area ===== */}
@@ -693,9 +651,6 @@ export default function ChatPage() {
               )}
             </button>
           </div>
-          <p className="mt-1.5 text-center text-[10px] text-muted-foreground/40">
-            {tChat("powered_by")}
-          </p>
         </div>
       </div>
     </div>
