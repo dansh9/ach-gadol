@@ -6,7 +6,6 @@ import { Link } from "@/i18n/routing";
 import {
   Send,
   Bot,
-  User,
   Sparkles,
   ClipboardCheck,
   FileText,
@@ -68,32 +67,6 @@ function parseSuggestions(content: string): {
   };
 }
 
-/* ===== Confidence Indicator ===== */
-
-function ConfidenceDot({ confidence }: { confidence: number }) {
-  const tChat = useTranslations("chat");
-  const color =
-    confidence >= 0.8
-      ? "bg-emerald-500"
-      : confidence >= 0.5
-        ? "bg-amber-500"
-        : "bg-rose-500";
-
-  const label =
-    confidence >= 0.8
-      ? tChat("confidence_high")
-      : confidence >= 0.5
-        ? tChat("confidence_medium")
-        : tChat("confidence_low");
-
-  return (
-    <span
-      className={`inline-block h-2 w-2 rounded-full ${color}`}
-      title={label}
-    />
-  );
-}
-
 /* ===== Citation rendering ===== */
 
 function renderMessageContent(
@@ -142,7 +115,7 @@ function renderMessageContent(
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mx-0.5 inline-flex items-center justify-center rounded bg-[hsl(var(--primary)/0.15)] px-1 py-0 text-[10px] font-bold leading-4 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.3)] no-underline"
+                className="mx-0.5 inline-flex items-center justify-center rounded-md bg-[hsl(var(--primary)/0.12)] px-1.5 py-0 text-[11px] font-semibold leading-5 text-[hsl(var(--primary))] transition-colors hover:bg-[hsl(var(--primary)/0.25)] no-underline"
                 title={`${source.title}${isExternal ? " ↗" : ""}`}
               >
                 {num}
@@ -157,9 +130,9 @@ function renderMessageContent(
   );
 }
 
-/* ===== Message Bubble Component ===== */
+/* ===== Message Row — ChatGPT-style ===== */
 
-function MessageBubble({
+function MessageRow({
   message,
   onSuggestionClick,
   isLastBot,
@@ -176,112 +149,89 @@ function MessageBubble({
     ? parseSuggestions(message.content)
     : { mainContent: message.content, suggestions: [] };
 
-  return (
-    <div className={`flex gap-2.5 ${isBot ? "" : "flex-row-reverse"}`}>
-      {/* Avatar */}
-      <div
-        className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full ${
-          isBot
-            ? "bg-[hsl(var(--primary)/0.12)] ring-2 ring-[hsl(var(--primary)/0.06)]"
-            : "bg-[hsl(var(--accent)/0.15)]"
-        }`}
-      >
-        {isBot ? (
-          <Bot className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
-        ) : (
-          <User className="h-3.5 w-3.5 text-[hsl(var(--accent))]" />
-        )}
+  if (!isBot) {
+    /* ----- User message: subtle bg, aligned to end ----- */
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[85%] sm:max-w-[70%] rounded-2xl bg-[hsl(var(--muted))] px-4 py-3">
+          <div className="whitespace-pre-line text-[15px] leading-[1.7] text-foreground">
+            {mainContent}
+          </div>
+        </div>
       </div>
+    );
+  }
 
-      {/* Bubble + Suggestions */}
-      <div className="max-w-[82%] sm:max-w-[72%]">
-        <div
-          className={`rounded-2xl px-4 py-2.5 ${
-            isBot
-              ? "rounded-ss-md bg-card text-foreground shadow-sm ring-1 ring-border/40"
-              : "rounded-se-md bg-[hsl(var(--primary))] text-primary-foreground shadow-sm"
-          }`}
-        >
-          {/* Loading dots before first token */}
-          {isBot && message.isStreaming && !message.content ? (
-            <div className="flex items-center gap-1 py-1">
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:0ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:300ms]" />
+  /* ----- Bot message: full width, no background ----- */
+  return (
+    <div className="group">
+      <div className="flex items-start gap-3">
+        {/* Bot icon */}
+        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)] mt-0.5">
+          <Bot className="h-4 w-4 text-[hsl(var(--primary))]" />
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1 pt-0.5">
+          {/* Loading dots */}
+          {message.isStreaming && !message.content ? (
+            <div className="flex items-center gap-1.5 py-2">
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:0ms]" />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:150ms]" />
+              <span className="h-2 w-2 animate-bounce rounded-full bg-[hsl(var(--primary)/0.4)] [animation-delay:300ms]" />
             </div>
           ) : (
-            <div className="whitespace-pre-line text-[14px] leading-[1.65]">
+            <div className="whitespace-pre-line text-[15px] leading-[1.75] text-foreground">
               {renderMessageContent(mainContent, message.sourceMap, locale)}
               {message.isStreaming && (
-                <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-sm bg-[hsl(var(--primary)/0.5)]" />
+                <span className="ml-0.5 inline-block h-[18px] w-[2px] animate-pulse rounded-sm bg-[hsl(var(--primary)/0.6)]" />
               )}
             </div>
           )}
 
           {/* Sources */}
-          {isBot && !message.isStreaming && message.sources && message.sources.length > 0 && (
-            <div className="mt-2 border-t border-border/20 pt-2">
-              <p className="text-[10px] font-medium text-muted-foreground/70">
+          {!message.isStreaming && message.sources && message.sources.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              <span className="text-[11px] font-medium text-muted-foreground/60 self-center">
                 {tChat("sources_label")}
-              </p>
-              <div className="mt-1 flex flex-wrap gap-1">
-                {message.sources.map((source, i) => {
-                  const mapEntry = message.sourceMap
-                    ? Object.values(message.sourceMap).find((s) => s.title === source)
-                    : null;
-                  const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
-                  return (
-                    <a
-                      key={i}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-0.5 rounded-md bg-muted/60 px-1.5 py-0.5 text-[10px] text-muted-foreground transition-colors hover:bg-[hsl(var(--primary)/0.1)] hover:text-[hsl(var(--primary))]"
-                    >
-                      <ExternalLink className="h-2.5 w-2.5" />
-                      {source}
-                    </a>
-                  );
-                })}
-              </div>
+              </span>
+              {message.sources.map((source, i) => {
+                const mapEntry = message.sourceMap
+                  ? Object.values(message.sourceMap).find((s) => s.title === source)
+                  : null;
+                const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+                return (
+                  <a
+                    key={i}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 rounded-lg border border-border/50 bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground transition-colors hover:border-[hsl(var(--primary)/0.3)] hover:text-[hsl(var(--primary))]"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    {source}
+                  </a>
+                );
+              })}
             </div>
           )}
 
-          {/* Timestamp + Confidence */}
-          {!message.isStreaming && (
-            <div className="mt-1.5 flex items-center gap-1.5">
-              {isBot && message.confidence !== undefined && (
-                <ConfidenceDot confidence={message.confidence} />
-              )}
-              <p
-                className={`text-[10px] ${
-                  isBot ? "text-muted-foreground/50" : "text-primary-foreground/50"
-                }`}
-              >
-                {message.timestamp.toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
+          {/* Follow-up Suggestions */}
+          {!message.isStreaming && isLastBot && suggestions.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {suggestions.map((suggestion, i) => (
+                <button
+                  key={i}
+                  onClick={() => onSuggestionClick?.(suggestion)}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border/60 bg-background px-3.5 py-2 text-[13px] font-medium text-foreground transition-all hover:border-[hsl(var(--primary)/0.3)] hover:bg-[hsl(var(--primary)/0.04)] hover:text-[hsl(var(--primary))] active:scale-[0.98]"
+                >
+                  <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span>{suggestion}</span>
+                </button>
+              ))}
             </div>
           )}
         </div>
-
-        {/* Follow-up Suggestions */}
-        {isBot && !message.isStreaming && isLastBot && suggestions.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {suggestions.map((suggestion, i) => (
-              <button
-                key={i}
-                onClick={() => onSuggestionClick?.(suggestion)}
-                className="inline-flex items-center gap-1 rounded-xl border border-[hsl(var(--primary)/0.15)] bg-[hsl(var(--primary)/0.04)] px-3 py-1.5 text-xs font-medium text-[hsl(var(--primary))] transition-all hover:bg-[hsl(var(--primary)/0.1)] hover:shadow-sm active:scale-[0.98]"
-              >
-                <ArrowUpRight className="h-3 w-3" />
-                <span>{suggestion}</span>
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
@@ -293,7 +243,7 @@ function EscalationBanner() {
   const tChat = useTranslations("chat");
 
   return (
-    <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
+    <div className="mx-auto max-w-2xl px-4 pb-3 sm:px-6">
       <div className="rounded-xl border border-amber-200/50 bg-amber-50/80 p-3 dark:border-amber-800/50 dark:bg-amber-900/10">
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
@@ -349,15 +299,7 @@ export default function ChatPage() {
     },
   ];
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "bot",
-      content: tChat("welcome"),
-      timestamp: new Date(),
-      confidence: 1.0,
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -586,48 +528,40 @@ export default function ChatPage() {
     -1
   );
 
-  const isWelcomeState = messages.length <= 1 && !isTyping;
+  const isWelcomeState = messages.length === 0 && !isTyping;
 
   return (
-    <div className="flex h-[calc(100dvh-4rem)] flex-col bg-gradient-to-b from-background via-background to-muted/20">
-      {/* ===== Messages Area ===== */}
+    <div className="flex h-[calc(100dvh-4rem)] flex-col">
+      {/* ===== Messages / Welcome Area ===== */}
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
         {isWelcomeState ? (
-          /* ===== Welcome / Empty State ===== */
-          <div className="flex h-full flex-col items-center justify-center px-4 pb-4">
-            {/* Bot avatar & branding */}
-            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[hsl(var(--primary)/0.1)] ring-4 ring-[hsl(var(--primary)/0.05)]">
-              <Bot className="h-8 w-8 text-[hsl(var(--primary))]" />
+          /* ===== Welcome State ===== */
+          <div className="flex h-full flex-col items-center justify-center px-4 pb-8">
+            {/* Greeting */}
+            <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-[hsl(var(--primary)/0.1)]">
+              <Sparkles className="h-6 w-6 text-[hsl(var(--primary))]" />
             </div>
-            <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+            <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
               {tChat("title")}
             </h1>
-            <div className="mt-1 flex items-center gap-1.5">
-              <Sparkles className="h-3.5 w-3.5 text-[hsl(var(--accent))]" />
-              <span className="text-sm text-muted-foreground">
-                {tChat("powered_by")}
-              </span>
-            </div>
-
-            {/* Welcome message */}
-            <p className="mx-auto mt-4 max-w-md text-center text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-2 max-w-md text-center text-[15px] leading-relaxed text-muted-foreground">
               {tChat("welcome")}
             </p>
 
             {/* Quick Action Cards */}
-            <div className="mt-6 grid w-full max-w-md grid-cols-1 gap-2 sm:grid-cols-3 sm:max-w-xl">
+            <div className="mt-8 grid w-full max-w-lg grid-cols-1 gap-2.5 sm:grid-cols-3 sm:max-w-2xl">
               {quickActions.map((action) => (
                 <button
                   key={action.id}
                   onClick={() => handleQuickAction(action)}
-                  className="group flex items-center gap-3 rounded-xl border border-border/60 bg-card p-3.5 text-start shadow-sm transition-all hover:border-[hsl(var(--primary)/0.3)] hover:bg-[hsl(var(--primary)/0.04)] hover:shadow-md active:scale-[0.98] sm:flex-col sm:items-start sm:gap-2 sm:p-4"
+                  className="group flex flex-col items-start gap-2 rounded-2xl border border-border/50 bg-card/80 p-4 text-start transition-all hover:border-[hsl(var(--primary)/0.25)] hover:bg-card hover:shadow-md active:scale-[0.98]"
                 >
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--primary)/0.08)] transition-colors group-hover:bg-[hsl(var(--primary)/0.14)]">
-                    <action.icon className="h-4.5 w-4.5 text-[hsl(var(--primary))]" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-foreground">{action.label}</p>
-                    <p className="mt-0.5 line-clamp-2 text-xs text-muted-foreground hidden sm:block">
+                  <action.icon className="h-5 w-5 text-[hsl(var(--primary)/0.7)] transition-colors group-hover:text-[hsl(var(--primary))]" />
+                  <div>
+                    <p className="text-[13px] font-medium text-foreground">
+                      {action.label}
+                    </p>
+                    <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground/70 hidden sm:block">
                       {action.description}
                     </p>
                   </div>
@@ -636,16 +570,16 @@ export default function ChatPage() {
             </div>
 
             {/* Disclaimer */}
-            <p className="mt-6 max-w-sm text-center text-[10px] leading-relaxed text-muted-foreground/50">
+            <p className="mt-8 max-w-sm text-center text-[11px] leading-relaxed text-muted-foreground/40">
               {tChat("disclaimer")}
             </p>
           </div>
         ) : (
           /* ===== Chat Messages ===== */
-          <div className="mx-auto max-w-3xl px-4 py-4 sm:px-6">
-            <div className="space-y-4" aria-live="polite">
+          <div className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6">
+            <div className="space-y-6" aria-live="polite">
               {messages.map((message, idx) => (
-                <MessageBubble
+                <MessageRow
                   key={message.id}
                   message={message}
                   onSuggestionClick={handleSuggestionClick}
@@ -662,9 +596,9 @@ export default function ChatPage() {
       </div>
 
       {/* ===== Input Area ===== */}
-      <div className="flex-shrink-0 border-t border-border/30 bg-background/80 backdrop-blur-lg">
-        <div className="mx-auto max-w-3xl px-3 py-2.5 sm:px-5">
-          <div className="flex items-end gap-2 rounded-2xl border border-border/60 bg-card px-3 py-2 shadow-sm transition-all focus-within:border-[hsl(var(--primary)/0.4)] focus-within:ring-2 focus-within:ring-[hsl(var(--primary)/0.08)]">
+      <div className="flex-shrink-0 pb-3 pt-1 sm:pb-5">
+        <div className="mx-auto max-w-2xl px-3 sm:px-5">
+          <div className="flex items-end gap-2 rounded-2xl border border-border/50 bg-card px-4 py-2.5 shadow-sm transition-all focus-within:border-[hsl(var(--primary)/0.4)] focus-within:shadow-md">
             <textarea
               ref={inputRef}
               value={input}
@@ -674,22 +608,25 @@ export default function ChatPage() {
               disabled={isTyping}
               rows={1}
               aria-label={tChat("placeholder")}
-              className="flex-1 resize-none bg-transparent py-1.5 text-[14px] leading-relaxed text-foreground placeholder-muted-foreground/60 outline-none disabled:opacity-50"
+              className="flex-1 resize-none bg-transparent py-1 text-[15px] leading-relaxed text-foreground placeholder-muted-foreground/50 outline-none disabled:opacity-50"
               style={{ maxHeight: "7.5rem" }}
             />
             <button
               onClick={handleSend}
               disabled={!input.trim() || isTyping}
-              className="mb-0.5 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--primary))] text-primary-foreground shadow-sm transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30"
+              className="mb-0.5 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--primary))] text-primary-foreground transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-25"
               aria-label={tChat("send")}
             >
               {isTyping ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Send className="h-3.5 w-3.5" />
+                <Send className="h-4 w-4" />
               )}
             </button>
           </div>
+          <p className="mt-1.5 text-center text-[10px] text-muted-foreground/40">
+            {tChat("powered_by")}
+          </p>
         </div>
       </div>
     </div>
