@@ -191,7 +191,28 @@ export async function runRagPipeline(
     return runDemoMode(message, language);
   }
 
-  // 3. Generate embedding for the query and find relevant KB chunks
+  // 3. Translate query to English for KB search (KB content is in English)
+  let searchQuery = message;
+  if (language !== "en") {
+    try {
+      const anthropic = new Anthropic({ apiKey: anthropicKey });
+      const translationResp = await anthropic.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 200,
+        system: "Translate the following text to English. Return ONLY the translation, nothing else.",
+        messages: [{ role: "user", content: message }],
+      });
+      const translated = translationResp.content[0].type === "text" ? translationResp.content[0].text : message;
+      if (translated && translated.length > 0) {
+        searchQuery = translated;
+        console.log("Translated query for KB search:", searchQuery);
+      }
+    } catch (translateError) {
+      console.warn("Translation failed, using original message for search:", translateError);
+    }
+  }
+
+  // 4. Generate embedding for the (translated) query and find relevant KB chunks
   let kbChunks: {
     chunk_text: string;
     metadata?: Record<string, unknown>;
@@ -199,7 +220,7 @@ export async function runRagPipeline(
   }[] = [];
 
   try {
-    const embedding = await generateEmbedding(message);
+    const embedding = await generateEmbedding(searchQuery);
 
     // 4. Fetch all KB chunks with their embeddings and compute similarity
     const supabase = createAdminClient();
