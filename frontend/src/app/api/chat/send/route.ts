@@ -2,13 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runRagPipeline } from "@/lib/rag/pipeline";
 
-// Allow up to 30s for the AI pipeline (translate + embed + search + Claude)
+// Allow up to 30s for the AI pipeline (embed + search + Claude streaming)
 export const maxDuration = 30;
 
 /**
  * POST /api/chat/send
  * Body: { sessionId?: string, message: string, language?: string, channel?: string }
- * Returns: { sessionId, reply, sources, confidence }
+ * Returns: SSE stream with events:
+ *   { type: "session", sessionId }
+ *   { type: "token", text }
+ *   { type: "done", sources, sourceMap, confidence }
+ *   { type: "error", message }
  */
 export async function POST(request: NextRequest) {
   try {
@@ -75,50 +79,82 @@ export async function POST(request: NextRequest) {
         content: msg.content,
       }));
 
-    // Run RAG pipeline
-    const ragResult = await runRagPipeline(
-      message.trim(),
-      conversationHistory,
-      language
-    );
+    // Create SSE streaming response
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (data: Record<string, unknown>) => {
+          controller.enqueue(
+            encoder.encode(`data: ${JSON.stringify(data)}\n\n`)
+          );
+        };
 
-    // Store assistant message
-    const { error: botMsgError } = await supabase
-      .from("chat_messages")
-      .insert({
-        session_id: activeSessionId,
-        role: "assistant",
-        content: ragResult.reply,
-        confidence: ragResult.confidence,
-        sources: ragResult.sources,
-      });
+        // Send session ID immediately
+        send({ type: "session", sessionId: activeSessionId });
 
-    if (botMsgError) {
-      console.error("Failed to store assistant message:", botMsgError);
-    }
+        try {
+          // Run RAG pipeline with streaming token callback
+          const ragResult = await runRagPipeline(
+            message.trim(),
+            conversationHistory,
+            language,
+            (token) => send({ type: "token", text: token })
+          );
 
-    // Update session last activity
-    await supabase
-      .from("chat_sessions")
-      .update({ updated_at: new Date().toISOString() })
-      .eq("id", activeSessionId);
+          // Send final metadata
+          send({
+            type: "done",
+            sources: ragResult.sources,
+            sourceMap: ragResult.sourceMap,
+            confidence: ragResult.confidence,
+          });
 
-    // If confidence is low, flag for human review
-    if (ragResult.confidence < 0.5) {
-      await supabase.from("approval_queue").insert({
-        approval_type: "kb_update",
-        risk_level: ragResult.confidence < 0.3 ? "red" : "yellow",
-        ai_suggestion: { reply: ragResult.reply, question: message },
-        ai_sources: ragResult.sources,
-        status: "pending",
-      });
-    }
+          // Store assistant message
+          const { error: botMsgError } = await supabase
+            .from("chat_messages")
+            .insert({
+              session_id: activeSessionId,
+              role: "assistant",
+              content: ragResult.reply,
+              confidence: ragResult.confidence,
+              sources: ragResult.sources,
+            });
 
-    return NextResponse.json({
-      sessionId: activeSessionId,
-      reply: ragResult.reply,
-      sources: ragResult.sources,
-      confidence: ragResult.confidence,
+          if (botMsgError) {
+            console.error("Failed to store assistant message:", botMsgError);
+          }
+
+          // Update session last activity
+          await supabase
+            .from("chat_sessions")
+            .update({ updated_at: new Date().toISOString() })
+            .eq("id", activeSessionId);
+
+          // If confidence is low, flag for human review
+          if (ragResult.confidence < 0.5) {
+            await supabase.from("approval_queue").insert({
+              approval_type: "kb_update",
+              risk_level: ragResult.confidence < 0.3 ? "red" : "yellow",
+              ai_suggestion: { reply: ragResult.reply, question: message },
+              ai_sources: ragResult.sources,
+              status: "pending",
+            });
+          }
+        } catch (error) {
+          console.error("Streaming pipeline error:", error);
+          send({ type: "error", message: "Internal server error" });
+        }
+
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache, no-transform",
+        Connection: "keep-alive",
+      },
     });
   } catch (error) {
     console.error("Chat send error:", error);
