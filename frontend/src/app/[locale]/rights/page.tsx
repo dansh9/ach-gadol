@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import {
   Wallet,
@@ -59,11 +58,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "לחודש",
         conditionsHe: "כל חייל בודד מוכר",
         conditionsEn: "All recognized lone soldiers",
-        sourceHe: "צה\"ל — מדור כוח אדם",
+        sourceHe: 'צה"ל — מדור כוח אדם',
         sourceEn: "IDF — Personnel Division",
-        sourceUrl: "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
-        howToGetHe: "פנו למדור כוח אדם ביחידה. התוספת מחושבת אוטומטית לאחר הכרה כחייל בודד.",
-        howToGetEn: "Contact your unit's Personnel Division. The allowance is calculated automatically after lone soldier recognition.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+        howToGetHe:
+          "פנו למדור כוח אדם ביחידה. התוספת מחושבת אוטומטית לאחר הכרה כחייל בודד.",
+        howToGetEn:
+          "Contact your unit's Personnel Division. The allowance is calculated automatically after lone soldier recognition.",
       },
       {
         id: "combat_allowance",
@@ -74,11 +76,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "לחודש",
         conditionsHe: "חייל בודד בתפקיד לוחם",
         conditionsEn: "Lone soldiers in combat roles",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
-        howToGetHe: "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
-        howToGetEn: "Automatically calculated based on your unit role classification.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+        howToGetHe:
+          "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
+        howToGetEn:
+          "Automatically calculated based on your unit role classification.",
       },
       {
         id: "combat_support_allowance",
@@ -89,11 +94,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "לחודש",
         conditionsHe: "חייל בודד בתפקיד תומך לחימה",
         conditionsEn: "Lone soldiers in combat support roles",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
-        howToGetHe: "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
-        howToGetEn: "Automatically calculated based on your unit role classification.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+        howToGetHe:
+          "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
+        howToGetEn:
+          "Automatically calculated based on your unit role classification.",
       },
       {
         id: "food_allowance",
@@ -104,11 +112,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "לחודש",
         conditionsHe: "חייל בודד בבסיס ללא חדר אוכל",
         conditionsEn: "Lone soldiers at bases without dining facilities",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/דמי_כלכלה_לחיילים_בודדים",
-        howToGetHe: "פנו למדור כוח אדם ביחידה עם אישור שהבסיס ללא חדר אוכל.",
-        howToGetEn: "Contact your unit's Personnel Division with confirmation that the base has no dining facility.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/דמי_כלכלה_לחיילים_בודדים",
+        howToGetHe:
+          "פנו למדור כוח אדם ביחידה עם אישור שהבסיס ללא חדר אוכל.",
+        howToGetEn:
+          "Contact your unit's Personnel Division with confirmation that the base has no dining facility.",
       },
       {
         id: "holiday_vouchers",
@@ -119,11 +130,13 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "פעמיים בשנה",
         conditionsHe: "לראש השנה ולפסח",
         conditionsEn: "For Rosh Hashana and Passover (~250 x 2)",
-        sourceHe: "משרד הקליטה / צה\"ל",
+        sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
         sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
-        howToGetHe: "השוברים מחולקים אוטומטית לפני החגים דרך היחידה. יש לוודא שהפרטים מעודכנים.",
-        howToGetEn: "Vouchers are distributed automatically before holidays through your unit. Ensure your details are up to date.",
+        howToGetHe:
+          "השוברים מחולקים אוטומטית לפני החגים דרך היחידה. יש לוודא שהפרטים מעודכנים.",
+        howToGetEn:
+          "Vouchers are distributed automatically before holidays through your unit. Ensure your details are up to date.",
       },
       {
         id: "immigration_ministry",
@@ -136,9 +149,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "New immigrants (Olim) only",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Aliyah and Integration",
-        sourceUrl: "https://www.kolzchut.org.il/he/מענק_מטעם_משרד_העלייה_והקליטה_לחייל_בודד_או_מתנדב_בודד_בשירות_לאומי-אזרחי",
-        howToGetHe: "פנו לסניף משרד הקליטה הקרוב עם תעודת עולה ואישור חייל בודד. ניתן לפנות גם דרך טלפון *3721.",
-        howToGetEn: "Visit your nearest Ministry of Immigration office with Oleh certificate and lone soldier confirmation. Call *3721.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/מענק_מטעם_משרד_העלייה_והקליטה_לחייל_בודד_או_מתנדב_בודד_בשירות_לאומי-אזרחי",
+        howToGetHe:
+          "פנו לסניף משרד הקליטה הקרוב עם תעודת עולה ואישור חייל בודד. ניתן לפנות גם דרך טלפון *3721.",
+        howToGetEn:
+          "Visit your nearest Ministry of Immigration office with Oleh certificate and lone soldier confirmation. Call *3721.",
       },
       {
         id: "housing_ministry",
@@ -151,9 +167,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers paying rent",
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
-        sourceUrl: "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
-        howToGetHe: "הגישו בקשה באתר משרד השיכון או בסניף הקרוב. יש לצרף חוזה שכירות ואישור חייל בודד. טלפון *5442.",
-        howToGetEn: "Apply via the Ministry of Housing website or nearest branch. Attach rental contract and lone soldier certificate. Call *5442.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
+        howToGetHe:
+          'הגישו בקשה באתר משרד השיכון או בסניף הקרוב. יש לצרף חוזה שכירות ואישור חייל בודד. טלפון *5442.',
+        howToGetEn:
+          "Apply via the Ministry of Housing website or nearest branch. Attach rental contract and lone soldier certificate. Call *5442.",
       },
       {
         id: "electricity_discount",
@@ -166,9 +185,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers in private apartments",
         sourceHe: "חברת החשמל",
         sourceEn: "Israel Electric Corporation",
-        sourceUrl: "https://www.kolzchut.org.il/he/הנחה_בחשבון_חשמל_לחיילים_בודדים",
-        howToGetHe: "פנו לחברת החשמל עם אישור חייל בודד וחשבון חשמל על שמכם. ניתן להגיש בקשה מקוונת.",
-        howToGetEn: "Contact Israel Electric Corporation with lone soldier certificate and an electricity bill in your name. Online application available.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/הנחה_בחשבון_חשמל_לחיילים_בודדים",
+        howToGetHe:
+          "פנו לחברת החשמל עם אישור חייל בודד וחשבון חשמל על שמכם. ניתן להגיש בקשה מקוונת.",
+        howToGetEn:
+          "Contact Israel Electric Corporation with lone soldier certificate and an electricity bill in your name. Online application available.",
       },
       {
         id: "property_tax",
@@ -181,9 +203,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Apartment registered to the lone soldier",
         sourceHe: "רשות מקומית",
         sourceEn: "Local Municipality",
-        sourceUrl: "https://www.kolzchut.org.il/he/פטור_מארנונה_לחיילים_בשירות_חובה_וחיילים_משוחררים",
-        howToGetHe: "פנו למחלקת הארנונה ברשות המקומית עם אישור חייל בודד וחוזה שכירות/נסח טאבו.",
-        howToGetEn: "Contact the local municipality's property tax department with lone soldier certificate and rental contract/land registry.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/פטור_מארנונה_לחיילים_בשירות_חובה_וחיילים_משוחררים",
+        howToGetHe:
+          "פנו למחלקת הארנונה ברשות המקומית עם אישור חייל בודד וחוזה שכירות/נסח טאבו.",
+        howToGetEn:
+          "Contact the local municipality's property tax department with lone soldier certificate and rental contract/land registry.",
       },
     ],
   },
@@ -201,11 +226,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "עד לחודש",
         conditionsHe: "חייל בודד ששוכר דירה",
         conditionsEn: "Lone soldiers renting an apartment (up to NIS 1,800/mo)",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
-        howToGetHe: "פנו למדור כוח אדם ביחידה עם חוזה שכירות ואישור חייל בודד. הסבסוד מועבר ישירות לחשבון הבנק.",
-        howToGetEn: "Contact your unit's Personnel Division with rental contract and lone soldier certificate. Subsidy is transferred directly to your bank account.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
+        howToGetHe:
+          "פנו למדור כוח אדם ביחידה עם חוזה שכירות ואישור חייל בודד. הסבסוד מועבר ישירות לחשבון הבנק.",
+        howToGetEn:
+          "Contact your unit's Personnel Division with rental contract and lone soldier certificate. Subsidy is transferred directly to your bank account.",
       },
       {
         id: "dirat_alach",
@@ -217,9 +245,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "New immigrant lone soldiers",
         sourceHe: "עמותת עלאך",
         sourceEn: "Alach Association",
-        sourceUrl: "https://www.kolzchut.org.il/he/דירות_אל\"ח_לחיילים_בודדים",
-        howToGetHe: "הגישו בקשה דרך אתר עמותת עלאך או פנו לנציג העמותה בבסיס. יש לצרף אישור חייל בודד ותעודת עולה.",
-        howToGetEn: "Apply through the Alach Association website or contact their representative at your base. Attach lone soldier certificate and Oleh ID.",
+        sourceUrl:
+          'https://www.kolzchut.org.il/he/דירות_אל"ח_לחיילים_בודדים',
+        howToGetHe:
+          "הגישו בקשה דרך אתר עמותת עלאך או פנו לנציג העמותה בבסיס. יש לצרף אישור חייל בודד ותעודת עולה.",
+        howToGetEn:
+          "Apply through the Alach Association website or contact their representative at your base. Attach lone soldier certificate and Oleh ID.",
       },
       {
         id: "beit_hachayal",
@@ -231,9 +262,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Recognized lone soldiers — 7 branches nationwide",
         sourceHe: "בית החייל",
         sourceEn: "Beit HaChayal",
-        sourceUrl: "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
-        howToGetHe: "פנו ישירות לסניף בית החייל הקרוב עם תעודה צבאית ואישור חייל בודד. ניתן להירשם גם דרך מדור כוח אדם.",
-        howToGetEn: "Contact your nearest Beit HaChayal branch with military ID and lone soldier certificate. You can also register through your Personnel Division.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
+        howToGetHe:
+          "פנו ישירות לסניף בית החייל הקרוב עם תעודה צבאית ואישור חייל בודד. ניתן להירשם גם דרך מדור כוח אדם.",
+        howToGetEn:
+          "Contact your nearest Beit HaChayal branch with military ID and lone soldier certificate. You can also register through your Personnel Division.",
       },
       {
         id: "kibbutz",
@@ -243,12 +277,15 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequency: "per_month",
         frequencyHe: "דמי כיס + מגורים חינם",
         conditionsHe: "חייל בודד המשובץ לקיבוץ",
-        conditionsEn: "Lone soldiers assigned to a kibbutz (free housing + NIS 150 pocket money)",
+        conditionsEn:
+          "Lone soldiers assigned to a kibbutz (free housing + NIS 150 pocket money)",
         sourceHe: "תנועה קיבוצית",
         sourceEn: "Kibbutz Movement",
         sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
-        howToGetHe: "פנו לתנועה הקיבוצית או לסוכנות היהודית לשיבוץ לקיבוץ. התהליך כולל ראיון והתאמה.",
-        howToGetEn: "Contact the Kibbutz Movement or Jewish Agency for kibbutz placement. The process includes an interview and matching.",
+        howToGetHe:
+          "פנו לתנועה הקיבוצית או לסוכנות היהודית לשיבוץ לקיבוץ. התהליך כולל ראיון והתאמה.",
+        howToGetEn:
+          "Contact the Kibbutz Movement or Jewish Agency for kibbutz placement. The process includes an interview and matching.",
       },
       {
         id: "adoptive_family",
@@ -261,8 +298,10 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "ארגוני מתנדבים",
         sourceEn: "Volunteer Organizations",
         sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
-        howToGetHe: "פנו לקצין העיר ביחידה או לעמותות חיילים בודדים. השיבוץ למשפחה מתבצע בהתאם לאזור המגורים.",
-        howToGetEn: "Contact your unit's City Officer or lone soldier organizations. Family matching is based on your area of residence.",
+        howToGetHe:
+          "פנו לקצין העיר ביחידה או לעמותות חיילים בודדים. השיבוץ למשפחה מתבצע בהתאם לאזור המגורים.",
+        howToGetEn:
+          "Contact your unit's City Officer or lone soldier organizations. Family matching is based on your area of residence.",
       },
     ],
   },
@@ -273,18 +312,21 @@ const RIGHTS_DATA: RightsCategory[] = [
     rights: [
       {
         id: "abroad_leave",
-        titleHe: "חופשה לחו\"ל",
+        titleHe: 'חופשה לחו"ל',
         titleEn: "Overseas Leave",
         amount: "30",
         frequency: "one_time",
         frequencyHe: "ימים בשנה",
-        conditionsHe: "חייל בודד עם הורים בחו\"ל",
+        conditionsHe: 'חייל בודד עם הורים בחו"ל',
         conditionsEn: "30 days per year for soldiers with parents abroad",
-        sourceHe: "צה\"ל — פקודת מטכ\"ל",
+        sourceHe: 'צה"ל — פקודת מטכ"ל',
         sourceEn: "IDF — General Staff Order",
-        sourceUrl: "https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לצורך_ביקור_הוריהם_בחו\"ל",
-        howToGetHe: "הגישו בקשה דרך המפקד הישיר. יש למלא טופס בקשה לחופשת חו\"ל ולצרף אישור הורים בחו\"ל.",
-        howToGetEn: "Submit a request through your direct commander. Fill out the overseas leave form and attach proof of parents abroad.",
+        sourceUrl:
+          'https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לצורך_ביקור_הוריהם_בחו"ל',
+        howToGetHe:
+          'הגישו בקשה דרך המפקד הישיר. יש למלא טופס בקשה לחופשת חו"ל ולצרף אישור הורים בחו"ל.',
+        howToGetEn:
+          "Submit a request through your direct commander. Fill out the overseas leave form and attach proof of parents abroad.",
       },
       {
         id: "flight_funding",
@@ -294,11 +336,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "בהתאם לזכאות",
         conditionsHe: "מימון חלקי או מלא לטיסות לבקר משפחה",
         conditionsEn: "Partial or full flight funding to visit family",
-        sourceHe: "משרד הקליטה / צה\"ל",
+        sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/מימון_טיסה_לחיילים_בודדים_לביקור_הוריהם_בחו\"ל",
-        howToGetHe: "פנו למשרד הקליטה עם אישור חייל בודד ומסמך נסיעה. חלק מהמימון ניתן גם דרך צה\"ל — בדקו עם מדור כוח אדם.",
-        howToGetEn: "Contact the Ministry of Immigration with lone soldier certificate and travel document. Some funding is also available through IDF — check with Personnel Division.",
+        sourceUrl:
+          'https://www.kolzchut.org.il/he/מימון_טיסה_לחיילים_בודדים_לביקור_הוריהם_בחו"ל',
+        howToGetHe:
+          "פנו למשרד הקליטה עם אישור חייל בודד ומסמך נסיעה. חלק מהמימון ניתן גם דרך צה\"ל — בדקו עם מדור כוח אדם.",
+        howToGetEn:
+          "Contact the Ministry of Immigration with lone soldier certificate and travel document. Some funding is also available through IDF — check with Personnel Division.",
       },
       {
         id: "family_visit",
@@ -309,11 +354,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "ימים בשנה",
         conditionsHe: "כאשר משפחה מגיעה לביקור בארץ",
         conditionsEn: "4 days when family visits Israel",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לרגל_ביקור_הוריהם_בארץ",
-        howToGetHe: "הגישו בקשה דרך המפקד הישיר כשמשפחה מגיעה לביקור. יש לתאם מראש ולצרף אישור כניסה של בני המשפחה.",
-        howToGetEn: "Submit a request through your direct commander when family visits. Coordinate in advance and attach family entry confirmation.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לרגל_ביקור_הוריהם_בארץ",
+        howToGetHe:
+          "הגישו בקשה דרך המפקד הישיר כשמשפחה מגיעה לביקור. יש לתאם מראש ולצרף אישור כניסה של בני המשפחה.",
+        howToGetEn:
+          "Submit a request through your direct commander when family visits. Coordinate in advance and attach family entry confirmation.",
       },
       {
         id: "regular_leave",
@@ -324,11 +372,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "יום כל חודשיים",
         conditionsHe: "חייל בודד מוכר",
         conditionsEn: "1 additional day every 2 months",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/יום_חופשה_לחיילים_בודדים_לצורך_סידורים_אישיים",
-        howToGetHe: "ימי החופשה מחושבים אוטומטית. תאמו עם המפקד הישיר לניצול הימים.",
-        howToGetEn: "Leave days are calculated automatically. Coordinate with your direct commander to use them.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/יום_חופשה_לחיילים_בודדים_לצורך_סידורים_אישיים",
+        howToGetHe:
+          "ימי החופשה מחושבים אוטומטית. תאמו עם המפקד הישיר לניצול הימים.",
+        howToGetEn:
+          "Leave days are calculated automatically. Coordinate with your direct commander to use them.",
       },
       {
         id: "early_leave",
@@ -338,11 +389,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "לפני חגים",
         conditionsHe: "יציאה מוקדמת ערב חג",
         conditionsEn: "Early release before holidays",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/חופשה_מיוחדת_לחיילים_בודדים",
-        howToGetHe: "הזכות ניתנת אוטומטית לחיילים בודדים מוכרים. תאמו עם המפקד לגבי שעת היציאה.",
-        howToGetEn: "This right is granted automatically to recognized lone soldiers. Coordinate with your commander regarding departure time.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/חופשה_מיוחדת_לחיילים_בודדים",
+        howToGetHe:
+          "הזכות ניתנת אוטומטית לחיילים בודדים מוכרים. תאמו עם המפקד לגבי שעת היציאה.",
+        howToGetEn:
+          "This right is granted automatically to recognized lone soldiers. Coordinate with your commander regarding departure time.",
       },
     ],
   },
@@ -359,11 +413,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "חד-פעמי",
         conditionsHe: "עם השחרור — סכום בהתאם לתקופת השירות",
         conditionsEn: "Upon discharge — amount based on service duration",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/מענק_שחרור_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "המענק מועבר אוטומטית לחשבון הבנק עם השחרור. ודאו שפרטי הבנק מעודכנים במערכת צה\"ל.",
-        howToGetEn: "The grant is transferred automatically to your bank account upon discharge. Ensure your bank details are updated in the IDF system.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/מענק_שחרור_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          'המענק מועבר אוטומטית לחשבון הבנק עם השחרור. ודאו שפרטי הבנק מעודכנים במערכת צה"ל.',
+        howToGetEn:
+          "The grant is transferred automatically to your bank account upon discharge. Ensure your bank details are updated in the IDF system.",
       },
       {
         id: "personal_deposit",
@@ -371,13 +428,18 @@ const RIGHTS_DATA: RightsCategory[] = [
         titleEn: "Personal Deposit (6 Purposes, 5 Years)",
         frequency: "one_time",
         frequencyHe: "חד-פעמי",
-        conditionsHe: "ניתן לשימוש ל-6 מטרות: לימודים, דיור, עסק, נסיעות, חתונה, רכב",
-        conditionsEn: "Can be used for 6 purposes: education, housing, business, travel, wedding, vehicle. Valid 5 years.",
+        conditionsHe:
+          "ניתן לשימוש ל-6 מטרות: לימודים, דיור, עסק, נסיעות, חתונה, רכב",
+        conditionsEn:
+          "Can be used for 6 purposes: education, housing, business, travel, wedding, vehicle. Valid 5 years.",
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
-        sourceUrl: "https://www.kolzchut.org.il/he/פיקדון_אישי_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "הפיקדון נפתח אוטומטית. למימוש — הגישו בקשה דרך אתר משרד הביטחון או בסניפי בנק הפועלים. יש לבחור ייעוד ולצרף מסמכים תומכים.",
-        howToGetEn: "The deposit is opened automatically. To withdraw — apply via the Ministry of Defense website or Bank Hapoalim branches. Choose a purpose and attach supporting documents.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/פיקדון_אישי_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "הפיקדון נפתח אוטומטית. למימוש — הגישו בקשה דרך אתר משרד הביטחון או בסניפי בנק הפועלים. יש לבחור ייעוד ולצרף מסמכים תומכים.",
+        howToGetEn:
+          "The deposit is opened automatically. To withdraw — apply via the Ministry of Defense website or Bank Hapoalim branches. Choose a purpose and attach supporting documents.",
       },
       {
         id: "free_accommodation",
@@ -387,11 +449,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "3 חודשים",
         conditionsHe: "לאחר שחרור — מגורים חינם",
         conditionsEn: "Free accommodation for 3 months after discharge",
-        sourceHe: "צה\"ל / עמותות",
+        sourceHe: 'צה"ל / עמותות',
         sourceEn: "IDF / NGOs",
-        sourceUrl: "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
-        howToGetHe: "פנו למדור כוח אדם לפני השחרור לתיאום מגורים. ניתן גם לפנות לעמותות כמו עלאך ובית החייל.",
-        howToGetEn: "Contact Personnel Division before discharge to arrange accommodation. You can also reach out to organizations like Alach and Beit HaChayal.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
+        howToGetHe:
+          "פנו למדור כוח אדם לפני השחרור לתיאום מגורים. ניתן גם לפנות לעמותות כמו עלאך ובית החייל.",
+        howToGetEn:
+          "Contact Personnel Division before discharge to arrange accommodation. You can also reach out to organizations like Alach and Beit HaChayal.",
       },
       {
         id: "rent_assistance",
@@ -400,13 +465,16 @@ const RIGHTS_DATA: RightsCategory[] = [
         amount: "12,000",
         frequency: "one_time",
         frequencyHe: "חד-פעמי",
-        conditionsHe: "עד 12,000 ש\"ח סיוע בשכירות לאחר שחרור",
+        conditionsHe: 'עד 12,000 ש"ח סיוע בשכירות לאחר שחרור',
         conditionsEn: "Up to NIS 12,000 rent assistance post-discharge",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "פנו לסניף משרד הקליטה הקרוב עם תעודת שחרור ותעודת עולה. ניתן לפנות גם דרך טלפון *3721.",
-        howToGetEn: "Visit your nearest Ministry of Immigration office with discharge certificate and Oleh ID. You can also call *3721.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "פנו לסניף משרד הקליטה הקרוב עם תעודת שחרור ותעודת עולה. ניתן לפנות גם דרך טלפון *3721.",
+        howToGetEn:
+          "Visit your nearest Ministry of Immigration office with discharge certificate and Oleh ID. You can also call *3721.",
       },
       {
         id: "rent_grant",
@@ -419,9 +487,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "One-time NIS 5,000 grant for renting an apartment",
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "הגישו בקשה דרך אתר משרד השיכון עם תעודת שחרור וחוזה שכירות. טלפון *5442.",
-        howToGetEn: "Apply via the Ministry of Housing website with discharge certificate and rental contract. Call *5442.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "הגישו בקשה דרך אתר משרד השיכון עם תעודת שחרור וחוזה שכירות. טלפון *5442.",
+        howToGetEn:
+          "Apply via the Ministry of Housing website with discharge certificate and rental contract. Call *5442.",
       },
       {
         id: "extended_benefits",
@@ -429,13 +500,18 @@ const RIGHTS_DATA: RightsCategory[] = [
         titleEn: "Extended Benefits — 10 Years",
         frequency: "one_time",
         frequencyHe: "עד 10 שנים",
-        conditionsHe: "זכאות להטבות מורחבות עד 10 שנים לאחר שחרור",
-        conditionsEn: "Eligibility for extended benefits up to 10 years post-discharge",
+        conditionsHe:
+          "זכאות להטבות מורחבות עד 10 שנים לאחר שחרור",
+        conditionsEn:
+          "Eligibility for extended benefits up to 10 years post-discharge",
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "הזכאות היא אוטומטית לעולים חדשים. פנו למשרד הקליטה לבירור הטבות ספציפיות. טלפון *3721.",
-        howToGetEn: "Eligibility is automatic for new immigrants. Contact the Ministry of Immigration for specific benefit details. Call *3721.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "הזכאות היא אוטומטית לעולים חדשים. פנו למשרד הקליטה לבירור הטבות ספציפיות. טלפון *3721.",
+        howToGetEn:
+          "Eligibility is automatic for new immigrants. Contact the Ministry of Immigration for specific benefit details. Call *3721.",
       },
       {
         id: "career_assessment",
@@ -447,9 +523,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional career counseling and job guidance",
         sourceHe: "משרד הקליטה / עמותות",
         sourceEn: "Ministry of Immigration / NGOs",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "פנו למרכזי התעסוקה של משרד הקליטה או לעמותות כמו כנפיים. ניתן לתאם פגישת ייעוץ בטלפון *3721.",
-        howToGetEn: "Contact Ministry of Immigration employment centers or organizations like Knafayim. Schedule a counseling session at *3721.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "פנו למרכזי התעסוקה של משרד הקליטה או לעמותות כמו כנפיים. ניתן לתאם פגישת ייעוץ בטלפון *3721.",
+        howToGetEn:
+          "Contact Ministry of Immigration employment centers or organizations like Knafayim. Schedule a counseling session at *3721.",
       },
       {
         id: "education_funding",
@@ -461,9 +540,12 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Assistance for academic and vocational education",
         sourceHe: "משרד הקליטה / משרד החינוך",
         sourceEn: "Ministry of Immigration / Ministry of Education",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
-        howToGetHe: "פנו למשרד הקליטה עם אישור קבלה למוסד לימודים. ניתן לממש גם מתוך הפיקדון האישי.",
-        howToGetEn: "Contact the Ministry of Immigration with your acceptance letter. Funding can also come from your personal deposit.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+        howToGetHe:
+          "פנו למשרד הקליטה עם אישור קבלה למוסד לימודים. ניתן לממש גם מתוך הפיקדון האישי.",
+        howToGetEn:
+          "Contact the Ministry of Immigration with your acceptance letter. Funding can also come from your personal deposit.",
       },
       {
         id: "knafayim",
@@ -471,13 +553,17 @@ const RIGHTS_DATA: RightsCategory[] = [
         titleEn: "Knafayim Program",
         frequency: "one_time",
         frequencyHe: "תוכנית מלגות",
-        conditionsHe: "מלגות ותמיכה כלכלית לחיילים בודדים משוחררים",
-        conditionsEn: "Scholarships and financial support for discharged lone soldiers",
+        conditionsHe:
+          "מלגות ותמיכה כלכלית לחיילים בודדים משוחררים",
+        conditionsEn:
+          "Scholarships and financial support for discharged lone soldiers",
         sourceHe: "עמותת כנפיים",
         sourceEn: "Knafayim Foundation",
         sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
-        howToGetHe: "הגישו בקשה דרך אתר עמותת כנפיים. המלגות מחולקות בתחילת שנת הלימודים.",
-        howToGetEn: "Apply through the Knafayim Foundation website. Scholarships are awarded at the beginning of the academic year.",
+        howToGetHe:
+          "הגישו בקשה דרך אתר עמותת כנפיים. המלגות מחולקות בתחילת שנת הלימודים.",
+        howToGetEn:
+          "Apply through the Knafayim Foundation website. Scholarships are awarded at the beginning of the academic year.",
       },
     ],
   },
@@ -494,11 +580,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "חינם",
         conditionsHe: "מגורים מסובסדים בזמן שירות מילואים",
         conditionsEn: "Subsidized accommodation during reserve duty",
-        sourceHe: "צה\"ל",
+        sourceHe: 'צה"ל',
         sourceEn: "IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/זכויות_חייל_המילואים_במשך_השירות",
-        howToGetHe: "פנו למפקד היחידה או למדור כוח אדם עם צו מילואים. המגורים מסופקים דרך צה\"ל.",
-        howToGetEn: "Contact your unit commander or Personnel Division with your reserve duty order. Accommodation is provided through the IDF.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/זכויות_חייל_המילואים_במשך_השירות",
+        howToGetHe:
+          'פנו למפקד היחידה או למדור כוח אדם עם צו מילואים. המגורים מסופקים דרך צה"ל.',
+        howToGetEn:
+          "Contact your unit commander or Personnel Division with your reserve duty order. Accommodation is provided through the IDF.",
       },
       {
         id: "reserve_expenses",
@@ -506,13 +595,18 @@ const RIGHTS_DATA: RightsCategory[] = [
         titleEn: "Expense Reimbursement",
         frequency: "one_time",
         frequencyHe: "בהתאם להוצאות",
-        conditionsHe: "החזר הוצאות שכירות ומחיה בזמן מילואים",
-        conditionsEn: "Reimbursement for rent and living expenses during reserves",
+        conditionsHe:
+          "החזר הוצאות שכירות ומחיה בזמן מילואים",
+        conditionsEn:
+          "Reimbursement for rent and living expenses during reserves",
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
-        sourceUrl: "https://www.kolzchut.org.il/he/תשלום_עבור_שירות_מילואים",
-        howToGetHe: "הגישו בקשה להחזר הוצאות דרך אתר משרד הביטחון — אגף שיקום. יש לצרף קבלות ואישורי תשלום.",
-        howToGetEn: "Submit expense reimbursement request through the Ministry of Defense website — Rehabilitation Division. Attach receipts and payment confirmations.",
+        sourceUrl:
+          "https://www.kolzchut.org.il/he/תשלום_עבור_שירות_מילואים",
+        howToGetHe:
+          "הגישו בקשה להחזר הוצאות דרך אתר משרד הביטחון — אגף שיקום. יש לצרף קבלות ואישורי תשלום.",
+        howToGetEn:
+          "Submit expense reimbursement request through the Ministry of Defense website — Rehabilitation Division. Attach receipts and payment confirmations.",
       },
       {
         id: "reserve_mental_health",
@@ -522,11 +616,13 @@ const RIGHTS_DATA: RightsCategory[] = [
         frequencyHe: "חינם",
         conditionsHe: "תמיכה נפשית ומקצועית למשרתי מילואים",
         conditionsEn: "Professional mental health support for reservists",
-        sourceHe: "צה\"ל / משרד הבריאות",
+        sourceHe: 'צה"ל / משרד הבריאות',
         sourceEn: "IDF / Ministry of Health",
         sourceUrl: "https://www.kolzchut.org.il/he/מילואים",
-        howToGetHe: "פנו לקו הסיוע הנפשי של צה\"ל או למרכזי בריאות הנפש של משרד הבריאות. הטיפול ניתן בחינם ובסודיות.",
-        howToGetEn: "Contact the IDF mental health hotline or Ministry of Health mental health centers. Treatment is free and confidential.",
+        howToGetHe:
+          "פנו לקו הסיוע הנפשי של צה\"ל או למרכזי בריאות הנפש של משרד הבריאות. הטיפול ניתן בחינם ובסודיות.",
+        howToGetEn:
+          "Contact the IDF mental health hotline or Ministry of Health mental health centers. Treatment is free and confidential.",
       },
       {
         id: "reserve_career",
@@ -539,41 +635,14 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הביטחון / עמותות",
         sourceEn: "Ministry of Defense / NGOs",
         sourceUrl: "https://www.kolzchut.org.il/he/מילואים",
-        howToGetHe: "פנו לאגף שיקום במשרד הביטחון או לעמותות תעסוקה למשרתי מילואים. ניתן לתאם פגישה טלפונית.",
-        howToGetEn: "Contact the Ministry of Defense Rehabilitation Division or employment organizations for reservists. Phone appointments available.",
+        howToGetHe:
+          "פנו לאגף שיקום במשרד הביטחון או לעמותות תעסוקה למשרתי מילואים. ניתן לתאם פגישה טלפונית.",
+        howToGetEn:
+          "Contact the Ministry of Defense Rehabilitation Division or employment organizations for reservists. Phone appointments available.",
       },
     ],
   },
 ];
-
-/* ===== Category Tab Component ===== */
-
-function CategoryTab({
-  category,
-  isActive,
-  onClick,
-  tRights,
-}: {
-  category: RightsCategory;
-  isActive: boolean;
-  onClick: () => void;
-  tRights: ReturnType<typeof useTranslations>;
-}) {
-  const Icon = category.icon;
-  return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-all ${
-        isActive
-          ? "bg-[hsl(var(--primary))] text-primary-foreground shadow-sm"
-          : "bg-card text-muted-foreground hover:bg-[hsl(var(--primary)/0.08)] hover:text-foreground"
-      }`}
-    >
-      <Icon className="h-4 w-4" />
-      <span>{tRights(`categories.${category.translationKey}`)}</span>
-    </button>
-  );
-}
 
 /* ===== Right Card Component ===== */
 
@@ -589,106 +658,99 @@ function RightCard({
   const [expanded, setExpanded] = useState(false);
   const isHe = locale === "he";
 
-  // Pick the right language: Hebrew for "he", English for everything else
   const title = isHe ? right.titleHe : right.titleEn;
-  const subtitle = isHe ? right.titleEn : right.titleHe;
   const conditions = isHe ? right.conditionsHe : right.conditionsEn;
   const howToGet = isHe ? right.howToGetHe : right.howToGetEn;
   const source = isHe ? right.sourceHe : right.sourceEn;
-  const frequency = isHe ? right.frequencyHe : (right.frequency ? tRights(right.frequency) : undefined);
+  const frequency = isHe
+    ? right.frequencyHe
+    : right.frequency
+      ? tRights(right.frequency)
+      : undefined;
 
   return (
-    <div className="overflow-hidden rounded-xl border border-border/50 bg-card transition-colors hover:bg-muted/20">
-      <div className="p-4 sm:p-5">
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex-1">
-            <h4 className="text-base font-bold text-foreground">
-              {title}
-            </h4>
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
-          </div>
+    <div className="overflow-hidden rounded-2xl border border-border/40 bg-card shadow-sm transition-all hover:shadow-md">
+      <div className="p-5 sm:p-6">
+        {/* Header row */}
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-base font-bold leading-snug text-foreground sm:text-[17px]">
+            {title}
+          </h3>
           {right.amount && (
             <div className="flex-shrink-0 text-end">
-              <div className="text-lg font-extrabold text-[hsl(var(--primary))] sm:text-xl">
-                {right.amount}
+              <div className="text-xl font-extrabold text-[hsl(var(--primary))] sm:text-2xl">
+                {right.amount.includes("%") ? right.amount : `₪${right.amount}`}
               </div>
               {frequency && (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] font-medium text-muted-foreground">
                   {frequency}
                 </p>
               )}
             </div>
           )}
-          {!right.amount && frequency && (
-            <div className="flex-shrink-0">
-              <span className="inline-flex rounded-full bg-[hsl(var(--primary)/0.08)] px-2.5 py-0.5 text-xs font-medium text-[hsl(var(--primary))]">
-                {frequency}
-              </span>
-            </div>
-          )}
         </div>
+
+        {/* Badge for non-amount items */}
+        {!right.amount && frequency && (
+          <div className="mt-2">
+            <span className="inline-flex rounded-full bg-[hsl(var(--primary)/0.08)] px-3 py-1 text-xs font-semibold text-[hsl(var(--primary))]">
+              {frequency}
+            </span>
+          </div>
+        )}
+
+        {/* Conditions preview */}
+        {conditions && (
+          <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+            {conditions}
+          </p>
+        )}
 
         {/* Expand Toggle */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-2 flex items-center gap-1 text-xs font-medium text-[hsl(var(--primary))] transition-colors hover:text-[hsl(var(--primary)/0.8)]"
+          className="mt-3 flex items-center gap-1.5 text-sm font-medium text-[hsl(var(--primary))] transition-colors hover:text-[hsl(var(--primary)/0.7)]"
         >
-          <Info className="h-3.5 w-3.5" />
+          <Info className="h-4 w-4" />
           <span>{tRights("details")}</span>
           {expanded ? (
-            <ChevronUp className="h-3.5 w-3.5" />
+            <ChevronUp className="h-4 w-4" />
           ) : (
-            <ChevronDown className="h-3.5 w-3.5" />
+            <ChevronDown className="h-4 w-4" />
           )}
         </button>
 
         {/* Expanded Details */}
         {expanded && (
-          <div className="mt-2 space-y-2.5 border-t border-border/30 pt-2">
-            {conditions && (
-              <div className="flex items-start gap-2">
-                <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                  {tRights("conditions")}:
-                </span>
-                <p className="text-xs text-foreground">
-                  {conditions}
-                </p>
-              </div>
-            )}
-
-            {/* How to get this benefit */}
+          <div className="mt-4 space-y-3 border-t border-border/30 pt-4">
             {howToGet && (
-              <div className="flex items-start gap-2">
-                <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                  {tRights("how_to_get")}:
-                </span>
-                <p className="text-xs text-foreground">
+              <div>
+                <p className="mb-1 text-xs font-bold uppercase tracking-wide text-muted-foreground/70">
+                  {tRights("how_to_get")}
+                </p>
+                <p className="text-sm leading-relaxed text-foreground">
                   {howToGet}
                 </p>
               </div>
             )}
 
-            {/* Source with link */}
-            <div className="flex items-start gap-2">
-              <span className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
-                {tRights("source")}:
-              </span>
-              <div>
-                {right.sourceUrl ? (
-                  <a
-                    href={right.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-xs font-medium text-[hsl(var(--primary))] hover:underline"
-                  >
-                    <span>{source}</span>
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                ) : (
-                  <p className="text-xs text-foreground">{source}</p>
-                )}
-              </div>
+            <div>
+              <p className="mb-1 text-xs font-bold uppercase tracking-wide text-muted-foreground/70">
+                {tRights("source")}
+              </p>
+              {right.sourceUrl ? (
+                <a
+                  href={right.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-[hsl(var(--primary))] hover:underline"
+                >
+                  <span>{source}</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              ) : (
+                <p className="text-sm text-foreground">{source}</p>
+              )}
             </div>
           </div>
         )}
@@ -697,37 +759,109 @@ function RightCard({
   );
 }
 
+/* ===== Category Section Component ===== */
+
+function CategorySection({
+  category,
+  tRights,
+  locale,
+}: {
+  category: RightsCategory;
+  tRights: ReturnType<typeof useTranslations>;
+  locale: string;
+}) {
+  const Icon = category.icon;
+
+  return (
+    <section id={category.id} className="scroll-mt-20">
+      {/* Category Header */}
+      <div className="mb-6 flex items-center gap-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[hsl(var(--primary)/0.1)]">
+          <Icon className="h-5 w-5 text-[hsl(var(--primary))]" />
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+            {tRights(`categories.${category.translationKey}`)}
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            {category.rights.length} {tRights("rights_count")}
+          </p>
+        </div>
+      </div>
+
+      {/* Rights Cards Grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {category.rights.map((right) => (
+          <RightCard
+            key={right.id}
+            right={right}
+            tRights={tRights}
+            locale={locale}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ===== Quick Jump Navigation ===== */
+
+function QuickJumpNav({
+  tRights,
+}: {
+  tRights: ReturnType<typeof useTranslations>;
+}) {
+  return (
+    <nav className="flex flex-wrap gap-2" aria-label="Jump to category">
+      {RIGHTS_DATA.map((category) => {
+        const Icon = category.icon;
+        return (
+          <a
+            key={category.id}
+            href={`#${category.id}`}
+            className="inline-flex items-center gap-2 rounded-xl border border-border/50 bg-card px-4 py-2.5 text-sm font-medium text-muted-foreground shadow-sm transition-all hover:border-[hsl(var(--primary)/0.3)] hover:bg-[hsl(var(--primary)/0.04)] hover:text-[hsl(var(--primary))] active:scale-[0.98]"
+          >
+            <Icon className="h-4 w-4" />
+            <span>{tRights(`categories.${category.translationKey}`)}</span>
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
+
 /* ===== Main Page Component ===== */
 
 export default function RightsPage() {
   const tRights = useTranslations("rights");
   const locale = useLocale();
-  const searchParams = useSearchParams();
-  const tabParam = searchParams.get("tab");
-  const initialTab = RIGHTS_DATA.find((c) => c.id === tabParam)?.id || RIGHTS_DATA[0].id;
-  const [activeCategory, setActiveCategory] = useState(initialTab);
-
-  const currentCategory = RIGHTS_DATA.find((c) => c.id === activeCategory)!;
 
   return (
     <div className="flex flex-col">
-      {/* ===== Header ===== */}
+      {/* ===== Hero Header ===== */}
       <section className="border-b border-border/40 bg-[hsl(var(--primary)/0.03)]">
-        <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+        <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
+            {/* Badge */}
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[hsl(var(--primary)/0.2)] bg-[hsl(var(--primary)/0.06)] px-3 py-1 text-sm font-medium text-foreground">
+              <Shield className="h-3.5 w-3.5 text-[hsl(var(--primary))]" />
+              <span>{tRights("badge_count")}</span>
+            </div>
+
             <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
               {tRights("title")}
             </h1>
-            <p className="mx-auto mt-3 max-w-2xl text-base text-muted-foreground">
+
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {tRights("subtitle")}
             </p>
 
-            <div className="mt-6">
+            <div className="mt-7">
               <Link
                 href="/check"
-                className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-110"
+                className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-7 py-3.5 text-base font-semibold text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-110"
               >
-                <ClipboardCheck className="h-4 w-4" />
+                <ClipboardCheck className="h-5 w-5" />
                 <span>{tRights("check_eligibility_button")}</span>
               </Link>
             </div>
@@ -735,81 +869,52 @@ export default function RightsPage() {
         </div>
       </section>
 
-      {/* ===== Category Tabs ===== */}
-      <section className="sticky top-16 z-30 border-b border-border/40 bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-2 overflow-x-auto py-3 scrollbar-none">
-            {RIGHTS_DATA.map((category) => (
-              <CategoryTab
-                key={category.id}
-                category={category}
-                isActive={activeCategory === category.id}
-                onClick={() => setActiveCategory(category.id)}
-                tRights={tRights}
-              />
-            ))}
-          </div>
+      {/* ===== Main Content ===== */}
+      <div className="mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+        {/* Quick Jump Navigation */}
+        <div className="mb-10">
+          <QuickJumpNav tRights={tRights} />
         </div>
-      </section>
 
-      {/* ===== Rights Grid ===== */}
-      <section className="py-6 sm:py-8">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          {/* Category Header */}
-          <div className="mb-5 flex items-center gap-3">
-            <div className="inline-flex rounded-lg bg-[hsl(var(--primary)/0.08)] p-2.5">
-              <currentCategory.icon className="h-5 w-5 text-[hsl(var(--primary))]" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold text-foreground">
-                {tRights(`categories.${currentCategory.translationKey}`)}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {currentCategory.rights.length} {tRights("rights_count")}
-              </p>
-            </div>
-          </div>
-
-          {/* Rights Cards */}
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
-            {currentCategory.rights.map((right) => (
-              <RightCard
-                key={right.id}
-                right={right}
-                tRights={tRights}
-                locale={locale}
-              />
-            ))}
-          </div>
+        {/* All Category Sections */}
+        <div className="space-y-14 sm:space-y-16">
+          {RIGHTS_DATA.map((category) => (
+            <CategorySection
+              key={category.id}
+              category={category}
+              tRights={tRights}
+              locale={locale}
+            />
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* ===== Summary Banner ===== */}
+      {/* ===== Bottom CTA ===== */}
       <section className="border-t border-border/40 bg-[hsl(var(--primary)/0.03)]">
-        <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
-          <div className="rounded-xl border border-border/50 bg-card p-6 text-center sm:p-8">
-            <div className="mx-auto mb-3 inline-flex rounded-lg bg-[hsl(var(--primary)/0.08)] p-2.5">
-              <Zap className="h-6 w-6 text-[hsl(var(--primary))]" />
+        <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+          <div className="rounded-2xl border border-border/50 bg-card p-6 text-center shadow-sm sm:p-10">
+            <div className="mx-auto mb-4 inline-flex rounded-xl bg-[hsl(var(--primary)/0.1)] p-3">
+              <Zap className="h-7 w-7 text-[hsl(var(--primary))]" />
             </div>
-            <h3 className="text-lg font-bold text-foreground sm:text-xl">
+            <h2 className="text-xl font-bold text-foreground sm:text-2xl">
               {tRights("not_sure_title")}
-            </h3>
-            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
               {tRights("not_sure_description")}
             </p>
-            <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 href="/check"
-                className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-110"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--primary))] px-7 py-3.5 text-base font-semibold text-primary-foreground shadow-md transition-all hover:shadow-lg hover:brightness-110 sm:w-auto"
               >
-                <ClipboardCheck className="h-4 w-4" />
+                <ClipboardCheck className="h-5 w-5" />
                 {tRights("check_eligibility_button")}
               </Link>
               <Link
                 href="/chat"
-                className="inline-flex items-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-6 py-3 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:brightness-110"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[hsl(var(--accent))] px-7 py-3.5 text-base font-semibold text-white shadow-md transition-all hover:shadow-lg hover:brightness-110 sm:w-auto"
               >
-                <Heart className="h-4 w-4" />
+                <Heart className="h-5 w-5" />
                 {tRights("ask_question")}
               </Link>
             </div>
