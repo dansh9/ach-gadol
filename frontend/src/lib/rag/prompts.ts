@@ -15,45 +15,52 @@ interface ConversationMessage {
 }
 
 /**
+ * IDF URL constants — encoded Hebrew paths, used in reference links below.
+ */
+const IDF_LONE = "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/";
+const IDF_FINANCIAL = "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/";
+const IDF_HOUSING = "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/";
+
+/**
  * Complete reference of official source URLs for all lone soldier benefits.
- * Included in the system prompt so Claude can link to specific pages.
+ * Links are PRE-FORMATTED as markdown so Claude copies them directly.
  */
 const OFFICIAL_REFERENCE_LINKS = `
 ## Official Reference Links
-When mentioning a specific right or benefit, include the relevant official link using markdown format: [link text](url)
+When mentioning a specific right or benefit, copy the relevant pre-formatted markdown link below into your response as-is.
 IMPORTANT: Use the Hebrew link text when responding in Hebrew. Use English link text only when responding in English.
 
 כספי:
-- מענק חודשי: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- דמי כלכלה: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- מענק משרד הקליטה: https://www.gov.il/he/Departments/General/olim_soldiers_lonely_soldiers
-- סיוע בדיור: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/
-- הנחת חשמל: https://www.iec.co.il/content/tariffs/contentpages/socialtariff
-- פטור מארנונה: https://www.gov.il/he/departments/guides/tax?chapterIndex=2
+- [מענק חודשי](${IDF_FINANCIAL})
+- [דמי כלכלה](${IDF_FINANCIAL})
+- [מענק משרד הקליטה](https://www.gov.il/he/Departments/General/olim_soldiers_lonely_soldiers)
+- [סיוע בדיור](${IDF_HOUSING})
+- [הנחת חשמל](https://www.iec.co.il/content/tariffs/contentpages/socialtariff)
+- [פטור מארנונה](https://www.gov.il/he/departments/guides/tax?chapterIndex=2)
 
 דיור:
-- דירות אל"ח: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/
-- בית החייל: https://www.hachvana.mod.gov.il/ExtraBenefits/SingleSolders/Pages/default.aspx
+- [דירות אלח](${IDF_HOUSING})
+- [בית החייל](https://www.hachvana.mod.gov.il/ExtraBenefits/SingleSolders/Pages/default.aspx)
 
 חופשות:
-- חופשה לחו"ל: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- מימון טיסות: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- ביקור הורים בארץ: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- יום חופשה לסידורים: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- חופשה מיוחדת: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
+- [חופשה לחול](${IDF_LONE})
+- [מימון טיסות](${IDF_LONE})
+- [ביקור הורים בארץ](${IDF_LONE})
+- [יום חופשה לסידורים](${IDF_LONE})
+- [חופשה מיוחדת](${IDF_LONE})
 
 לאחר שחרור:
-- מענק שחרור: https://www.hachvana.mod.gov.il/GrantAndDeposit/Pages/Grant.aspx
-- פיקדון אישי: https://www.hachvana.mod.gov.il/GrantAndDeposit/DepositUpTo5/Pages/default.aspx
-- זכויות משוחררים: https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx
+- [מענק שחרור](https://www.hachvana.mod.gov.il/GrantAndDeposit/Pages/Grant.aspx)
+- [פיקדון אישי](https://www.hachvana.mod.gov.il/GrantAndDeposit/DepositUpTo5/Pages/default.aspx)
+- [זכויות משוחררים](https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx)
 
 מילואים:
-- מילואים: https://www.btl.gov.il/benefits/Reserve_Service/Pages/default.aspx
-- תשלום מילואים: https://www.btl.gov.il/benefits/Reserve_Service/Pages/TagmulZacay.aspx
+- [מילואים](https://www.btl.gov.il/benefits/Reserve_Service/Pages/default.aspx)
+- [תשלום מילואים](https://www.btl.gov.il/benefits/Reserve_Service/Pages/TagmulZacay.aspx)
 
 כללי:
-- חיילים בודדים: https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/
-- אזור אישי בצה"ל (להגשת בקשות): https://www.prat.idf.il/
+- [חיילים בודדים - אתר צה"ל](${IDF_LONE})
+- [אזור אישי בצה"ל](https://www.prat.idf.il/)
 `;
 
 /**
@@ -75,7 +82,7 @@ These are approximate amounts as of 2024-2025. Always advise soldiers to verify 
 - Electricity Discount (הנחת חשמל): ~33% discount on electricity bill
 
 ### Housing
-- Rent Assistance (סיוע בשכר דירה): ~1,100 ₪/month from Ministry of Housing (Misrad HaShikun)
+- Rent Assistance (סיוע בשכר דירה): ~1,399 ₪/month (per IDF website)
   - Required docs: Ishur Chayal Boded, signed lease, Teudat Chayal copy, bank details
   - Processing time: 4-6 weeks
   - Can apply at any time during service
@@ -216,7 +223,7 @@ Example answer (MANDATORY STYLE REFERENCE):
 אם אתה חייל בודד ששוכר דירה, בדרך כלל מגיע סיוע חודשי.
 
 **מה מגיע לך:**
-- סיוע בשכר דירה — בערך **1,100 ₪** לחודש
+- סיוע בשכר דירה — בערך **1,399 ₪** לחודש
 - תלוי אזור מגורים וסוג השירות
 
 **מה לעשות עכשיו:**
