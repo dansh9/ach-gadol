@@ -33,7 +33,6 @@ export default function Navigation({ locale }: { locale: string }) {
     { href: "/check", label: t("check") },
     { href: "/chat", label: t("chat") },
     { href: "/resources", label: t("resources") },
-    { href: "/volunteer", label: t("volunteer") },
   ] as const;
 
   function handleLocaleChange(newLocale: Locale) {
