@@ -7,7 +7,6 @@ import {
   Send,
   ClipboardCheck,
   FileText,
-  Users,
   Loader2,
   ExternalLink,
   ArrowUpRight,
@@ -327,13 +326,6 @@ export default function ChatPage() {
       description: tChat("quick_forms_msg"),
       icon: FileText,
       message: tChat("quick_forms_msg"),
-    },
-    {
-      id: "volunteer",
-      label: tChat("quick_volunteer"),
-      description: tChat("quick_volunteer_msg"),
-      icon: Users,
-      message: tChat("quick_volunteer_msg"),
     },
   ];
 
