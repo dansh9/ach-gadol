@@ -6,6 +6,7 @@ import {
   BookOpen,
   ClipboardCheck,
   MessageCircle,
+  Users,
   ArrowLeft,
   ArrowRight,
   Shield,
