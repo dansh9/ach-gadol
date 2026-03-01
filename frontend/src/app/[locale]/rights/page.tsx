@@ -61,7 +61,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל — מדור כוח אדם',
         sourceEn: "IDF — Personnel Division",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה. התוספת מחושבת אוטומטית לאחר הכרה כחייל בודד.",
         howToGetEn:
@@ -79,7 +79,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
         howToGetEn:
@@ -97,7 +97,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
         howToGetEn:
@@ -115,7 +115,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%A0%D7%9C%D7%95%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA-%D7%9C%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה עם אישור שהבסיס ללא חדר אוכל.",
         howToGetEn:
@@ -132,7 +132,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "For Rosh Hashana and Passover (~250 x 2)",
         sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
-        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "השוברים מחולקים אוטומטית לפני החגים דרך היחידה. יש לוודא שהפרטים מעודכנים.",
         howToGetEn:
@@ -168,7 +168,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           'הגישו בקשה באתר משרד השיכון או בסניף הקרוב. יש לצרף חוזה שכירות ואישור חייל בודד. טלפון *5442.',
         howToGetEn:
@@ -229,7 +229,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה עם חוזה שכירות ואישור חייל בודד. הסבסוד מועבר ישירות לחשבון הבנק.",
         howToGetEn:
@@ -246,7 +246,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "עמותת עלאך",
         sourceEn: "Alach Association",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           "הגישו בקשה דרך אתר עמותת עלאך או פנו לנציג העמותה בבסיס. יש לצרף אישור חייל בודד ותעודת עולה.",
         howToGetEn:
@@ -281,7 +281,7 @@ const RIGHTS_DATA: RightsCategory[] = [
           "Lone soldiers assigned to a kibbutz (free housing + NIS 150 pocket money)",
         sourceHe: "תנועה קיבוצית",
         sourceEn: "Kibbutz Movement",
-        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "פנו לתנועה הקיבוצית או לסוכנות היהודית לשיבוץ לקיבוץ. התהליך כולל ראיון והתאמה.",
         howToGetEn:
@@ -297,7 +297,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers — matched with a host family",
         sourceHe: "ארגוני מתנדבים",
         sourceEn: "Volunteer Organizations",
-        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "פנו לקצין העיר ביחידה או לעמותות חיילים בודדים. השיבוץ למשפחה מתבצע בהתאם לאזור המגורים.",
         howToGetEn:
@@ -322,7 +322,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל — פקודת מטכ"ל',
         sourceEn: "IDF — General Staff Order",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           'הגישו בקשה דרך המפקד הישיר. יש למלא טופס בקשה לחופשת חו"ל ולצרף אישור הורים בחו"ל.',
         howToGetEn:
@@ -339,7 +339,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "פנו למשרד הקליטה עם אישור חייל בודד ומסמך נסיעה. חלק מהמימון ניתן גם דרך צה\"ל — בדקו עם מדור כוח אדם.",
         howToGetEn:
@@ -357,7 +357,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "הגישו בקשה דרך המפקד הישיר כשמשפחה מגיעה לביקור. יש לתאם מראש ולצרף אישור כניסה של בני המשפחה.",
         howToGetEn:
@@ -375,7 +375,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "ימי החופשה מחושבים אוטומטית. תאמו עם המפקד הישיר לניצול הימים.",
         howToGetEn:
@@ -392,7 +392,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
+          "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "הזכות ניתנת אוטומטית לחיילים בודדים מוכרים. תאמו עם המפקד לגבי שעת היציאה.",
         howToGetEn:
@@ -559,7 +559,7 @@ const RIGHTS_DATA: RightsCategory[] = [
           "Scholarships and financial support for discharged lone soldiers",
         sourceHe: "עמותת כנפיים",
         sourceEn: "Knafayim Foundation",
-        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99/%D7%9E%D7%A1%D7%9C%D7%95%D7%9C%D7%99-%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%99%D7%99%D7%97%D7%95%D7%93%D7%99%D7%99%D7%9D/%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/",
         howToGetHe:
           "הגישו בקשה דרך אתר עמותת כנפיים. המלגות מחולקות בתחילת שנת הלימודים.",
         howToGetEn:
