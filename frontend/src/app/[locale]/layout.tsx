@@ -40,6 +40,15 @@ export async function generateMetadata({
   };
 }
 
+async function DisclaimerFooter({ locale }: { locale: string }) {
+  const t = await getTranslations({ locale, namespace: "footer" });
+  return (
+    <footer className="border-t border-border/40 py-3 text-center text-xs text-muted-foreground/60">
+      {t("disclaimer")}
+    </footer>
+  );
+}
+
 export default async function LocaleLayout({
   children,
   params: { locale },
@@ -64,6 +73,7 @@ export default async function LocaleLayout({
           <div className="relative flex min-h-screen flex-col">
             <Navigation locale={locale} />
             <main className="flex-1">{children}</main>
+            <DisclaimerFooter locale={locale} />
           </div>
         </NextIntlClientProvider>
       </body>
