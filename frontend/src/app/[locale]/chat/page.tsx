@@ -38,7 +38,7 @@ interface QuickAction {
 
 /* ===== Fallback URL for sources without an external link ===== */
 
-const FALLBACK_SOURCE_URL = "/rights";
+const FALLBACK_SOURCE_URL = "https://www.achgadol.org";
 
 /* ===== Parse follow-up suggestions from bot content ===== */
 
