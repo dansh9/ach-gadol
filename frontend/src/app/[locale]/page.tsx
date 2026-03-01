@@ -6,7 +6,6 @@ import {
   BookOpen,
   ClipboardCheck,
   MessageCircle,
-  Users,
   ArrowLeft,
   ArrowRight,
   Shield,
@@ -25,16 +24,15 @@ import Image from "next/image";
  * 4. CTA - Final call to action
  */
 
-const FEATURE_ICONS = [BookOpen, ClipboardCheck, MessageCircle, Users] as const;
+const FEATURE_ICONS = [BookOpen, ClipboardCheck, MessageCircle] as const;
 
 const FEATURE_KEYS = [
   "rights_info",
   "eligibility_checker",
   "ai_chat",
-  "personal_guidance",
 ] as const;
 
-const FEATURE_LINKS = ["/rights", "/check", "/chat", "/volunteer"] as const;
+const FEATURE_LINKS = ["/rights", "/check", "/chat"] as const;
 
 export default function HomePage() {
   const tHero = useTranslations("hero");
