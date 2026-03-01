@@ -40,6 +40,10 @@ interface QuickAction {
 
 const FALLBACK_SOURCE_URL = "https://www.achgadol.org";
 
+/* ===== sessionStorage keys — persist chat within the same tab ===== */
+const STORAGE_MESSAGES = "ach-gadol-chat-msgs";
+const STORAGE_SESSION = "ach-gadol-chat-sid";
+
 /* ===== Parse follow-up suggestions from bot content ===== */
 
 function parseSuggestions(content: string): {
@@ -341,6 +345,45 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const hydrated = useRef(false);
+
+  // Restore chat from sessionStorage on mount (survives page navigation, clears on refresh/close)
+  useEffect(() => {
+    try {
+      const savedMsgs = sessionStorage.getItem(STORAGE_MESSAGES);
+      if (savedMsgs) {
+        const parsed = JSON.parse(savedMsgs) as Message[];
+        setMessages(
+          parsed.map((m) => ({ ...m, timestamp: new Date(m.timestamp) }))
+        );
+      }
+      const savedSid = sessionStorage.getItem(STORAGE_SESSION);
+      if (savedSid) setSessionId(savedSid);
+    } catch {
+      /* ignore */
+    }
+    hydrated.current = true;
+  }, []);
+
+  // Persist messages to sessionStorage on every change
+  useEffect(() => {
+    if (!hydrated.current) return;
+    try {
+      sessionStorage.setItem(STORAGE_MESSAGES, JSON.stringify(messages));
+    } catch {
+      /* quota exceeded — ignore */
+    }
+  }, [messages]);
+
+  // Persist sessionId
+  useEffect(() => {
+    if (!hydrated.current) return;
+    try {
+      if (sessionId) sessionStorage.setItem(STORAGE_SESSION, sessionId);
+    } catch {
+      /* ignore */
+    }
+  }, [sessionId]);
 
   // Detect if user has scrolled up
   useEffect(() => {
