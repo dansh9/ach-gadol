@@ -432,7 +432,7 @@ export async function runRagPipeline(
 
       const stream = anthropic.messages.stream({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1024,
+        max_tokens: 1536,
         system: systemPrompt,
         messages,
       });
@@ -465,7 +465,7 @@ export async function runRagPipeline(
       // Non-streaming mode
       const response = await anthropic.messages.create({
         model: "claude-sonnet-4-20250514",
-        max_tokens: 1024,
+        max_tokens: 1536,
         system: systemPrompt,
         messages,
       });
