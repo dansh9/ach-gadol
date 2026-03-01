@@ -4,7 +4,6 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 
 type Locale = (typeof routing.locales)[number];
 
@@ -65,7 +64,6 @@ export default async function LocaleLayout({
           <div className="relative flex min-h-screen flex-col">
             <Navigation locale={locale} />
             <main className="flex-1">{children}</main>
-            <Footer />
           </div>
         </NextIntlClientProvider>
       </body>
