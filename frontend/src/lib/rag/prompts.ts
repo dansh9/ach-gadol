@@ -69,39 +69,61 @@ IMPORTANT: Use the Hebrew link text when responding in Hebrew. Use English link 
  * Updated periodically — amounts are approximate and soldiers should verify.
  */
 const RIGHTS_DATA_REFERENCE = `
-## Lone Soldier Rights Quick Reference (Approximate Amounts)
-These are approximate amounts as of 2024-2025. Always advise soldiers to verify current amounts with the relevant authority.
+## Lone Soldier Rights Quick Reference (Verified Amounts — sources: idf.il, hachvana.mod.gov.il, January 2026)
+These amounts are from official IDF and government sources. Always advise soldiers to verify current amounts as they update periodically.
 
-### Financial & Grants
-- Monthly Stipend (מענק חודשי): ~1,200 ₪/month from Ministry of Defense
-- Food Allowance (דמי כלכלה): ~800 ₪/month
-- Combat Bonus (תוספת קרבית): ~700 ₪/month for combat soldiers
-- Immigration Ministry Grant (מענק משרד הקליטה): ~5,300 ₪ one-time from Misrad HaKlita for Olim
+### Monthly Salary (דמי קיום — paid to ALL soldiers, varies by role)
+- Combat soldiers (לוחמים): ~2,463 ₪/month
+- Elite combat (לוחמי חוד, from 3rd year): ~3,048 ₪/month
+- Combat support (תומכי לחימה): ~1,793 ₪/month
+- Rear/administrative (עורפיים): ~1,235 ₪/month
+
+### Lone Soldier Specific Benefits (on top of base salary)
+- Lone Soldier Supplement (תוספת חייל בודד): ~601 ₪/month added to salary
+- Food Vouchers (תווי מזון): ~150 ₪/month loaded on military ID (choger card), must use within 2 months
+- Holiday Vouchers (תווי חג): 250 ₪ twice a year (Rosh Hashana and Pesach)
 - Emergency Financial Assistance: Available through unit welfare officer on case-by-case basis
-- Property Tax Exemption (פטור מארנונה): Full exemption during mandatory service, partial after discharge
-- Electricity Discount (הנחת חשמל): ~33% discount on electricity bill
+- Property Tax Exemption (פטור מארנונה): Full exemption during mandatory service
+- Electricity Discount (הנחת חשמל): ~50% discount on electricity bill (soldier must be on lease and electric bill)
+
+### Olim (New Immigrants) Additional Benefits
+- Misrad HaKlita Monthly Stipend: ~352 ₪/month (first year), ~230 ₪/month (after first year)
+- Misrad HaBinui Additional Rent Stipend: ~402 ₪/month (starts from 8th month after Aliyah, paid automatically)
+- Sal Klita (Absorption Basket): ~20,491 ₪ total for single oleh (paid over 6 months) — second part received after service ends (must request within 1 year)
+- Full tuition scholarship for undergraduate degree after service (Misrad HaKlita)
 
 ### Housing
-- Rent Assistance (סיוע בשכר דירה): ~1,399 ₪/month (per IDF website)
+- Rent Assistance (סיוע בשכר דירה): 1,399 ₪/month rent subsidy + 351.50 ₪/month maintenance = **1,750 ₪/month total** (per IDF website)
   - Required docs: Ishur Chayal Boded, signed lease, Teudat Chayal copy, bank details
   - Processing time: 4-6 weeks
   - Can apply at any time during service
 - Dirat Alach (דירות אל"ח): Subsidized IDF apartments for lone soldiers
-- Beit HaChayal (בית החייל): Temporary accommodation facilities in major cities
+- Beit HaChayal (בית החייל): Temporary accommodation in major cities
+- Beit Cham (בית חם): Shared apartments, includes 400 ₪/month food vouchers
+- Five housing options: IDF barracks, Beit Cham, kibbutz adoption, rent reimbursement, or maintenance coverage
 
 ### Vacations & Leave
-- Overseas Leave (חופשה לחו"ל): Up to 28 days per year to visit parents abroad
-- Flight Funding (מימון טיסות): Partial/full flight cost coverage once per year
-- Family Visit Leave (ביקור הורים בארץ): Extra days off when parents visit Israel
-- Personal Errands Day (יום חופשה לסידורים): 1 day per month for personal errands
+- Overseas Leave (חופשה לחו"ל): Up to 30 days per year to visit parents abroad (after 8 months of service)
+- Flight Funding (מימון טיסות): Flight cost coverage once during service (via HaAguda LeMa'an HaChayal)
+- Family Visit Leave (ביקור הורים בארץ): Up to 8 extra days per year when parents visit Israel
+- Personal Errands Day (יום סידורים): 1 day/month during basic training; 1 day/2 months in regular units
 - Special Leave (חופשה מיוחדת): Additional leave days for lone soldiers
 
 ### Post-Service & Discharge
-- Enhanced Pikadon (פיקדון מוגדל): ~25,000 ₪ additional on top of regular pikadon
-- Regular Pikadon: Accumulated savings fund released after discharge
+- Discharge Grant (מענק שחרור — per month of service, January 2026):
+  - Combat: 675.19 ₪ × months (e.g., 32 months = ~21,606 ₪)
+  - Combat support: 562.25 ₪ × months
+  - Other: 449.32 ₪ × months
+- Pikadon (פיקדון אישי — per month of service, January 2026):
+  - Combat: 976.45 ₪ × months (e.g., 32 months = ~31,246 ₪)
+  - Combat support: 813.71 ₪ × months
+  - Other: 650.97 ₪ × months
+- Lone soldiers get advance on grant within 14 days of discharge (vs 60 days for others)
+- Pikadon eligibility extended to 10 years (vs 5 for regular soldiers)
+- Post-service rent assistance: up to 1,000 ₪/month for 12 months (12,000 ₪/year)
+- Up to 3 months accommodation at Beit HaChayal after discharge
 - Higher Education Tuition Assistance: Available after discharge
 - Vocational Training Subsidies: Available after discharge
-- Processing time for Pikadon: 60-90 days after release date
 - IMPORTANT: Update lone soldier status at least 3 months before release
 
 ### Reserves (מילואים)
@@ -223,8 +245,8 @@ Example answer (MANDATORY STYLE REFERENCE):
 אם אתה חייל בודד ששוכר דירה, בדרך כלל מגיע סיוע חודשי.
 
 **מה מגיע לך:**
-- סיוע בשכר דירה — בערך **1,399 ₪** לחודש
-- תלוי אזור מגורים וסוג השירות
+- סיוע בשכר דירה — **1,399 ₪** לחודש + 351 ₪ תחזוקה = **1,750 ₪ סה"כ**
+- עוד ~601 ₪ תוספת חייל בודד למשכורת
 
 **מה לעשות עכשיו:**
 1. להשיג אישור חייל בודד מהיחידה
