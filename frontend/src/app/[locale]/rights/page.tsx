@@ -61,7 +61,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל — מדור כוח אדם',
         sourceEn: "IDF — Personnel Division",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה. התוספת מחושבת אוטומטית לאחר הכרה כחייל בודד.",
         howToGetEn:
@@ -79,7 +79,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
         howToGetHe:
           "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
         howToGetEn:
@@ -97,7 +97,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/מענק_חודשי_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%9B%D7%9C%D7%9B%D7%9C%D7%99%D7%95%D7%AA-%D7%A7%D7%91%D7%95%D7%A2%D7%95%D7%AA/",
         howToGetHe:
           "התוספת מחושבת אוטומטית על פי סיווג התפקיד ביחידה.",
         howToGetEn:
@@ -115,7 +115,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/דמי_כלכלה_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%A0%D7%9C%D7%95%D7%95%D7%AA/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה עם אישור שהבסיס ללא חדר אוכל.",
         howToGetEn:
@@ -132,7 +132,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "For Rosh Hashana and Passover (~250 x 2)",
         sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
-        sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
         howToGetHe:
           "השוברים מחולקים אוטומטית לפני החגים דרך היחידה. יש לוודא שהפרטים מעודכנים.",
         howToGetEn:
@@ -150,7 +150,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Aliyah and Integration",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/מענק_מטעם_משרד_העלייה_והקליטה_לחייל_בודד_או_מתנדב_בודד_בשירות_לאומי-אזרחי",
+          "https://www.gov.il/he/Departments/General/olim_soldiers_lonely_soldiers",
         howToGetHe:
           "פנו לסניף משרד הקליטה הקרוב עם תעודת עולה ואישור חייל בודד. ניתן לפנות גם דרך טלפון *3721.",
         howToGetEn:
@@ -168,7 +168,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           'הגישו בקשה באתר משרד השיכון או בסניף הקרוב. יש לצרף חוזה שכירות ואישור חייל בודד. טלפון *5442.',
         howToGetEn:
@@ -186,7 +186,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "חברת החשמל",
         sourceEn: "Israel Electric Corporation",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/הנחה_בחשבון_חשמל_לחיילים_בודדים",
+          "https://www.iec.co.il/content/tariffs/contentpages/socialtariff",
         howToGetHe:
           "פנו לחברת החשמל עם אישור חייל בודד וחשבון חשמל על שמכם. ניתן להגיש בקשה מקוונת.",
         howToGetEn:
@@ -204,7 +204,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "רשות מקומית",
         sourceEn: "Local Municipality",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/פטור_מארנונה_לחיילים_בשירות_חובה_וחיילים_משוחררים",
+          "https://www.gov.il/he/departments/guides/tax?chapterIndex=2",
         howToGetHe:
           "פנו למחלקת הארנונה ברשות המקומית עם אישור חייל בודד וחוזה שכירות/נסח טאבו.",
         howToGetEn:
@@ -229,7 +229,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/סיוע_בהוצאות_דיור_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           "פנו למדור כוח אדם ביחידה עם חוזה שכירות ואישור חייל בודד. הסבסוד מועבר ישירות לחשבון הבנק.",
         howToGetEn:
@@ -246,7 +246,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "עמותת עלאך",
         sourceEn: "Alach Association",
         sourceUrl:
-          'https://www.kolzchut.org.il/he/דירות_אל"ח_לחיילים_בודדים',
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%94%D7%98%D7%91%D7%95%D7%AA-%D7%93%D7%99%D7%95%D7%A8/",
         howToGetHe:
           "הגישו בקשה דרך אתר עמותת עלאך או פנו לנציג העמותה בבסיס. יש לצרף אישור חייל בודד ותעודת עולה.",
         howToGetEn:
@@ -263,7 +263,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "בית החייל",
         sourceEn: "Beit HaChayal",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
+          "https://www.hachvana.mod.gov.il/ExtraBenefits/SingleSolders/Pages/default.aspx",
         howToGetHe:
           "פנו ישירות לסניף בית החייל הקרוב עם תעודה צבאית ואישור חייל בודד. ניתן להירשם גם דרך מדור כוח אדם.",
         howToGetEn:
@@ -281,7 +281,7 @@ const RIGHTS_DATA: RightsCategory[] = [
           "Lone soldiers assigned to a kibbutz (free housing + NIS 150 pocket money)",
         sourceHe: "תנועה קיבוצית",
         sourceEn: "Kibbutz Movement",
-        sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
         howToGetHe:
           "פנו לתנועה הקיבוצית או לסוכנות היהודית לשיבוץ לקיבוץ. התהליך כולל ראיון והתאמה.",
         howToGetEn:
@@ -297,7 +297,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Lone soldiers — matched with a host family",
         sourceHe: "ארגוני מתנדבים",
         sourceEn: "Volunteer Organizations",
-        sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
         howToGetHe:
           "פנו לקצין העיר ביחידה או לעמותות חיילים בודדים. השיבוץ למשפחה מתבצע בהתאם לאזור המגורים.",
         howToGetEn:
@@ -322,7 +322,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל — פקודת מטכ"ל',
         sourceEn: "IDF — General Staff Order",
         sourceUrl:
-          'https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לצורך_ביקור_הוריהם_בחו"ל',
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
         howToGetHe:
           'הגישו בקשה דרך המפקד הישיר. יש למלא טופס בקשה לחופשת חו"ל ולצרף אישור הורים בחו"ל.',
         howToGetEn:
@@ -339,7 +339,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'משרד הקליטה / צה"ל',
         sourceEn: "Ministry of Immigration / IDF",
         sourceUrl:
-          'https://www.kolzchut.org.il/he/מימון_טיסה_לחיילים_בודדים_לביקור_הוריהם_בחו"ל',
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
         howToGetHe:
           "פנו למשרד הקליטה עם אישור חייל בודד ומסמך נסיעה. חלק מהמימון ניתן גם דרך צה\"ל — בדקו עם מדור כוח אדם.",
         howToGetEn:
@@ -357,7 +357,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/חופשה_לחיילים_בודדים_לרגל_ביקור_הוריהם_בארץ",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
         howToGetHe:
           "הגישו בקשה דרך המפקד הישיר כשמשפחה מגיעה לביקור. יש לתאם מראש ולצרף אישור כניסה של בני המשפחה.",
         howToGetEn:
@@ -375,7 +375,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/יום_חופשה_לחיילים_בודדים_לצורך_סידורים_אישיים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
         howToGetHe:
           "ימי החופשה מחושבים אוטומטית. תאמו עם המפקד הישיר לניצול הימים.",
         howToGetEn:
@@ -392,7 +392,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/חופשה_מיוחדת_לחיילים_בודדים",
+          "https://www.idf.il/%D7%90%D7%AA%D7%A8%D7%99%D7%9D/%D7%94%D7%A9%D7%90%D7%9C%D7%95%D7%AA-%D7%94%D7%9B%D7%99-%D7%A0%D7%A4%D7%95%D7%A6%D7%95%D7%AA-%D7%91%D7%A6%D7%94%D7%9C/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%97%D7%99%D7%99%D7%9C%D7%99%D7%9D-%D7%91%D7%95%D7%93%D7%93%D7%99%D7%9D/%D7%97%D7%95%D7%A4%D7%A9%D7%95%D7%AA/",
         howToGetHe:
           "הזכות ניתנת אוטומטית לחיילים בודדים מוכרים. תאמו עם המפקד לגבי שעת היציאה.",
         howToGetEn:
@@ -416,7 +416,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/מענק_שחרור_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/GrantAndDeposit/Pages/Grant.aspx",
         howToGetHe:
           'המענק מועבר אוטומטית לחשבון הבנק עם השחרור. ודאו שפרטי הבנק מעודכנים במערכת צה"ל.',
         howToGetEn:
@@ -435,7 +435,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/פיקדון_אישי_לחיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/GrantAndDeposit/DepositUpTo5/Pages/default.aspx",
         howToGetHe:
           "הפיקדון נפתח אוטומטית. למימוש — הגישו בקשה דרך אתר משרד הביטחון או בסניפי בנק הפועלים. יש לבחור ייעוד ולצרף מסמכים תומכים.",
         howToGetEn:
@@ -452,7 +452,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל / עמותות',
         sourceEn: "IDF / NGOs",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/לינה_בבית_החייל_לחיילים_בודדים",
+          "https://www.hachvana.mod.gov.il/ExtraBenefits/SingleSolders/Pages/default.aspx",
         howToGetHe:
           "פנו למדור כוח אדם לפני השחרור לתיאום מגורים. ניתן גם לפנות לעמותות כמו עלאך ובית החייל.",
         howToGetEn:
@@ -470,7 +470,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx",
         howToGetHe:
           "פנו לסניף משרד הקליטה הקרוב עם תעודת שחרור ותעודת עולה. ניתן לפנות גם דרך טלפון *3721.",
         howToGetEn:
@@ -488,7 +488,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד השיכון",
         sourceEn: "Ministry of Housing",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx",
         howToGetHe:
           "הגישו בקשה דרך אתר משרד השיכון עם תעודת שחרור וחוזה שכירות. טלפון *5442.",
         howToGetEn:
@@ -507,7 +507,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הקליטה",
         sourceEn: "Ministry of Immigration",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx",
         howToGetHe:
           "הזכאות היא אוטומטית לעולים חדשים. פנו למשרד הקליטה לבירור הטבות ספציפיות. טלפון *3721.",
         howToGetEn:
@@ -524,7 +524,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הקליטה / עמותות",
         sourceEn: "Ministry of Immigration / NGOs",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx",
         howToGetHe:
           "פנו למרכזי התעסוקה של משרד הקליטה או לעמותות כמו כנפיים. ניתן לתאם פגישת ייעוץ בטלפון *3721.",
         howToGetEn:
@@ -541,7 +541,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הקליטה / משרד החינוך",
         sourceEn: "Ministry of Immigration / Ministry of Education",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חיילים_משוחררים_ומסיימי_שירות_לאומי-אזרחי",
+          "https://www.hachvana.mod.gov.il/Soldiers/Pages/default.aspx",
         howToGetHe:
           "פנו למשרד הקליטה עם אישור קבלה למוסד לימודים. ניתן לממש גם מתוך הפיקדון האישי.",
         howToGetEn:
@@ -559,7 +559,7 @@ const RIGHTS_DATA: RightsCategory[] = [
           "Scholarships and financial support for discharged lone soldiers",
         sourceHe: "עמותת כנפיים",
         sourceEn: "Knafayim Foundation",
-        sourceUrl: "https://www.kolzchut.org.il/he/חיילים_בודדים",
+        sourceUrl: "https://www.idf.il/%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%A9%D7%9C%D7%99-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA%D7%A0%D7%90%D7%99-%D7%94%D7%A9%D7%99%D7%A8%D7%95%D7%AA-%D7%91%D7%A6%D7%94%22%D7%9C/%D7%AA-%D7%A9/%D7%96%D7%9B%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%97%D7%99%D7%99%D7%9C-%D7%94%D7%91%D7%95%D7%93%D7%93-%D7%91%D7%A1%D7%93%D7%99%D7%A8/",
         howToGetHe:
           "הגישו בקשה דרך אתר עמותת כנפיים. המלגות מחולקות בתחילת שנת הלימודים.",
         howToGetEn:
@@ -583,7 +583,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: 'צה"ל',
         sourceEn: "IDF",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/זכויות_חייל_המילואים_במשך_השירות",
+          "https://www.btl.gov.il/benefits/Reserve_Service/Pages/default.aspx",
         howToGetHe:
           'פנו למפקד היחידה או למדור כוח אדם עם צו מילואים. המגורים מסופקים דרך צה"ל.',
         howToGetEn:
@@ -602,7 +602,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         sourceHe: "משרד הביטחון",
         sourceEn: "Ministry of Defense",
         sourceUrl:
-          "https://www.kolzchut.org.il/he/תשלום_עבור_שירות_מילואים",
+          "https://www.btl.gov.il/benefits/Reserve_Service/Pages/TagmulZacay.aspx",
         howToGetHe:
           "הגישו בקשה להחזר הוצאות דרך אתר משרד הביטחון — אגף שיקום. יש לצרף קבלות ואישורי תשלום.",
         howToGetEn:
@@ -618,7 +618,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional mental health support for reservists",
         sourceHe: 'צה"ל / משרד הבריאות',
         sourceEn: "IDF / Ministry of Health",
-        sourceUrl: "https://www.kolzchut.org.il/he/מילואים",
+        sourceUrl: "https://www.btl.gov.il/benefits/Reserve_Service/Pages/default.aspx",
         howToGetHe:
           "פנו לקו הסיוע הנפשי של צה\"ל או למרכזי בריאות הנפש של משרד הבריאות. הטיפול ניתן בחינם ובסודיות.",
         howToGetEn:
@@ -634,7 +634,7 @@ const RIGHTS_DATA: RightsCategory[] = [
         conditionsEn: "Professional guidance and job placement",
         sourceHe: "משרד הביטחון / עמותות",
         sourceEn: "Ministry of Defense / NGOs",
-        sourceUrl: "https://www.kolzchut.org.il/he/מילואים",
+        sourceUrl: "https://www.btl.gov.il/benefits/Reserve_Service/Pages/default.aspx",
         howToGetHe:
           "פנו לאגף שיקום במשרד הביטחון או לעמותות תעסוקה למשרתי מילואים. ניתן לתאם פגישה טלפונית.",
         howToGetEn:
