@@ -1,6 +1,7 @@
 /* ===================================================================
  * Eligibility Rules Engine
  * Shared between client (check page) and server (API route).
+ * Amounts based on Ach Gadol Rights Guide 2025-26 (primary source).
  * =================================================================== */
 
 export type SoldierType =
@@ -44,7 +45,7 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
       id: "lone_soldier_allowance",
       titleHe: "תוספת חייל בודד",
       titleEn: "Lone Soldier Allowance",
-      monthlyAmount: 620.7,
+      monthlyAmount: 620,
       noteHe: "לכל חייל בודד מוכר",
       noteEn: "For all recognized lone soldiers",
       category: "financial",
@@ -53,42 +54,60 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
     if (isCombat === true) {
       rights.push({
         id: "combat_allowance",
-        titleHe: "תוספת לוחם",
-        titleEn: "Combat Soldier Allowance",
-        monthlyAmount: 482.3,
-        noteHe: "עבור חיילים בתפקיד לוחם",
-        noteEn: "For soldiers in combat roles",
+        titleHe: "תוספת לוחם (רמ\"פ א'+)",
+        titleEn: "Combat Allowance (Level א'+)",
+        monthlyAmount: 482,
+        noteHe: "עבור חיילים בתפקיד לוחם ברמ\"פ א'+",
+        noteEn: "For combat soldiers at activity level א'+",
         category: "financial",
       });
     } else if (isCombat === false) {
       rights.push({
         id: "combat_support_allowance",
-        titleHe: "תוספת תומך לחימה",
-        titleEn: "Combat Support Allowance",
-        monthlyAmount: 241.3,
-        noteHe: "עבור חיילים בתפקיד תומך לחימה",
-        noteEn: "For soldiers in combat support roles",
+        titleHe: "תוספת תומך לחימה (רמ\"פ א')",
+        titleEn: "Combat Support Allowance (Level א')",
+        monthlyAmount: 241,
+        noteHe: "עבור חיילים בתפקיד תומך לחימה ברמ\"פ א'",
+        noteEn: "For combat support soldiers at activity level א'",
         category: "financial",
       });
     }
 
     rights.push({
-      id: "food_allowance",
-      titleHe: "דמי כלכלה",
-      titleEn: "Food Allowance",
+      id: "shopping_vouchers",
+      titleHe: "תווי קנייה (חוגר)",
+      titleEn: "Shopping Vouchers",
       monthlyAmount: 150,
-      noteHe: "בבסיסים ללא חדר אוכל",
-      noteEn: "At bases without dining facilities",
+      noteHe: "שופרסל, יש חסד, קואופ-שופ, כוורת. אסור טבק ואלכוהול!",
+      noteEn: "Shufersal, Yesh Chesed, Co-op Shop, Koveret. No tobacco/alcohol!",
       category: "financial",
     });
 
     rights.push({
       id: "holiday_vouchers",
-      titleHe: "שוברי חגים",
+      titleHe: "שי לחג",
       titleEn: "Holiday Vouchers",
       oneTimeAmount: 500,
-      noteHe: "~250 ש\"ח פעמיים בשנה",
-      noteEn: "~NIS 250 twice a year",
+      noteHe: "500 ₪ לשנה (פסח וראש השנה)",
+      noteEn: "500 ₪/year (Pesach and Rosh Hashana)",
+      category: "financial",
+    });
+
+    rights.push({
+      id: "living_allowance",
+      titleHe: "דמי קיום (לפי רמ\"פ)",
+      titleEn: "Living Allowance (by Activity Level)",
+      noteHe: "רמ\"פ א'+: 1,983 ₪ | רמ\"פ א': 1,666 ₪ | רמ\"פ ב': 1,575 ₪ | רמ\"פ ג': 1,486 ₪ | רמ\"פ ד': 1,366 ₪",
+      noteEn: "Level א'+: 1,983 ₪ | Level א': 1,666 ₪ | Level ב': 1,575 ₪ | Level ג': 1,486 ₪ | Level ד': 1,366 ₪",
+      category: "financial",
+    });
+
+    rights.push({
+      id: "general_grant",
+      titleHe: "מענק כללי",
+      titleEn: "General Grant",
+      noteHe: "רמ\"פ א' ומעלה ודרג א': עד 5,000 ₪ | יתר החיילים: עד 4,000 ₪. דורש אישורים תומכים ומיצוי סיוע אחר.",
+      noteEn: "Level א'+ & Grade א': up to 5,000 ₪ | Others: up to 4,000 ₪. Requires supporting documents.",
       category: "financial",
     });
 
@@ -102,73 +121,89 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
         noteEn: "For new immigrants only",
         category: "financial",
       });
+
+      rights.push({
+        id: "housing_ministry",
+        titleHe: "מענק משרד הבינוי והשיכון",
+        titleEn: "Housing Ministry Grant",
+        monthlyAmount: 402,
+        noteHe: "לעולים חדשים השוכרים דירה",
+        noteEn: "For new immigrants renting an apartment",
+        category: "financial",
+      });
     }
 
     rights.push({
-      id: "housing_ministry",
-      titleHe: "מענק משרד השיכון",
-      titleEn: "Housing Ministry Grant",
-      monthlyAmount: 402,
-      noteHe: "לחיילים ששוכרים דירה",
-      noteEn: "For soldiers renting an apartment",
-      category: "financial",
-    });
-
-    rights.push({
       id: "electricity_discount",
-      titleHe: "הנחת חשמל",
-      titleEn: "Electricity Discount",
-      monthlyAmount: 105,
-      noteHe: "בדירה עצמאית",
-      noteEn: "In a private apartment",
+      titleHe: "הנחה בחשמל (50%)",
+      titleEn: "Electricity Discount (50%)",
+      noteHe: "50% הנחה על 400 וואט ראשונים",
+      noteEn: "50% discount on first 400 watts",
       category: "financial",
     });
 
     rights.push({
       id: "property_tax",
-      titleHe: "פטור מארנונה (100%)",
-      titleEn: "Property Tax Exemption (100%)",
-      noteHe: "פטור מלא מארנונה",
-      noteEn: "Full property tax exemption",
+      titleHe: "פטור מארנונה",
+      titleEn: "Property Tax Exemption",
+      noteHe: "פטור מתשלום ארנונה מטעם העירייה",
+      noteEn: "Municipal property tax exemption",
       category: "financial",
     });
 
     rights.push({
       id: "rent_subsidy",
-      titleHe: "סבסוד שכירות (עד 1,800 ש\"ח)",
-      titleEn: "Rent Subsidy (up to NIS 1,800)",
-      monthlyAmount: 1800,
-      noteHe: "סבסוד שכירות חודשי",
-      noteEn: "Monthly rent subsidy",
+      titleHe: "השתתפות בשכ\"ד (כ-1,807 ש\"ח)",
+      titleEn: "Rent Reimbursement (~NIS 1,807)",
+      monthlyAmount: 1807,
+      noteHe: "השתתפות בשכ\"ד חודשי. שימו לב: עלויות מחייה גבוהות מההשתתפות! אפשרות A ו-A2 הן חלופיות (לא מצטברות).",
+      noteEn: "Monthly rent reimbursement. Note: living costs exceed reimbursement! Options A and A2 are alternatives (not additive).",
       category: "housing",
     });
 
-    if (isImmigrant === true) {
-      rights.push({
-        id: "dirat_alach",
-        titleHe: "דירת עלאך (מרוהטת בחינם)",
-        titleEn: "Dirat Alach (Free Furnished Apartment)",
-        noteHe: "לעולים חדשים — דירה מרוהטת",
-        noteEn: "For new immigrants — furnished apartment",
-        category: "housing",
-      });
-    }
+    rights.push({
+      id: "maintenance_allowance",
+      titleHe: "אפשרות A2 — החזר הוצאות אחזקת דירה (הא\"ד)",
+      titleEn: "Option A2 — Housing Maintenance (HAD)",
+      monthlyAmount: 362,
+      noteHe: "לחיילים הגרים בדירה אך לא משלמים שכ\"ד. חלופה לאפשרות A — לא ניתן לקבל שכ\"ד והא\"ד יחד.",
+      noteEn: "For soldiers in an apartment but NOT paying rent. Alternative to Option A — cannot receive both.",
+      category: "housing",
+    });
+
+    rights.push({
+      id: "beit_cham",
+      titleHe: "דירת בית חם (אל\"ח — חינם)",
+      titleEn: "Beit Cham Apartment (Free)",
+      noteHe: "דירה מרוהטת, 3-6 חיילים, חינם. 400 ₪ תווי מזון. דרוש 6+ חודשי שירות שנותרו.",
+      noteEn: "Furnished apartment, 3-6 soldiers, free. 400 ₪ food vouchers. Requires 6+ months remaining.",
+      category: "housing",
+    });
 
     rights.push({
       id: "beit_hachayal",
-      titleHe: "בית החייל (חינם, 7 מיקומים)",
-      titleEn: "Beit HaChayal (Free, 7 Locations)",
-      noteHe: "מגורים חינם ב-7 סניפים",
-      noteEn: "Free accommodation at 7 branches",
+      titleHe: "בית החייל (8 מיקומים)",
+      titleEn: "Beit HaChayal (8 Locations)",
+      noteHe: "ת\"א, ר\"ג, חיפה, ב\"ש, אילת, י-ם, קריית שמונה, טבריה",
+      noteEn: "Tel Aviv, Ramat Gan, Haifa, Beer Sheva, Eilat, Jerusalem, Kiryat Shmona, Tiberias",
       category: "housing",
     });
 
     rights.push({
-      id: "adoptive_family",
-      titleHe: "משפחה מאמצת",
-      titleEn: "Adoptive Family",
-      noteHe: "שיבוץ למשפחה מארחת",
-      noteEn: "Matched with a host family",
+      id: "kibbutz_adoption",
+      titleHe: "אימוץ בקיבוץ",
+      titleEn: "Kibbutz Adoption",
+      noteHe: "לחיילים בבסיסים סגורים — דירה מרוהטת ללא תשלום",
+      noteEn: "For soldiers at closed bases — free furnished apartment",
+      category: "housing",
+    });
+
+    rights.push({
+      id: "furniture",
+      titleHe: "ריהוט ומוצרי חשמל (חדשים!)",
+      titleEn: "Furniture & Appliances (New!)",
+      noteHe: "לשוכרי דירה בלבד. מוצרים חדשים מהחנות, אין צורך להחזיר.",
+      noteEn: "For renters only. Brand new items, no need to return.",
       category: "housing",
     });
 
@@ -177,46 +212,64 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
         id: "abroad_leave",
         titleHe: "30 ימי חופשה לחו\"ל",
         titleEn: "30 Days Overseas Leave",
-        noteHe: "לחיילים עם הורים בחו\"ל",
-        noteEn: "For soldiers with parents abroad",
+        noteHe: "פעם בשנת שירות (ניתן לפצל)",
+        noteEn: "Once per service year (can be split)",
         category: "vacations",
       });
 
       rights.push({
         id: "flight_funding",
-        titleHe: "מימון טיסות",
-        titleEn: "Flight Funding",
-        noteHe: "מימון חלקי או מלא",
-        noteEn: "Partial or full flight funding",
+        titleHe: "מימון טיסה (100%)",
+        titleEn: "Flight Funding (100%)",
+        noteHe: "בודד מובהק: מימון מלא. לוחמים: אחרי 8 חודשים (פעמיים בשירות — רק ללוחמים!). תומכ\"ל רמ\"פ א'/א'+: אחרי שנה. אחרים: אחרי מחצית השירות או 12 חודשים.",
+        noteEn: "Boded Muvhak: full funding. Combat: after 8 months (twice during service — combat only!). Support at Level א'/א'+: after 1 year. Others: after half service or 12 months.",
         category: "vacations",
       });
 
       rights.push({
         id: "family_visit",
-        titleHe: "4 ימי ביקור משפחה",
-        titleEn: "4 Family Visit Days",
-        noteHe: "כאשר משפחה מבקרת בארץ",
-        noteEn: "When family visits Israel",
+        titleHe: "4–8 ימי ביקור הורה",
+        titleEn: "4–8 Family Visit Days",
+        noteHe: "4 ימים ברירת מחדל, עד 8 באישור מפקד. פעם בשנת שירות. בהכשרה — מאושרים 4 ימי חופשה מיוחדת בלבד.",
+        noteEn: "4 days standard, up to 8 with commander approval. Once per service year. In training — 4 special leave days only.",
         category: "vacations",
       });
     }
 
     rights.push({
-      id: "regular_leave",
-      titleHe: "יום חופשה כל חודשיים",
-      titleEn: "1 Extra Day Off Every 2 Months",
-      noteHe: "חייל בודד מוכר",
-      noteEn: "Recognized lone soldier",
+      id: "errands_day",
+      titleHe: "יום סידורים",
+      titleEn: "Personal Errands Day",
+      noteHe: "פעם ב-2 חודשים בסדיר, פעם בחודש בהכשרה",
+      noteEn: "Every 2 months in regular service, monthly during training",
       category: "vacations",
     });
 
     rights.push({
-      id: "early_leave",
-      titleHe: "יציאה מוקדמת לחגים",
-      titleEn: "Early Leave for Holidays",
-      noteHe: "ערב חג",
-      noteEn: "Before holidays",
+      id: "moving_leave",
+      titleHe: "חופשה למעבר דירה (2 ימים)",
+      titleEn: "Moving Leave (2 Days)",
+      noteHe: "פעם בשנת שירות",
+      noteEn: "Once per service year",
       category: "vacations",
+    });
+
+    rights.push({
+      id: "dental",
+      titleHe: "טיפול שיניים פרוטתי",
+      titleEn: "Prosthetic Dental Treatment",
+      noteHe: "עד 2 טיפולי כתר/שתל, בהצגת אישור רופא לסגל הת\"ש",
+      noteEn: "Up to 2 crown/implant treatments, by presenting doctor's certificate to Tat\"Sh staff",
+      category: "financial",
+    });
+
+    rights.push({
+      id: "legal_aid",
+      titleHe: "סיוע משפטי (עמותת נד\"ן)",
+      titleEn: "Legal Aid (Nadan Organization)",
+      noteHe: "עזרה בסעד משפטי",
+      noteEn: "Legal assistance through Nadan org",
+      category: "financial",
     });
   }
 
@@ -227,118 +280,112 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
         id: "discharge_grant",
         titleHe: "מענק שחרור",
         titleEn: "Discharge Grant",
-        noteHe: "סכום בהתאם לתקופת השירות",
-        noteEn: "Amount based on service duration",
+        noteHe: "לוחמים: כ-589 ₪/חודש | תומכי לחימה: כ-491 ₪/חודש | אחרים: כ-392 ₪/חודש",
+        noteEn: "Combat: ~589 ₪/mo | Support: ~491 ₪/mo | Other: ~392 ₪/mo",
         category: "post_service",
       },
       {
         id: "personal_deposit",
         titleHe: "פיקדון אישי (6 ייעודים, 5 שנים)",
         titleEn: "Personal Deposit (6 Purposes, 5 Years)",
-        noteHe: "לימודים, דיור, עסק, נסיעות, חתונה, רכב",
-        noteEn: "Education, housing, business, travel, wedding, vehicle",
+        noteHe: "הקמת עסק, הכשרה מקצועית, נהיגה, לימודים, דירה, רכב",
+        noteEn: "Business, vocational training, driving, studies, apartment, vehicle",
         category: "post_service",
       },
       {
         id: "free_accommodation",
-        titleHe: "3 חודשי מגורים חינם",
-        titleEn: "3 Months Free Accommodation",
-        noteHe: "מיד לאחר שחרור",
-        noteEn: "Immediately after discharge",
+        titleHe: "בית החייל עד 3 חודשים",
+        titleEn: "Beit HaChayal Up to 3 Months",
+        noteHe: "ללא אפשרות הארכה. לאחר מכן — סיוע שכירות להשלמת 12 חודשים.",
+        noteEn: "No extension possible. Then rent assistance for remaining 12 months.",
         category: "post_service",
       }
     );
 
-    if (isImmigrant === true) {
-      rights.push({
-        id: "rent_assistance",
-        titleHe: "סיוע בשכירות (עד 12,000 ש\"ח)",
-        titleEn: "Rent Assistance (up to NIS 12,000)",
-        oneTimeAmount: 12000,
-        noteHe: "לעולים חדשים",
-        noteEn: "For new immigrants",
-        category: "post_service",
-      });
-    }
+    rights.push({
+      id: "rent_assistance_post",
+      titleHe: "סיוע בשכירות (עד 1,000 ש\"ח × 12 חודשים)",
+      titleEn: "Rent Assistance (up to NIS 1,000 × 12 months)",
+      monthlyAmount: 1000,
+      noteHe: "לחיילים שהיו מוכרים כבודדים וזכאים לדיור בשירות. פנייה לאגף והקרן.",
+      noteEn: "For soldiers recognized as Boded with housing benefits during service. Apply to Division & Fund.",
+      category: "post_service",
+    });
 
     rights.push(
       {
-        id: "rent_grant",
-        titleHe: "מענק שכירות חד-פעמי (5,000 ש\"ח)",
-        titleEn: "One-Time Rent Grant (NIS 5,000)",
-        oneTimeAmount: 5000,
-        noteHe: "מענק חד-פעמי",
-        noteEn: "One-time grant",
+        id: "tax_credits",
+        titleHe: "נקודות זיכוי ממס הכנסה",
+        titleEn: "Income Tax Credits",
+        noteHe: "2 נקודות זיכוי למשך 3 שנים (כ-484 ₪/חודש חיסכון). דרוש 23+ חודשי שירות (גברים) / 22+ (נשים).",
+        noteEn: "2 tax credit points for 3 years (~484 ₪/month savings). Requires 23+ months service (male) / 22+ (female).",
         category: "post_service",
       },
       {
-        id: "extended_benefits",
-        titleHe: "הטבות מורחבות — עד 10 שנים",
-        titleEn: "Extended Benefits — Up to 10 Years",
-        noteHe: "זכאות מורחבת לאחר שחרור",
-        noteEn: "Extended eligibility post-discharge",
+        id: "free_transport",
+        titleHe: "תחבורה ציבורית חינם (שנה)",
+        titleEn: "Free Public Transportation (1 Year)",
+        noteHe: "שנה של תחבורה ציבורית חינם מיום השחרור",
+        noteEn: "1 year free public transportation from discharge date",
         category: "post_service",
       },
       {
-        id: "career_assessment",
-        titleHe: "אבחון קריירה",
-        titleEn: "Career Assessment",
-        noteHe: "ייעוץ מקצועי חינם",
-        noteEn: "Free professional counseling",
+        id: "psychometric_voucher",
+        titleHe: "שובר קורס פסיכומטרי (1,500 ₪)",
+        titleEn: "Psychometric Course Voucher (1,500 ₪)",
+        oneTimeAmount: 1500,
+        noteHe: "1,500 ₪ חד-פעמי לקורס הכנה לפסיכומטרי",
+        noteEn: "1,500 ₪ one-time for psychometric prep course",
         category: "post_service",
       },
       {
-        id: "education_funding",
-        titleHe: "מימון לימודים",
-        titleEn: "Education Funding",
-        noteHe: "סיוע במימון לימודים",
-        noteEn: "Education funding assistance",
-        category: "post_service",
-      },
-      {
-        id: "knafayim",
-        titleHe: "תוכנית כנפיים",
-        titleEn: "Knafayim Program",
-        noteHe: "מלגות ותמיכה כלכלית",
-        noteEn: "Scholarships and financial support",
+        id: "discharge_seminar",
+        titleHe: "סדנת הכנה לאזרחות (5 ימים)",
+        titleEn: "Discharge Preparation Seminar (5 days)",
+        noteHe: "כ-3 חודשים לפני שחרור. גם אח גדול מקיים סדנאות!",
+        noteEn: "~3 months before discharge. Ach Gadol also runs seminars!",
         category: "post_service",
       }
     );
   }
 
-  // === Reserve Duty Rights ===
+  // === Reserve Duty Rights (per miluim.idf.il — Lone Reservist Support Fund) ===
   if (serviceStatus === "reserves") {
     rights.push(
       {
-        id: "reserve_accommodation",
-        titleHe: "מגורים בזמן מילואים",
-        titleEn: "Accommodation During Reserves",
-        noteHe: "מגורים מסובסדים",
-        noteEn: "Subsidized accommodation",
+        id: "reserve_household",
+        titleHe: "כלכלת בית",
+        titleEn: "Household Maintenance",
+        oneTimeAmount: 1000,
+        noteHe: "עד 1,000 ₪ — באישור ועדת חריגים. הקרן פעילה עד 31/12/2026.",
+        noteEn: "Up to 1,000 ₪ — approved by exceptions committee. Fund active through 31/12/2026.",
         category: "reserves",
       },
       {
-        id: "reserve_expenses",
-        titleHe: "החזר הוצאות",
-        titleEn: "Expense Reimbursement",
-        noteHe: "שכירות ומחיה",
-        noteEn: "Rent and living expenses",
+        id: "reserve_flight",
+        titleHe: "החזר טיסה",
+        titleEn: "Flight Reimbursement",
+        oneTimeAmount: 5000,
+        noteHe: "עד 5,000 ₪ לתושבי חוץ שגויסו בצו 8",
+        noteEn: "Up to 5,000 ₪ for non-residents called by Tzav 8",
         category: "reserves",
       },
       {
-        id: "reserve_mental_health",
-        titleHe: "בריאות הנפש",
-        titleEn: "Mental Health Support",
-        noteHe: "תמיכה מקצועית חינם",
-        noteEn: "Free professional support",
+        id: "reserve_family_grant",
+        titleHe: "מענק ניהול משק בית",
+        titleEn: "Family Management Grant",
+        oneTimeAmount: 2000,
+        noteHe: "8+ ימי צו 8 + יש ילד",
+        noteEn: "8+ days Tzav 8 + has child",
         category: "reserves",
       },
       {
-        id: "reserve_career",
-        titleHe: "ייעוץ תעסוקתי",
-        titleEn: "Career Counseling",
-        noteHe: "הכוונה מקצועית",
-        noteEn: "Professional guidance",
+        id: "reserve_enhanced",
+        titleHe: "מענק כלכלת בית מוגבר",
+        titleEn: "Enhanced Household Grant",
+        oneTimeAmount: 2500,
+        noteHe: "45 ימי צו 8 במערך הלחימה",
+        noteEn: "45 days Tzav 8 in combat array",
         category: "reserves",
       }
     );
