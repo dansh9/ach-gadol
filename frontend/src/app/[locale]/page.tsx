@@ -7,7 +7,6 @@ import {
   ClipboardCheck,
   MessageCircle,
   Users,
-  ArrowLeft,
   ArrowRight,
   Shield,
   Heart,
@@ -157,8 +156,7 @@ export default function HomePage() {
                   {/* Arrow indicator */}
                   <div className="mt-3 flex items-center gap-1 text-sm font-medium text-[hsl(var(--primary))] opacity-0 transition-opacity group-hover:opacity-100">
                     <span>{tCommon("learn_more")}</span>
-                    <ArrowLeft className="h-4 w-4 rtl:hidden" />
-                    <ArrowRight className="hidden h-4 w-4 rtl:inline-block" />
+                    <ArrowRight className="h-4 w-4 flip-in-rtl" />
                   </div>
                 </Link>
               );

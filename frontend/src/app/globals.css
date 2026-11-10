@@ -182,6 +182,11 @@
     transform: scaleX(-1);
   }
 
+  /* Auto-flip directional icons (chevrons, arrows) in RTL mode */
+  [dir="rtl"] .flip-in-rtl {
+    transform: scaleX(-1);
+  }
+
   [dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 1;
   }

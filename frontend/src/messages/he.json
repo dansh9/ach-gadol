@@ -84,7 +84,7 @@
     "subtitle": "ענו על מספר שאלות קצרות וגלו אילו זכויות מגיעות לכם.",
     "soldier_type": "סוג חייל בודד",
     "soldier_types": {
-      "lone_classic": "חייל בודד קלאסי (עלה חדש ללא משפחה בארץ)",
+      "lone_classic": "חייל בודד (עולה חדש ללא הורים בארץ)",
       "child_of_emigrants": "ילד להורים שעזבו את הארץ",
       "child_of_envoys": "ילד לשליחים בחו\"ל",
       "no_family_support": "ללא גב משפחתי (ניתוק מהמשפחה)",
@@ -133,7 +133,8 @@
     "sources_label": "מקורות:",
     "confidence_high": "ביטחון גבוה",
     "confidence_medium": "ביטחון בינוני",
-    "confidence_low": "ביטחון נמוך"
+    "confidence_low": "ביטחון נמוך",
+    "new_chat": "שיחה חדשה"
   },
   "resources": {
     "title": "משאבים שימושיים",

@@ -11,7 +11,6 @@ import {
   Shield,
   Target,
   HandHeart,
-  ArrowLeft,
   ArrowRight,
 } from "lucide-react";
 
@@ -292,8 +291,7 @@ export default function AboutPage() {
             >
               <HandHeart className="h-5 w-5" />
               <span>{t("join_volunteers")}</span>
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1 rtl:hidden" />
-              <ArrowRight className="hidden h-4 w-4 transition-transform group-hover:translate-x-1 rtl:inline-block" />
+              <ArrowRight className="h-4 w-4 flip-in-rtl transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
         </div>

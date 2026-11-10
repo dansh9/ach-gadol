@@ -510,8 +510,7 @@ export default function CheckPage() {
                 disabled={step === 0}
                 className="inline-flex items-center gap-1 rounded-xl border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
               >
-                <ChevronRight className="h-4 w-4 rtl:hidden" />
-                <ChevronLeft className="hidden h-4 w-4 rtl:inline-block" />
+                <ChevronLeft className="h-4 w-4 flip-in-rtl" />
                 {tCommon("back")}
               </button>
 
@@ -524,10 +523,7 @@ export default function CheckPage() {
                   ? tCheck("check_button")
                   : tCommon("next")}
                 {step < totalSteps - 1 && (
-                  <>
-                    <ChevronLeft className="h-4 w-4 rtl:hidden" />
-                    <ChevronRight className="hidden h-4 w-4 rtl:inline-block" />
-                  </>
+                  <ChevronRight className="h-4 w-4 flip-in-rtl" />
                 )}
                 {step === totalSteps - 1 && (
                   <ClipboardCheck className="h-4 w-4" />
