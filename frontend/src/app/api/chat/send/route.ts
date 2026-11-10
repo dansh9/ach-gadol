@@ -2,8 +2,35 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runRagPipeline } from "@/lib/rag/pipeline";
 
-// Allow up to 30s for the AI pipeline (embed + search + Claude streaming)
-export const maxDuration = 30;
+// Allow up to 60s for the AI pipeline (embed + search + Claude streaming + repair pass)
+export const maxDuration = 60;
+
+/* ---------- Rate Limiter (in-memory, per IP) ---------- */
+const WINDOW_MS = 60 * 1000; // 1 minute
+const MAX_REQUESTS = 15;     // max 15 requests per minute per IP
+
+const ipHits = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = ipHits.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    ipHits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > MAX_REQUESTS;
+}
+
+// Clean up stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  ipHits.forEach((entry, ip) => {
+    if (now > entry.resetAt) ipHits.delete(ip);
+  });
+}, 5 * 60 * 1000);
 
 /**
  * POST /api/chat/send
@@ -16,6 +43,18 @@ export const maxDuration = 30;
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit by IP
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
+      || request.headers.get("x-real-ip")
+      || "unknown";
+
+    if (isRateLimited(ip)) {
+      return NextResponse.json(
+        { error: "Too many requests. Please wait a moment." },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { sessionId, message, language = "he", channel = "website" } = body;
 
@@ -133,19 +172,7 @@ export async function POST(request: NextRequest) {
             .update({ updated_at: new Date().toISOString() })
             .eq("id", activeSessionId);
 
-          if (ragResult.confidence < 0.5) {
-            // Low confidence: also flag for human review
-            const flagReview = supabase.from("approval_queue").insert({
-              approval_type: "kb_update",
-              risk_level: ragResult.confidence < 0.3 ? "red" : "yellow",
-              ai_suggestion: { reply: ragResult.reply, question: message },
-              ai_sources: ragResult.sources,
-              status: "pending",
-            });
-            await Promise.all([storeBotMsg, updateSession, flagReview]);
-          } else {
-            await Promise.all([storeBotMsg, updateSession]);
-          }
+          await Promise.all([storeBotMsg, updateSession]);
         } catch (error) {
           console.error("Streaming pipeline error:", error);
           send({ type: "error", message: "Internal server error" });
