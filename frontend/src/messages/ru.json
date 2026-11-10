@@ -133,7 +133,8 @@
     "sources_label": "Источники:",
     "confidence_high": "Высокая уверенность",
     "confidence_medium": "Средняя уверенность",
-    "confidence_low": "Низкая уверенность"
+    "confidence_low": "Низкая уверенность",
+    "new_chat": "Новый чат"
   },
   "resources": {
     "title": "Полезные ресурсы",

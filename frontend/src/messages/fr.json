@@ -133,7 +133,8 @@
     "sources_label": "Sources :",
     "confidence_high": "Confiance élevée",
     "confidence_medium": "Confiance moyenne",
-    "confidence_low": "Confiance faible"
+    "confidence_low": "Confiance faible",
+    "new_chat": "Nouvelle discussion"
   },
   "resources": {
     "title": "Ressources utiles",

@@ -133,7 +133,8 @@
     "sources_label": "المصادر:",
     "confidence_high": "ثقة عالية",
     "confidence_medium": "ثقة متوسطة",
-    "confidence_low": "ثقة منخفضة"
+    "confidence_low": "ثقة منخفضة",
+    "new_chat": "محادثة جديدة"
   },
   "resources": {
     "title": "موارد مفيدة",

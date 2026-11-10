@@ -133,7 +133,8 @@
     "sources_label": "ምንጮች:",
     "confidence_high": "ከፍተኛ እምነት",
     "confidence_medium": "መካከለኛ እምነት",
-    "confidence_low": "ዝቅተኛ እምነት"
+    "confidence_low": "ዝቅተኛ እምነት",
+    "new_chat": "አዲስ ውይይት"
   },
   "resources": {
     "title": "ጠቃሚ ሀብቶች",

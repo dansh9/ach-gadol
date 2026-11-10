@@ -11,6 +11,7 @@ import {
   Loader2,
   ExternalLink,
   ArrowUpRight,
+  RotateCcw,
 } from "lucide-react";
 import SoldierAvatar from "@/components/SoldierAvatar";
 
@@ -585,6 +586,18 @@ export default function ChatPage() {
     sendMessage(text);
   }
 
+  function handleEndSession() {
+    setMessages([]);
+    setInput("");
+    setIsTyping(false);
+    const newSid = `web-${crypto.randomUUID()}`;
+    setSessionId(newSid);
+    try {
+      sessionStorage.removeItem(STORAGE_MESSAGES);
+      sessionStorage.setItem(STORAGE_SESSION, newSid);
+    } catch { /* ignore */ }
+  }
+
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -669,6 +682,17 @@ export default function ChatPage() {
       <div className="flex-shrink-0 pb-3 pt-1 sm:pb-5">
         <div className="mx-auto max-w-2xl px-3 sm:px-5">
           <div className="flex items-end gap-2 rounded-2xl border border-border/50 bg-card px-4 py-2.5 shadow-sm transition-all focus-within:border-[hsl(var(--primary)/0.4)] focus-within:shadow-md">
+            {!isWelcomeState && (
+              <button
+                onClick={handleEndSession}
+                disabled={isTyping}
+                title={tChat("new_chat")}
+                className="mb-0.5 inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-muted-foreground/60 transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-30"
+                aria-label={tChat("new_chat")}
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+            )}
             <textarea
               ref={inputRef}
               value={input}
