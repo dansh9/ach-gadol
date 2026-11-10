@@ -9,6 +9,17 @@ import { generateEmbedding } from "./embeddings";
 import { buildSystemPrompt, buildMessages } from "./prompts";
 import { detectLanguage } from "./language";
 
+/* ===== Models =====
+ * Defined in one place and overridable by env, so a model retirement becomes a
+ * config change rather than a code change. The previous hard-coded IDs
+ * (claude-sonnet-4-20250514, claude-3-5-haiku-20241022) were retired by
+ * Anthropic during 2026 and started returning 404 not_found_error, which took
+ * the assistant down on both the website and Telegram.
+ * Check availability with: GET https://api.anthropic.com/v1/models
+ */
+const ANSWER_MODEL = process.env.ANTHROPIC_ANSWER_MODEL || "claude-sonnet-5-5";
+const REPAIR_MODEL = process.env.ANTHROPIC_REPAIR_MODEL || "claude-haiku-5-5";
+
 export interface RagResult {
   reply: string;
   sources: string[];
@@ -268,7 +279,7 @@ export async function runRagPipeline(
       };
 
       const stream = anthropic.messages.stream({
-        model: "claude-sonnet-4-20250514",
+        model: ANSWER_MODEL,
         max_tokens: 2048,
         system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
         messages,
@@ -302,7 +313,7 @@ export async function runRagPipeline(
     } else {
       // Non-streaming mode (Telegram / WhatsApp)
       const response = await anthropic.messages.create({
-        model: "claude-sonnet-4-20250514",
+        model: ANSWER_MODEL,
         max_tokens: 2048,
         system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
         messages,
@@ -342,7 +353,7 @@ export async function runRagPipeline(
       try {
         timelog("repair pass start");
         const repairResponse = await anthropic.messages.create({
-          model: "claude-3-5-haiku-20241022",
+          model: REPAIR_MODEL,
           max_tokens: 256,
           system: `You are a formatting repair tool. The following chatbot response is missing 2–3 follow-up suggestions. Output ONLY 2-3 lines starting with ">> ". Use the same language as the original response.`,
           messages: [{ role: "user", content: cleanReply.slice(0, 500) }],
