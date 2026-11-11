@@ -41,6 +41,19 @@ interface QuickAction {
 
 const FALLBACK_SOURCE_URL = "https://www.achgadol.org";
 
+/**
+ * Build a citation href.
+ *
+ * FALLBACK_SOURCE_URL used to be a relative path ("/rights"), so both call
+ * sites prefixed it with the locale. When it became an absolute URL the
+ * prefixing stayed, producing "/hehttps://www.achgadol.org" — a dead link on
+ * every citation that falls back. Only prefix relative paths.
+ */
+function resolveSourceHref(url: string | undefined, locale: string): string {
+  const target = url && url.trim() ? url.trim() : FALLBACK_SOURCE_URL;
+  return /^(https?:)?\/\//i.test(target) ? target : `/${locale}${target}`;
+}
+
 /* ===== sessionStorage keys — persist chat within the same tab ===== */
 const STORAGE_MESSAGES = "ach-gadol-chat-msgs";
 const STORAGE_SESSION = "ach-gadol-chat-sid";
@@ -94,7 +107,7 @@ function BotMessageContent({
   const withCitations = cleaned.replace(/\[(\d+)\]/g, (match, num) => {
     if (sourceMap && sourceMap[num]) {
       const source = sourceMap[num];
-      const href = source.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+      const href = resolveSourceHref(source.url, locale);
       return `[⁠${num}⁠](${href} "${source.title}")`;
     }
     return match;
@@ -270,7 +283,7 @@ function MessageRow({
                 const mapEntry = message.sourceMap
                   ? Object.values(message.sourceMap).find((s) => s.title === source)
                   : null;
-                const href = mapEntry?.url || `/${locale}${FALLBACK_SOURCE_URL}`;
+                const href = resolveSourceHref(mapEntry?.url, locale);
                 return (
                   <a
                     key={i}
