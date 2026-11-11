@@ -71,7 +71,11 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
           .from("kb_chunks")
           .select("chunk_text, kb_document_id, embedding, metadata")
           .not("embedding", "is", null),
-        supabase.from("kb_documents").select("id, title, source_url"),
+        // AG-SEC-05: only published documents may reach public chat context.
+        supabase
+          .from("kb_documents")
+          .select("id, title, source_url")
+          .eq("is_active", true),
       ]),
       timeoutPromise,
     ])) as unknown as [{ data: Array<{ chunk_text: string; kb_document_id: string; embedding: string | number[]; metadata: Record<string, unknown> }> | null }, { data: Array<{ id: string; title: string; source_url?: string }> | null }];
@@ -93,6 +97,9 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
     _chunkCache = chunksData
       .map((chunk) => {
         try {
+          // AG-SEC-05: a chunk whose document is inactive/withdrawn is dropped
+          // here rather than relying on prompt instructions to ignore it.
+          if (!docMap[chunk.kb_document_id]) return null;
           return {
             chunk_text: chunk.chunk_text,
             metadata: chunk.metadata || {},
@@ -100,8 +107,8 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
               typeof chunk.embedding === "string"
                 ? (JSON.parse(chunk.embedding) as number[])
                 : chunk.embedding,
-            document_title: docMap[chunk.kb_document_id]?.title || "Unknown",
-            source_url: docMap[chunk.kb_document_id]?.source_url || "",
+            document_title: docMap[chunk.kb_document_id]!.title,
+            source_url: docMap[chunk.kb_document_id]!.source_url,
           };
         } catch {
           return null;

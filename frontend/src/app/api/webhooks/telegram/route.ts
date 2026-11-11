@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { handleIncomingMessage, endSession } from "@/lib/channels/handler";
 import { detectLanguage } from "@/lib/rag/language";
 import {
@@ -25,6 +26,7 @@ const chatHits = new Map<number, { count: number; resetAt: number }>();
 
 function isRateLimited(chatId: number): boolean {
   const now = Date.now();
+  pruneHits(now);
   const entry = chatHits.get(chatId);
 
   if (!entry || now > entry.resetAt) {
@@ -36,13 +38,14 @@ function isRateLimited(chatId: number): boolean {
   return entry.count > MAX_REQUESTS;
 }
 
-// Clean up stale entries every 5 minutes
-setInterval(() => {
-  const now = Date.now();
+// Pruned opportunistically: a module-scope setInterval never fires reliably
+// in a serverless runtime. Note this limiter is per instance (AG-SEC-08).
+function pruneHits(now: number): void {
+  if (chatHits.size < 5000) return;
   chatHits.forEach((entry, id) => {
     if (now > entry.resetAt) chatHits.delete(id);
   });
-}, 5 * 60 * 1000);
+}
 
 /* ===== Per-user language preference (in-memory, survives warm instances) ===== */
 const userLanguageMap = new Map<number, string>();
@@ -170,14 +173,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify webhook secret token
-    if (TELEGRAM_SECRET) {
-      const secretHeader = request.headers.get(
-        "x-telegram-bot-api-secret-token"
-      );
-      if (secretHeader !== TELEGRAM_SECRET) {
-        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-      }
+    /* AG-SEC-07: fail CLOSED. The check used to be skipped entirely when no
+     * secret was configured, which left the endpoint open to forged updates. */
+    if (!TELEGRAM_SECRET) {
+      console.error("TELEGRAM_WEBHOOK_SECRET is not set — refusing webhook traffic");
+      return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
+    }
+
+    const secretHeader = request.headers.get("x-telegram-bot-api-secret-token");
+    const given = Buffer.from(secretHeader || "");
+    const want = Buffer.from(TELEGRAM_SECRET);
+    if (given.length !== want.length || !crypto.timingSafeEqual(given, want)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const update = await request.json();

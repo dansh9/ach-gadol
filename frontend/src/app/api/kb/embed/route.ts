@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { generateEmbeddings } from "@/lib/rag/embeddings";
-
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+import { requireAdmin } from "@/lib/security";
 
 /**
  * POST /api/kb/embed
@@ -11,16 +10,10 @@ const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
  */
 export async function POST(request: NextRequest) {
   try {
-    // Admin authentication required — this endpoint costs money (OpenAI API)
-    const authHeader = request.headers.get("authorization");
-    const providedKey = authHeader?.replace("Bearer ", "");
-
-    if (!ADMIN_API_KEY || providedKey !== ADMIN_API_KEY) {
-      return NextResponse.json(
-        { error: "Unauthorized — admin API key required" },
-        { status: 401 }
-      );
-    }
+    // Admin only — this endpoint costs money (OpenAI API).
+    // requireAdmin compares in constant time and fails closed if the key is unset.
+    const denied = requireAdmin(request);
+    if (denied) return denied;
 
     const supabase = createAdminClient();
 

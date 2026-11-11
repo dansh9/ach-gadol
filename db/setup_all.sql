@@ -1,7 +1,7 @@
 -- =============================================================================
 -- Ach Gadol - Complete Database Setup
 -- Run this ONCE in the Supabase SQL Editor:
--- https://supabase.com/dashboard/project/bbwbvpiagbiwlvxqqycb/sql/new
+-- https://supabase.com/dashboard/project/<PROJECT_REF>/sql/new
 -- =============================================================================
 
 -- ======================== STEP 1: SCHEMA ========================

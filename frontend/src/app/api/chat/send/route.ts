@@ -1,6 +1,56 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { runRagPipeline } from "@/lib/rag/pipeline";
+
+/* ===== Session ownership (AG-SEC-02) =====
+ * The conversation id is NEVER taken from the request body: anyone who learned
+ * another visitor's UUID could otherwise read that conversation (its history is
+ * fed into the model context) and append messages to it.
+ * Instead the server issues an HttpOnly cookie holding "<uuid>.<hmac>". Only a
+ * value this server signed is accepted, so a client cannot name someone else's
+ * session.
+ */
+const SESSION_COOKIE = "ag_session";
+const SESSION_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+
+function sessionSecret(): string {
+  // SESSION_SECRET is preferred; the service-role key is always present
+  // server-side and never leaves it, so it is a safe fallback.
+  return process.env.SESSION_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+}
+
+function signSession(id: string): string {
+  return crypto.createHmac("sha256", sessionSecret()).update(id).digest("base64url");
+}
+
+function buildSessionCookie(id: string): string {
+  return [
+    `${SESSION_COOKIE}=${id}.${signSession(id)}`,
+    "Path=/",
+    "HttpOnly",
+    "Secure",
+    "SameSite=Lax",
+    `Max-Age=${SESSION_MAX_AGE}`,
+  ].join("; ");
+}
+
+/** Returns the session id only if this server signed it. */
+function readSessionCookie(request: NextRequest): string | null {
+  const raw = request.cookies.get(SESSION_COOKIE)?.value;
+  if (!raw) return null;
+  const dot = raw.lastIndexOf(".");
+  if (dot <= 0) return null;
+  const id = raw.slice(0, dot);
+  const mac = Buffer.from(raw.slice(dot + 1));
+  const expected = Buffer.from(signSession(id));
+  if (mac.length !== expected.length) return null;
+  if (!crypto.timingSafeEqual(mac, expected)) return null;
+  return id;
+}
+
+const ALLOWED_CHANNELS = new Set(["website"]);
+const ALLOWED_LANGUAGES = new Set(["he", "en", "ru", "am", "fr", "es", "ar"]);
 
 // Allow up to 60s for the AI pipeline (embed + search + Claude streaming + repair pass)
 export const maxDuration = 60;
@@ -13,6 +63,7 @@ const ipHits = new Map<string, { count: number; resetAt: number }>();
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
+  pruneHits(now);
   const entry = ipHits.get(ip);
 
   if (!entry || now > entry.resetAt) {
@@ -24,13 +75,17 @@ function isRateLimited(ip: string): boolean {
   return entry.count > MAX_REQUESTS;
 }
 
-// Clean up stale entries every 5 minutes
-setInterval(() => {
-  const now = Date.now();
+// NOTE: this limiter is per serverless instance, so it bounds a single
+// instance rather than the deployment. A distributed limiter is still needed
+// for real abuse protection (AG-SEC-08).
+// Entries are pruned opportunistically; a module-scope setInterval never fires
+// reliably in a serverless runtime.
+function pruneHits(now: number): void {
+  if (ipHits.size < 5000) return;
   ipHits.forEach((entry, ip) => {
     if (now > entry.resetAt) ipHits.delete(ip);
   });
-}, 5 * 60 * 1000);
+}
 
 /**
  * POST /api/chat/send
@@ -56,7 +111,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { sessionId, message, language = "he", channel = "website" } = body;
+    const { message, reset } = body;
+    const language = ALLOWED_LANGUAGES.has(body.language) ? body.language : "he";
+    const channel = ALLOWED_CHANNELS.has(body.channel) ? body.channel : "website";
 
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return NextResponse.json(
@@ -74,10 +131,24 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    let activeSessionId = sessionId;
 
-    // Create new session if none provided
-    if (!activeSessionId) {
+    // AG-SEC-02: ownership comes from the signed cookie, never from the body.
+    // `reset: true` deliberately abandons the current session and starts a new one.
+    let resolvedSessionId: string | null =
+      reset === true ? null : readSessionCookie(request);
+    let issuedNewSession = false;
+
+    if (resolvedSessionId) {
+      // The cookie is authentic, but the row may have been deleted since.
+      const { data: existing } = await supabase
+        .from("chat_sessions")
+        .select("id")
+        .eq("id", resolvedSessionId)
+        .maybeSingle();
+      if (!existing) resolvedSessionId = null;
+    }
+
+    if (!resolvedSessionId) {
       const { data: session, error: sessionError } = await supabase
         .from("chat_sessions")
         .insert({
@@ -95,8 +166,12 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
-      activeSessionId = session.id;
+      resolvedSessionId = session.id as string;
+      issuedNewSession = true;
     }
+
+    // Definitely a string from here on — keeps the rest of the handler simple.
+    const activeSessionId: string = resolvedSessionId;
 
     // Store user message + fetch conversation history IN PARALLEL
     const [storeResult, { data: history }] = await Promise.all([
@@ -182,13 +257,16 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache, no-transform",
-        Connection: "keep-alive",
-      },
-    });
+    const responseHeaders: Record<string, string> = {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache, no-transform",
+      Connection: "keep-alive",
+    };
+    if (issuedNewSession) {
+      responseHeaders["Set-Cookie"] = buildSessionCookie(activeSessionId);
+    }
+
+    return new Response(stream, { headers: responseHeaders });
   } catch (error) {
     console.error("Chat send error:", error);
     return NextResponse.json(

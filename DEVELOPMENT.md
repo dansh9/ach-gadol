@@ -10,14 +10,14 @@ and from file modification timestamps in the working tree, so the record is comp
 ---
 
 ## Phase 1 — Foundation and RAG chatbot
-**27 Feb – 1 Mar 2026 · 59 commits · fully in git history**
+**27 Feb – 1 Mar 2026 · 58 commits · fully in git history**
 
 The core of the platform was built in an intensive three-day push.
 
 | Date | Work |
 |---|---|
 | 27 Feb | Project scaffold (Next.js 14 App Router, Tailwind, TypeScript). Supabase integration, initial schema, `match_kb_chunks` migration for pgvector search. i18n routing for 7 languages. |
-| 28 Feb | Visual identity aligned to achgadol.org. The bulk of the RAG chatbot: KB vector search with in-app cosine-similarity fallback, embedding-string parsing fix, multilingual similarity thresholds, streaming responses, citation links to source pages, response caching and parallelisation. Chat UI rebuilt several times to land on a clean layout. API security hardening (auth, validation, webhook verification). |
+| 28 Feb | Visual identity aligned to achgadol.org. The bulk of the RAG chatbot: KB vector search with in-app cosine-similarity fallback, embedding-string parsing fix, multilingual similarity thresholds, streaming responses, citation links to source pages, response caching and parallelisation. Chat UI rebuilt several times to land on a clean layout. A first pass at API hardening — input validation and an admin key on the embedding endpoint. Webhook signature verification was begun but left incomplete, and several routes still had no authentication; see SECURITY.md for what was actually closed, and when. |
 | 1 Mar | Rights page redesign. System prompt rewritten as a case-assistant with a strict answer template. All Kol-Zchut links replaced with official government sources. Chat history persisted in `sessionStorage`. Every financial figure verified against idf.il and hachvana.mod.gov.il and corrected across `prompts.ts` and all 7 locale files. |
 
 The last commit, `Verify and correct all financial amounts from official sources`,
@@ -64,20 +64,35 @@ The largest single body of content work in the project.
 | | |
 |---|---|
 | Active development window | 27 Feb – 15 Mar 2026 |
-| Commits in git history | 59 (27 Feb – 1 Mar) |
+| Commits from that sprint | 58 (27 Feb – 1 Mar) |
 | Working days with changes after the last commit | 7 (2, 3, 4, 5, 7, 14, 15 Mar) |
 | Source files in the project (excluding dependencies) | ~60 |
 | Languages supported | 7 (he, en, ru, am, fr, es, ar) |
 
 ## A note on the commit history
 
-The commits were made with git's default local identity on the machine used for
-development, which resolved to the macOS account name on that computer rather than
-to a configured author. The identity on the existing commits therefore reflects the
-machine account, not necessarily the author.
+Two things about this repository's history should be stated plainly, because an
+inaccurate record is worse than an incomplete one.
 
-Work after 1 Mar 2026 was done locally without commits. The dates in Phases 2–4 are
-taken from file modification timestamps in the working tree, which is why this
-document exists: it is the honest record of a development period that git did not
-capture. The commits that bring this work into the repository carry the date they
-were actually made, not backdated dates.
+**The author field was re-attributed on 10 November 2026.** The commits from the
+February–March sprint were originally recorded under the development machine's default
+git identity — the macOS account name on the computer the work was done on — because no
+`user.name` or `user.email` had been configured in that checkout. On 10 November 2026 the
+history was rewritten with `git filter-repo` so every commit carries a single, correct
+author, and the result was force-pushed. The commit dates and the content of every commit
+are unchanged; only the author field differs from what was originally recorded.
+
+<!-- TODO(Daniel): state on whose computer the work was done and confirm the commits are
+yours. If anyone else contributed, add them here and as Co-authored-by in future commits. -->
+
+**Phases 2–4 below were never committed at the time.** Their dates come from file
+modification timestamps in the working tree, not from git. That work was committed on
+10 November 2026, in commits carrying that date — they are not backdated, and the
+contribution graph reflects when the commits were made rather than when the work was done.
+This document exists to record the difference.
+
+## How this was built (AI-assisted)
+
+<!-- TODO(Daniel): what you decided and did yourself (requirements with the CEO, verifying
+amounts against official sources, testing, deployment) vs. what Claude / Claude Code
+generated. Be specific — an interviewer will ask, and a clear answer is a strength. -->

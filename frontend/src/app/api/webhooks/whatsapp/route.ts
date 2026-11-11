@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import { handleIncomingMessage } from "@/lib/channels/handler";
 import { detectLanguage } from "@/lib/rag/language";
 
@@ -31,25 +32,52 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    // Integration disabled — nothing configured, nothing to do.
     if (!WHATSAPP_TOKEN || !WHATSAPP_PHONE_ID) {
       return NextResponse.json({ ok: true });
     }
 
-    // Verify X-Hub-Signature-256 if app secret is configured
-    if (WHATSAPP_APP_SECRET) {
-      const signature = request.headers.get("x-hub-signature-256");
-      if (!signature) {
-        return NextResponse.json({ error: "Missing signature" }, { status: 403 });
-      }
-      // Note: Full HMAC verification requires reading raw body;
-      // for now we check that the header is present when the secret is configured.
-      // TODO: Implement full HMAC-SHA256 verification with raw body
+    /* AG-SEC-01: fail CLOSED. Previously the handler only checked that the
+     * signature header existed, and skipped verification entirely when no app
+     * secret was set — so anyone who knew the URL could forge Meta events,
+     * drive paid AI calls and make the bot message arbitrary numbers. */
+    if (!WHATSAPP_APP_SECRET) {
+      console.error("WHATSAPP_APP_SECRET is not set — refusing webhook traffic");
+      return NextResponse.json({ error: "Webhook not configured" }, { status: 503 });
     }
 
-    const body = await request.json();
+    // The raw bytes must be read BEFORE parsing: the HMAC covers the exact body.
+    const rawBody = await request.text();
+
+    if (rawBody.length > 1_000_000) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+    }
+
+    const signature = request.headers.get("x-hub-signature-256");
+    if (!signature || !signature.startsWith("sha256=")) {
+      return NextResponse.json({ error: "Missing signature" }, { status: 403 });
+    }
+
+    const expected =
+      "sha256=" +
+      crypto.createHmac("sha256", WHATSAPP_APP_SECRET).update(rawBody).digest("hex");
+
+    const given = Buffer.from(signature);
+    const want = Buffer.from(expected);
+    if (given.length !== want.length || !crypto.timingSafeEqual(given, want)) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
+    }
+
+    let body: Record<string, unknown>;
+    try {
+      body = JSON.parse(rawBody);
+    } catch {
+      return NextResponse.json({ error: "Malformed payload" }, { status: 400 });
+    }
 
     // Extract messages from webhook payload
-    const entry = body.entry?.[0];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const entry = (body as any).entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;
 
