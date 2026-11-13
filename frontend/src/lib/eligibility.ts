@@ -31,6 +31,41 @@ export interface EligibleRight {
   noteHe: string;
   noteEn: string;
   category: "financial" | "housing" | "vacations" | "post_service" | "reserves";
+  /**
+   * Rights sharing a group are alternatives, not additions. Only the highest
+   * monthlyAmount in the group counts toward a total. Both are still listed,
+   * because which one applies depends on the soldier's housing situation.
+   */
+  exclusiveGroup?: string;
+}
+
+/**
+ * Monthly total across eligible rights, counting each exclusive group once.
+ *
+ * Summing every monthlyAmount overstated the total, because rent reimbursement
+ * (option A) and the housing maintenance allowance (option A2) are alternatives
+ * and cannot both be received. The notes on those two rights have always said
+ * so; the total did not reflect it.
+ */
+export function totalMonthly(rights: EligibleRight[]): number {
+  const bestPerGroup = new Map<string, number>();
+  let sum = 0;
+
+  for (const right of rights) {
+    const amount = right.monthlyAmount ?? 0;
+    if (right.exclusiveGroup) {
+      const best = bestPerGroup.get(right.exclusiveGroup) ?? 0;
+      bestPerGroup.set(right.exclusiveGroup, Math.max(best, amount));
+    } else {
+      sum += amount;
+    }
+  }
+
+  bestPerGroup.forEach((amount) => {
+    sum += amount;
+  });
+
+  return sum;
 }
 
 export function calculateEligibility(answers: EligibilityAnswers): EligibleRight[] {
@@ -159,6 +194,7 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
       noteHe: "השתתפות בשכ\"ד חודשי. שימו לב: עלויות מחייה גבוהות מההשתתפות! אפשרות A ו-A2 הן חלופיות (לא מצטברות).",
       noteEn: "Monthly rent reimbursement. Note: living costs exceed reimbursement! Options A and A2 are alternatives (not additive).",
       category: "housing",
+      exclusiveGroup: "housing_option_a",
     });
 
     rights.push({
@@ -169,6 +205,7 @@ export function calculateEligibility(answers: EligibilityAnswers): EligibleRight
       noteHe: "לחיילים הגרים בדירה אך לא משלמים שכ\"ד. חלופה לאפשרות A — לא ניתן לקבל שכ\"ד והא\"ד יחד.",
       noteEn: "For soldiers in an apartment but NOT paying rent. Alternative to Option A — cannot receive both.",
       category: "housing",
+      exclusiveGroup: "housing_option_a",
     });
 
     rights.push({

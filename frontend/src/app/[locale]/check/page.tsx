@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import {
   calculateEligibility,
+  totalMonthly as computeTotalMonthly,
   type EligibilityAnswers as Answers,
   type EligibleRight,
   type SoldierType,
@@ -229,8 +230,7 @@ export default function CheckPage() {
   );
 
   const totalMonthly = useMemo(
-    () =>
-      eligibleRights.reduce((sum, r) => sum + (r.monthlyAmount ?? 0), 0),
+    () => computeTotalMonthly(eligibleRights),
     [eligibleRights]
   );
 
