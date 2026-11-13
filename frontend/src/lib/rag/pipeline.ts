@@ -272,7 +272,18 @@ export async function runRagPipeline(
 
   // 8. Call Claude (streaming or non-streaming)
   try {
-    const anthropic = new Anthropic({ apiKey: anthropicKey });
+    /* The SDK default is a 10-minute timeout with 2 retries, which outlives the
+     * route's maxDuration of 60s: a stalled call never throws, the fallback
+     * reply below is never reached, and Vercel kills the function with nothing
+     * logged — the user just gets silence. Bound it so a stall becomes a caught
+     * error with time left to answer. Worst case here is 2 x 20s, and the
+     * repair pass is already skipped once the pipeline passes 40s. For scale,
+     * a healthy answer call returns in about 1.5s. */
+    const anthropic = new Anthropic({
+      apiKey: anthropicKey,
+      timeout: 20_000,
+      maxRetries: 1,
+    });
 
     let rawReply = "";
 
