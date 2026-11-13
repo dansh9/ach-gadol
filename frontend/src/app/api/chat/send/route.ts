@@ -235,16 +235,21 @@ export async function POST(request: NextRequest) {
             confidence: ragResult.confidence,
           });
 
-          // Store assistant message + update session IN PARALLEL (non-blocking)
-          const storeBotMsg = supabase
-            .from("chat_messages")
-            .insert({
-              session_id: activeSessionId,
-              role: "assistant",
-              content: ragResult.reply,
-              confidence: ragResult.confidence,
-              sources: ragResult.sources,
-            });
+          // Store assistant message + update session IN PARALLEL (non-blocking).
+          // A service-error reply is streamed to the user but never stored:
+          // otherwise the model reads "Service is temporarily unavailable" as
+          // its own previous answer on the next message.
+          const storeBotMsg = ragResult.isError
+            ? Promise.resolve()
+            : supabase
+                .from("chat_messages")
+                .insert({
+                  session_id: activeSessionId,
+                  role: "assistant",
+                  content: ragResult.reply,
+                  confidence: ragResult.confidence,
+                  sources: ragResult.sources,
+                });
 
           const updateSession = supabase
             .from("chat_sessions")

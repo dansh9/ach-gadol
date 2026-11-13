@@ -110,14 +110,21 @@ export async function handleIncomingMessage(
     msg.language
   );
 
-  // Store assistant response
-  await supabase.from("chat_messages").insert({
-    session_id: sessionId,
-    role: "assistant",
-    content: ragResult.reply,
-    confidence: ragResult.confidence,
-    sources: ragResult.sources,
-  });
+  // Store assistant response. A service-error reply is shown to the user but
+  // never stored: otherwise the model reads "Service is temporarily
+  // unavailable" as its own previous answer on the next message.
+  if (!ragResult.isError) {
+    const { error: storeError } = await supabase.from("chat_messages").insert({
+      session_id: sessionId,
+      role: "assistant",
+      content: ragResult.reply,
+      confidence: ragResult.confidence,
+      sources: ragResult.sources,
+    });
+    if (storeError) {
+      console.error("[handler] storing assistant message failed:", storeError.message);
+    }
+  }
 
   // Update session timestamp
   await supabase

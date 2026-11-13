@@ -41,6 +41,13 @@ export interface RagResult {
   sourceMap: Record<string, { title: string; url?: string }>;
   confidence: number;
   language: string;
+  /**
+   * True when `reply` is the service-unavailable message rather than an answer.
+   * Callers must not store it as the assistant's turn: on the next message the
+   * model would read "Service is temporarily unavailable" as its own previous
+   * answer and continue from there.
+   */
+  isError?: boolean;
 }
 
 interface ConversationMessage {
@@ -174,7 +181,14 @@ function buildErrorResult(
       ? `השירות אינו זמין כרגע. אנא נסו שוב מאוחר יותר.\n\nלעזרה מיידית, פנו למתנדב אח גדול:\n- וואטסאפ: 058-785-0457\n- מייל: info@achgadol.org\n\n(קוד: ${errorId})`
       : `Service is temporarily unavailable. Please try again later.\n\nFor immediate help, contact an Ach Gadol volunteer:\n- WhatsApp: +972-58-785-0457\n- Email: info@achgadol.org\n\n(ref: ${errorId})`;
   if (onToken) onToken(reply);
-  return { reply, sources: [], sourceMap: {}, confidence: 0, language };
+  return {
+    reply,
+    sources: [],
+    sourceMap: {},
+    confidence: 0,
+    language,
+    isError: true,
+  };
 }
 
 /**
