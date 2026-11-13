@@ -187,6 +187,18 @@ docker build -t ach-gadol .
 docker run -p 3000:3000 --env-file .env.local ach-gadol
 ```
 
+## How this was built
+
+This project was built with Claude Code. Claude generated most of the code and assisted
+with architecture, integrations, documentation and fixes. Commits it contributed to carry
+a `Co-Authored-By: Claude` trailer.
+
+[DEVELOPMENT.md](DEVELOPMENT.md) records the phase-by-phase history and two facts about
+the commit record: the author field was re-attributed on 10 November 2026, and the
+February to March work was committed later than it was done.
+[SECURITY_REMEDIATION.md](SECURITY_REMEDIATION.md) covers the security review and the
+fixes it produced.
+
 ## License
 
 Private - Ach Gadol Organization
