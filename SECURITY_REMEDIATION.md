@@ -62,10 +62,19 @@ visitor could run up provider charges — and disclosed configured-secret names,
 upstream error bodies, available models and the Telegram webhook configuration.
 
 The public response is now `{ status, timestamp }` and nothing else, with no
-upstream calls. Full diagnostics require `?key=` matching `HEALTH_DIAG_KEY`
-(minimum 16 characters), compared in constant time; if that variable is unset
-the diagnostics are unavailable. The Telegram bot token is redacted from any
+upstream calls. Full diagnostics moved to `/api/health/deep` and require an
+`Authorization: Bearer` header matching `ADMIN_API_KEY` (minimum 16
+characters), compared in constant time; if that variable is unset the
+diagnostics are unavailable. The Telegram bot token is redacted from any
 output.
+
+> **Correction (13 November 2026).** An earlier version of this document and
+> the `4a9d2af` commit message described a `?key=` query parameter matching
+> `HEALTH_DIAG_KEY`. That variable was never used. The implemented check is
+> `ADMIN_API_KEY` in an `Authorization: Bearer` header, which is also what the
+> README and `frontend/.env.example` describe. A query parameter was avoided
+> because it lands in server and proxy logs. The commit message was not
+> amended, because that would mean rewriting published history.
 
 ### AG-SEC-03 — Public KB search
 `/api/kb/search` had no authentication, used the service-role client, returned
@@ -146,8 +155,8 @@ worthwhile and should be delivered as a reviewed migration.
 
 These cannot be done in code and are listed without values:
 
-1. Set `HEALTH_DIAG_KEY` in the Vercel project (16+ random characters) to
-   re-enable the detailed diagnostics.
+1. Set `ADMIN_API_KEY` in the Vercel project (16+ random characters) to
+   re-enable the detailed diagnostics at `/api/health/deep`.
 2. Set `SESSION_SECRET` in the Vercel project. Without it the chat session
    cookie is signed with the service-role key, which works but couples two
    unrelated secrets.

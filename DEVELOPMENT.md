@@ -71,7 +71,7 @@ The largest single body of content work in the project.
 
 ## A note on the commit history
 
-Three things about this repository's history should be stated plainly, because an
+Four things about this repository's history should be stated plainly, because an
 inaccurate record is worse than an incomplete one.
 
 **The author field was re-attributed on 10 November 2026.** The commits from the
@@ -83,15 +83,21 @@ author, and the result was force-pushed. The commit dates and the content of eve
 are unchanged; only the author field differs from what was originally recorded.
 
 That machine was a shared family computer, and the identity git picked up was its macOS
-account rather than mine. The code in those commits is my own work. No one else
-contributed code to this repository; where Claude Code contributed, the commit carries a
-`Co-Authored-By: Claude` trailer.
+account rather than mine. No other person contributed code to this repository. Most of
+the code was generated with Claude Code, as described in "How this was built" below.
 
 **Phases 2–4 below were never committed at the time.** Their dates come from file
 modification timestamps in the working tree, not from git. That work was committed on
 10 November 2026, in commits carrying that date — they are not backdated, and the
 contribution graph reflects when the commits were made rather than when the work was done.
 This document exists to record the difference.
+
+**The `Co-Authored-By` trailer was applied inconsistently before 13 November 2026.**
+Fourteen commits carry no trailer: `3039cac`, `38a4989`, `637b051`, `cc967a3`, `49305c4`,
+`44fe26c`, `e7fbee3`, `db2fd90`, `10b6bec`, `fea76ef`, `27324cc`, `4a9d2af`, `3cc264e`,
+`ee99128`. Among them is `4a9d2af`, the security remediation that this document describes
+as carried out with Claude Code. The trailer was not added retroactively, because doing so
+would mean rewriting published history. Commits from 13 November 2026 onward carry it.
 
 **An internal QA audit report was removed from the working tree on 13 November 2026.**
 `frontend/QA_AUDIT_REPORT.md` was an AI-generated QA pass dated 3 March 2026, covering

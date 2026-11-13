@@ -2,6 +2,8 @@
 
 AI-powered platform helping lone soldiers (Chayalim Bodedim) in the IDF navigate their rights, entitlements, and bureaucratic processes. Built for the Ach Gadol organization.
 
+Live demo: https://frontend-swart-chi-12.vercel.app
+
 Security model and known limitations: [SECURITY.md](SECURITY.md)
 
 ## What it does
@@ -190,12 +192,15 @@ docker run -p 3000:3000 --env-file .env.local ach-gadol
 ## How this was built
 
 This project was built with Claude Code. Claude generated most of the code and assisted
-with architecture, integrations, documentation and fixes. Commits it contributed to carry
-a `Co-Authored-By: Claude` trailer.
+with architecture, integrations, documentation and fixes. Commits from 13 November 2026
+onward carry a `Co-Authored-By: Claude` trailer; earlier ones are inconsistent, which
+[DEVELOPMENT.md](DEVELOPMENT.md) records.
 
-[DEVELOPMENT.md](DEVELOPMENT.md) records the phase-by-phase history and two facts about
-the commit record: the author field was re-attributed on 10 November 2026, and the
-February to March work was committed later than it was done.
+[DEVELOPMENT.md](DEVELOPMENT.md) also records the phase-by-phase history and four facts
+about the commit record: the author field was re-attributed on 10 November 2026, the
+February to March work was committed later than it was done, an AI-generated QA report
+was removed from the working tree on 13 November 2026 and is still readable in history,
+and the co-author trailer was applied inconsistently before that date.
 [SECURITY_REMEDIATION.md](SECURITY_REMEDIATION.md) covers the security review and the
 fixes it produced.
 
