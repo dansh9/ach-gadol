@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import ReactMarkdown from "react-markdown";
+import { buildSendBody } from "@/lib/chat/request";
 import {
   Send,
   ClipboardCheck,
@@ -57,6 +58,7 @@ function resolveSourceHref(url: string | undefined, locale: string): string {
 /* ===== sessionStorage keys — persist chat within the same tab ===== */
 const STORAGE_MESSAGES = "ach-gadol-chat-msgs";
 const STORAGE_SESSION = "ach-gadol-chat-sid";
+const STORAGE_RESET = "ach-gadol-chat-reset";
 
 /* ===== Parse follow-up suggestions from bot content ===== */
 
@@ -330,6 +332,8 @@ export default function ChatPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const userScrolledUp = useRef(false);
+  /** Set by handleEndSession; makes the next send ask the server for a new session. */
+  const resetNext = useRef(false);
 
   const quickActions: QuickAction[] = [
     {
@@ -459,17 +463,26 @@ export default function ChatPage() {
         inputRef.current.style.height = "auto";
       }
 
+      let reset = resetNext.current;
+      try {
+        reset = reset || sessionStorage.getItem(STORAGE_RESET) === "1";
+      } catch { /* ignore */ }
+
       try {
         const response = await fetch("/api/chat/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sessionId,
-            message: text.trim(),
-            language: locale,
-            channel: "website",
-          }),
+          body: JSON.stringify(
+            buildSendBody({ message: text, locale, reset })
+          ),
         });
+
+        if (response.ok) {
+          resetNext.current = false;
+          try {
+            sessionStorage.removeItem(STORAGE_RESET);
+          } catch { /* ignore */ }
+        }
 
         if (!response.ok || !response.body) {
           throw new Error("Failed to send message");
@@ -599,15 +612,27 @@ export default function ChatPage() {
     sendMessage(text);
   }
 
+  /**
+   * Start a new conversation.
+   *
+   * Clearing local state is not enough: the server identifies the session by
+   * the signed HttpOnly ag_session cookie, which JavaScript cannot clear, and
+   * it ignores any id in the request body. Minting a new client-side id left
+   * the old server session in place, so the next message still carried the
+   * previous conversation into the model's context. Flag the next send with
+   * reset so the server abandons that session and issues a new cookie.
+   */
   function handleEndSession() {
     setMessages([]);
     setInput("");
     setIsTyping(false);
-    const newSid = `web-${crypto.randomUUID()}`;
-    setSessionId(newSid);
+    setSessionId(null);
+    resetNext.current = true;
     try {
       sessionStorage.removeItem(STORAGE_MESSAGES);
-      sessionStorage.setItem(STORAGE_SESSION, newSid);
+      sessionStorage.removeItem(STORAGE_SESSION);
+      // Survives a reload between the reset and the next message.
+      sessionStorage.setItem(STORAGE_RESET, "1");
     } catch { /* ignore */ }
   }
 
