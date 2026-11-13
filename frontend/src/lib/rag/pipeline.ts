@@ -77,14 +77,17 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
 
   console.log("[RAG] KB cache miss — fetching from Supabase...");
   const fetchStart = Date.now();
+  let kbTimer: ReturnType<typeof setTimeout> | undefined;
 
   try {
     const supabase = createAdminClient();
 
-    // Race against a 12-second timeout to prevent cold-start hangs
-    const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error("KB fetch timeout (12s)")), 12_000)
-    );
+    // Race against a 12-second timeout to prevent cold-start hangs. The timer
+    // is cleared in the finally below: left armed, it kept the event loop
+    // referenced after the race was already won.
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      kbTimer = setTimeout(() => reject(new Error("KB fetch timeout (12s)")), 12_000);
+    });
 
     const [chunksResult, docsResult] = (await Promise.race([
       Promise.all([
@@ -142,6 +145,8 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
   } catch (err) {
     console.warn(`[RAG] KB fetch failed (${Date.now() - fetchStart}ms):`, err);
     return [];
+  } finally {
+    if (kbTimer) clearTimeout(kbTimer);
   }
 }
 

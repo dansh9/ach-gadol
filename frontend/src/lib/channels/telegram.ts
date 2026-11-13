@@ -9,6 +9,18 @@ const TELEGRAM_API = `https://api.telegram.org/bot${TELEGRAM_TOKEN}`;
 // Telegram callback_data has a 64-byte limit
 const MAX_CALLBACK_DATA_BYTES = 64;
 
+/**
+ * Every Telegram API call is bounded. Without this a hung connection consumed
+ * the route's remaining budget and the function was killed before it could log
+ * anything or fall back.
+ */
+const TELEGRAM_TIMEOUT_MS = 8_000;
+
+/** Error label safe to log: the request URL embeds the bot token. */
+function errorName(err: unknown): string {
+  return err instanceof Error ? err.name : "unknown error";
+}
+
 /* ===== Telegram API Calls ===== */
 
 interface SendMessageOptions {
@@ -47,11 +59,19 @@ export async function sendTelegramMessage(
 
   console.log(`[Telegram API] sendMessage to ${chatId}, text length=${text.length}, parse_mode=${payload.parse_mode}, has_keyboard=${!!options?.reply_markup}`);
 
-  const response = await fetch(`${TELEGRAM_API}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${TELEGRAM_API}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(TELEGRAM_TIMEOUT_MS),
+    });
+  } catch (err) {
+    // Never log the error object itself: the request URL carries the bot token.
+    console.error(`[Telegram API] sendMessage request failed: ${errorName(err)}`);
+    return false;
+  }
 
   // If HTML parsing fails, retry without parse_mode (plain text)
   if (!response.ok) {
@@ -70,12 +90,25 @@ export async function sendTelegramMessage(
         fallbackPayload.reply_markup = options.reply_markup;
       }
 
-      const fallbackResponse = await fetch(`${TELEGRAM_API}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fallbackPayload),
-      });
-      return fallbackResponse.ok;
+      try {
+        const fallbackResponse = await fetch(`${TELEGRAM_API}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(fallbackPayload),
+          signal: AbortSignal.timeout(TELEGRAM_TIMEOUT_MS),
+        });
+        if (!fallbackResponse.ok) {
+          const fallbackBody = await fallbackResponse.text();
+          console.error(
+            `[Telegram API] plain-text fallback failed (${fallbackResponse.status}):`,
+            fallbackBody.slice(0, 300)
+          );
+        }
+        return fallbackResponse.ok;
+      } catch (err) {
+        console.error(`[Telegram API] plain-text fallback request failed: ${errorName(err)}`);
+        return false;
+      }
     }
 
     console.error(`Telegram sendMessage error (${status}):`, errBody);
@@ -95,6 +128,7 @@ export async function sendTypingAction(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: chatId, action: "typing" }),
+    signal: AbortSignal.timeout(TELEGRAM_TIMEOUT_MS),
   }).catch(() => {
     // Non-critical — ignore errors
   });
@@ -110,6 +144,7 @@ export async function answerCallbackQuery(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ callback_query_id: callbackQueryId }),
+    signal: AbortSignal.timeout(TELEGRAM_TIMEOUT_MS),
   }).catch(() => {
     // Non-critical — ignore errors
   });

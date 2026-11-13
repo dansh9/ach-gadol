@@ -21,9 +21,9 @@ export async function generateEmbedding(text: string): Promise<number[]> {
     throw new Error("OPENAI_API_KEY is not set");
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10_000); // 10s timeout
-
+  /* The abort must stay armed through the body read. Clearing the timer as
+   * soon as headers arrived left response.json() and response.text() below
+   * unbounded, so a stalled body could hang the whole request. */
   const response = await fetch("https://api.openai.com/v1/embeddings", {
     method: "POST",
     headers: {
@@ -35,8 +35,8 @@ export async function generateEmbedding(text: string): Promise<number[]> {
       input: text,
       dimensions: EMBEDDING_DIMENSIONS,
     }),
-    signal: controller.signal,
-  }).finally(() => clearTimeout(timeout));
+    signal: AbortSignal.timeout(10_000),
+  });
 
   if (!response.ok) {
     const errorBody = await response.text();
