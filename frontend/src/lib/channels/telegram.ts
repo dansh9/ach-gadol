@@ -33,7 +33,7 @@ export async function sendTelegramMessage(
   chatId: number | string,
   text: string,
   options?: SendMessageOptions
-): Promise<void> {
+): Promise<boolean> {
   const payload: Record<string, unknown> = {
     chat_id: chatId,
     text,
@@ -70,15 +70,19 @@ export async function sendTelegramMessage(
         fallbackPayload.reply_markup = options.reply_markup;
       }
 
-      await fetch(`${TELEGRAM_API}/sendMessage`, {
+      const fallbackResponse = await fetch(`${TELEGRAM_API}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(fallbackPayload),
       });
-    } else {
-      console.error(`Telegram sendMessage error (${status}):`, errBody);
+      return fallbackResponse.ok;
     }
+
+    console.error(`Telegram sendMessage error (${status}):`, errBody);
+    return false;
   }
+
+  return true;
 }
 
 /**

@@ -294,6 +294,11 @@ async function processAndReply(
     ? getUserLang(chatId)
     : detectLanguage(text);
 
+  const started = Date.now();
+  console.log(
+    `[Telegram] processAndReply start chat=${chatId} lang=${language} chars=${text.length}`
+  );
+
   try {
     // Show typing indicator
     await sendTypingAction(chatId);
@@ -306,6 +311,10 @@ async function processAndReply(
       language,
     });
 
+    console.log(
+      `[Telegram] pipeline done chat=${chatId} in ${Date.now() - started}ms, reply=${result.text.length}ch, confidence=${result.confidence}`
+    );
+
     // Parse follow-up suggestions from the reply
     const { mainContent, suggestions } = parseFollowUps(result.text);
 
@@ -315,18 +324,34 @@ async function processAndReply(
     // Build inline keyboard from suggestions
     const keyboard = buildInlineKeyboard(suggestions);
 
-    // Split if message is too long for Telegram (4096 char limit)
-    const parts = splitLongMessage(htmlContent);
+    // Split if message is too long for Telegram (4096 char limit).
+    // Empty parts are dropped: Telegram rejects an empty text with a 400 and
+    // the user would see nothing at all.
+    const parts = splitLongMessage(htmlContent).filter((part) => part.trim().length > 0);
+
+    if (parts.length === 0) {
+      console.error(
+        `[Telegram] empty reply for chat ${chatId} after ${Date.now() - started}ms — sending error message instead`
+      );
+      await sendTelegramMessage(chatId, localized(ERROR_MESSAGES, chatId));
+      return;
+    }
 
     // Send all parts; only the last part gets the suggestion keyboard
     for (let i = 0; i < parts.length; i++) {
       const isLastPart = i === parts.length - 1;
-      await sendTelegramMessage(chatId, parts[i], {
+      const delivered = await sendTelegramMessage(chatId, parts[i], {
         reply_markup: isLastPart ? keyboard : undefined,
       });
+      console.log(
+        `[Telegram] sent part ${i + 1}/${parts.length} chat=${chatId} delivered=${delivered} total=${Date.now() - started}ms`
+      );
     }
   } catch (err) {
-    console.error(`[Telegram] processAndReply error for chat ${chatId}:`, err);
+    console.error(
+      `[Telegram] processAndReply error for chat ${chatId} after ${Date.now() - started}ms:`,
+      err
+    );
 
     // Send error message in the user's language — no mixing
     await sendTelegramMessage(chatId, localized(ERROR_MESSAGES, chatId)).catch(() => {});

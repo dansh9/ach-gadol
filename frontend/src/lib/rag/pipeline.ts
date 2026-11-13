@@ -20,6 +20,21 @@ import { detectLanguage } from "./language";
 const ANSWER_MODEL = process.env.ANTHROPIC_ANSWER_MODEL || "claude-sonnet-5-5";
 const REPAIR_MODEL = process.env.ANTHROPIC_REPAIR_MODEL || "claude-haiku-5-5";
 
+/**
+ * Collect every text block of a non-streaming response.
+ *
+ * Current Claude models run adaptive thinking by default, so the first content
+ * block is a thinking block and the answer sits in a later block. Reading
+ * content[0] alone returned "" for every Telegram and WhatsApp message while
+ * the website (streaming path) kept working.
+ */
+function extractText(content: Anthropic.ContentBlock[]): string {
+  return content
+    .filter((block): block is Anthropic.TextBlock => block.type === "text")
+    .map((block) => block.text)
+    .join("");
+}
+
 export interface RagResult {
   reply: string;
   sources: string[];
@@ -261,6 +276,10 @@ export async function runRagPipeline(
 
     let rawReply = "";
 
+    timelog(
+      `Claude call start (mode=${onToken ? "stream" : "create"}, model=${ANSWER_MODEL}, system=${systemPrompt.length}ch, messages=${messages.length})`
+    );
+
     if (onToken) {
       // Streaming mode — buffer to filter out [[CONFIDENCE:X.XX]] marker
       // The marker appears at the end of the response, so we buffer trailing
@@ -324,7 +343,20 @@ export async function runRagPipeline(
         system: [{ type: "text", text: systemPrompt, cache_control: { type: "ephemeral" } }],
         messages,
       });
-      rawReply = response.content[0].type === "text" ? response.content[0].text : "";
+      timelog(
+        `Claude create done (blocks=${response.content.map((b) => b.type).join(",")}, stop=${response.stop_reason})`
+      );
+      rawReply = extractText(response.content);
+
+      if (!rawReply.trim()) {
+        const errorId = `ERR-${Date.now().toString(36)}`;
+        console.error(
+          `[${errorId}] Claude returned no text (blocks=${response.content
+            .map((b) => b.type)
+            .join(",")}, stop=${response.stop_reason})`
+        );
+        return buildErrorResult(language, errorId, onToken);
+      }
     }
 
     // 9. Parse response — confidence marker
@@ -364,7 +396,7 @@ export async function runRagPipeline(
           system: `You are a formatting repair tool. The following chatbot response is missing 2–3 follow-up suggestions. Output ONLY 2-3 lines starting with ">> ". Use the same language as the original response.`,
           messages: [{ role: "user", content: cleanReply.slice(0, 500) }],
         });
-        const repairText = repairResponse.content[0].type === "text" ? repairResponse.content[0].text.trim() : "";
+        const repairText = extractText(repairResponse.content).trim();
 
         const followUpLines = repairText
           .split("\n")
