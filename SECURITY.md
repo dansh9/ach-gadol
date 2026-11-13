@@ -40,7 +40,7 @@ comparison, and payloads above 1 MB are rejected.
 closed if the key is unset or shorter than 16 characters and returns no detail on failure.
 The public `/api/health` returns `{"status":"ok"}` and makes no outbound calls.
 
-**Database.** RLS is enabled on all four tables. `chat_sessions` and `chat_messages` have
+**Database.** As defined in `db/schema.sql`, RLS is enabled on all four tables. `chat_sessions` and `chat_messages` have
 no anon policies — only the server's service-role client reaches them. `kb_documents` and
 `kb_chunks` allow anonymous reads, as they hold published reference material about IDF
 entitlements. The service-role key is server-side only and never reaches the browser.
@@ -54,8 +54,7 @@ exception for `.env.example`, plus key, certificate and credential-file patterns
 Telegram bot token is redacted from diagnostic output.
 
 **Models.** Model ids live in one place and are overridable by environment variable, so a
-provider retirement is a configuration change rather than an outage. Two retired model ids
-took the assistant down for months before this was fixed.
+provider retirement is a configuration change rather than a code change.
 
 ## Known limitations
 
@@ -70,14 +69,13 @@ took the assistant down for months before this was fixed.
   document is still readable by direct Supabase access, even though the application path
   filters it. The content is public reference material, so this is a correctness gap
   rather than a confidentiality breach, but the policy should be tightened.
-- **No automated security tests or CI.** Every check above was verified by hand.
-
-## Fixed issues
-
-Findings from the 10 November 2026 audit, with what was done about each, are recorded in
-[SECURITY_REMEDIATION.md](SECURITY_REMEDIATION.md).
+- **Next.js 14.x is no longer patched.** Some advisories have fixes only in 15.5.28 and
+  16.4.1. The image optimizer, the subject of the most severe of them, is disabled
+  (`images.unoptimized`) because the app does not use `next/image`; upgrading to 15.x is
+  the remaining fix.
+- **No automated security tests or CI.** The controls above were verified by hand.
 
 ## Reporting
 
-This is a student project built for a non-profit. If you find something, open an issue on
-the repository without including exploit details or any credential you may have found.
+If you find a security issue, open an issue on the repository without including exploit
+details or any credential you may have found.

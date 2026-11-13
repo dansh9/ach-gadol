@@ -64,7 +64,6 @@ async function getCachedKBChunks(): Promise<CachedChunk[]> {
       setTimeout(() => reject(new Error("KB fetch timeout (12s)")), 12_000)
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [chunksResult, docsResult] = (await Promise.race([
       Promise.all([
         supabase

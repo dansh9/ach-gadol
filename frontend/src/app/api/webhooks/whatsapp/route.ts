@@ -8,6 +8,17 @@ const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
 const WHATSAPP_PHONE_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 const WHATSAPP_APP_SECRET = process.env.WHATSAPP_APP_SECRET;
 
+/** The subset of the Meta webhook payload this handler reads. */
+type WhatsAppPayload = {
+  entry?: Array<{
+    changes?: Array<{
+      value?: {
+        messages?: Array<{ type: string; from: string; text?: { body: string } }>;
+      };
+    }>;
+  }>;
+};
+
 /**
  * GET /api/webhooks/whatsapp
  * WhatsApp Cloud API webhook verification.
@@ -68,7 +79,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 403 });
     }
 
-    let body: Record<string, unknown>;
+    let body: WhatsAppPayload;
     try {
       body = JSON.parse(rawBody);
     } catch {
@@ -76,8 +87,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Extract messages from webhook payload
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const entry = (body as any).entry?.[0];
+    const entry = body.entry?.[0];
     const changes = entry?.changes?.[0];
     const value = changes?.value;
 
@@ -90,7 +100,8 @@ export async function POST(request: NextRequest) {
       if (message.type !== "text") continue;
 
       const from = message.from; // phone number
-      const text = message.text.body;
+      const text = message.text?.body;
+      if (!text) continue;
 
       // Detect language
       const language = detectLanguage(text);

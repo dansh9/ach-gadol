@@ -2,8 +2,7 @@
 
 AI-powered platform helping lone soldiers (Chayalim Bodedim) in the IDF navigate their rights, entitlements, and bureaucratic processes. Built for the Ach Gadol organization.
 
-- Development history: [DEVELOPMENT.md](DEVELOPMENT.md)
-- Security model and known limitations: [SECURITY.md](SECURITY.md)
+Security model and known limitations: [SECURITY.md](SECURITY.md)
 
 ## What it does
 
@@ -19,21 +18,26 @@ soldier's own language, citing the official source for every figure it gives.
 - **Eligibility check** — a rules engine that takes a soldier's profile and returns the
   entitlements that apply to them.
 - **Reachable off the web** — the same assistant is available over Telegram, because not
-  every soldier will visit a website. A WhatsApp handler exists but is not enabled.
+  every soldier will visit a website. A WhatsApp webhook handler is included but
+  is not configured.
 
 ## Tech Stack
 
 - **Frontend**: Next.js 14 (App Router), Tailwind CSS, TypeScript
 - **Database**: Supabase (PostgreSQL + pgvector)
 - **AI**: Anthropic Claude (answer generation), OpenAI (embeddings)
-- **Channels**: Telegram webhook; WhatsApp handler present but not deployed
+- **Channels**: Telegram webhook; WhatsApp handler included but not configured
 - **i18n**: Hebrew (default), English, Russian, Amharic, French, Spanish, Arabic
 - **Deployment**: Vercel; a Dockerfile is included for running it elsewhere
 
 Supabase is used purely as a Postgres database with the pgvector extension. Supabase Auth,
 Storage and Edge Functions are not used — the product has no user accounts.
 
-## How the assistant actually works
+## How the assistant works
+
+No model was trained or fine-tuned for this project. It uses existing hosted models —
+Claude for answers, an OpenAI embedding model for retrieval — and grounds each answer in
+the organisation's material through the system prompt and retrieved context.
 
 **Where the knowledge comes from.** Most of what the assistant knows is not retrieved at
 runtime: it lives in `lib/rag/prompts.ts` as a structured reference block covering lone
@@ -61,13 +65,14 @@ timeout — the pipeline applies a lower similarity threshold for non-Hebrew/Eng
 sources, and the prompt instructs it to describe a benefit rather than quote an exact
 figure where possible, and to tell the soldier to confirm with their welfare officer
 (מש״קית ת״ש). Getting an amount wrong is worse than saying "I don't know" — a soldier may
-act on it.
+act on it. This reduces the risk of a wrong answer; it does not guarantee correctness, and
+the information is general guidance rather than legal advice.
 
 **Confidence.** The model is asked to end its answer with a `[[CONFIDENCE:0.XX]]` marker.
 While streaming, the pipeline buffers output so the marker is never shown to the user, then
 parses it from the completed text. If knowledge-base context was used and the answer cites
-sources, the value is floored at 0.7. So confidence is a self-report by the model, read
-after generation — not an independent measurement.
+sources, the value is floored at 0.7. So confidence is the model's own estimate, read after
+generation — not a calibrated statistical measure.
 
 **Follow-up suggestions.** If the answer arrives without them, a second, cheaper model call
 generates two or three, skipped if the request has already taken over 40 seconds.
@@ -160,7 +165,7 @@ Never commit `.env.local`. It is gitignored.
 | `GET /api/health/deep` | `ADMIN_API_KEY` | Full diagnostics |
 | `POST /api/kb/embed` | `ADMIN_API_KEY` | Embed chunks missing an embedding |
 | `POST /api/webhooks/telegram` | shared secret header | Telegram updates |
-| `POST /api/webhooks/whatsapp` | HMAC signature | WhatsApp events (not enabled) |
+| `POST /api/webhooks/whatsapp` | HMAC signature | WhatsApp events (not configured) |
 
 ## Deployment
 

@@ -173,28 +173,32 @@ export async function POST(request: NextRequest) {
     // Definitely a string from here on — keeps the rest of the handler simple.
     const activeSessionId: string = resolvedSessionId;
 
-    // Store user message + fetch conversation history IN PARALLEL
-    const [storeResult, { data: history }] = await Promise.all([
-      supabase
-        .from("chat_messages")
-        .insert({
-          session_id: activeSessionId,
-          role: "user",
-          content: message.trim(),
-        }),
-      supabase
-        .from("chat_messages")
-        .select("role, content")
-        .eq("session_id", activeSessionId)
-        .order("created_at", { ascending: true })
-        .limit(10),
-    ]);
+    // Fetch the PREVIOUS messages first, then store the new one.
+    // - Newest 10, reversed back into chronological order. Ordering ascending
+    //   with a limit returned the *first* 10 messages of the session, so after
+    //   five exchanges the model lost the recent conversation.
+    // - Fetching before inserting keeps the current message out of the
+    //   history; buildMessages() appends it exactly once. Running both in
+    //   parallel made duplication a race.
+    const { data: recentDesc } = await supabase
+      .from("chat_messages")
+      .select("role, content")
+      .eq("session_id", activeSessionId)
+      .order("created_at", { ascending: false })
+      .limit(10);
+    const history = (recentDesc || []).reverse();
+
+    const storeResult = await supabase.from("chat_messages").insert({
+      session_id: activeSessionId,
+      role: "user",
+      content: message.trim(),
+    });
 
     if (storeResult.error) {
       console.error("Failed to store user message:", storeResult.error);
     }
 
-    const conversationHistory = (history || [])
+    const conversationHistory = history
       .filter((msg) => msg.role === "user" || msg.role === "assistant")
       .map((msg) => ({
         role: msg.role as "user" | "assistant",

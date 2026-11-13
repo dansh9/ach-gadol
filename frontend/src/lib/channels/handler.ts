@@ -77,6 +77,18 @@ export async function handleIncomingMessage(
     sessionMap.set(sessionKey, sessionId);
   }
 
+  // Fetch the PREVIOUS messages before storing the new one, so the current
+  // message is not in the history (buildMessages appends it once). Newest 10,
+  // reversed into chronological order — ascending + limit returned the first
+  // 10 messages of the session instead of the most recent.
+  const { data: recentDesc } = await supabase
+    .from("chat_messages")
+    .select("role, content")
+    .eq("session_id", sessionId)
+    .order("created_at", { ascending: false })
+    .limit(10);
+  const history = (recentDesc || []).reverse();
+
   // Store user message
   await supabase.from("chat_messages").insert({
     session_id: sessionId,
@@ -84,15 +96,7 @@ export async function handleIncomingMessage(
     content: msg.text,
   });
 
-  // Fetch conversation history
-  const { data: history } = await supabase
-    .from("chat_messages")
-    .select("role, content")
-    .eq("session_id", sessionId)
-    .order("created_at", { ascending: true })
-    .limit(10);
-
-  const conversationHistory = (history || [])
+  const conversationHistory = history
     .filter((m) => m.role === "user" || m.role === "assistant")
     .map((m) => ({
       role: m.role as "user" | "assistant",
