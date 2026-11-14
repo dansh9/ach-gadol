@@ -97,7 +97,9 @@ Fourteen commits carry no trailer: `3039cac`, `38a4989`, `637b051`, `cc967a3`, `
 `44fe26c`, `e7fbee3`, `db2fd90`, `10b6bec`, `fea76ef`, `27324cc`, `4a9d2af`, `3cc264e`,
 `ee99128`. Among them is `4a9d2af`, the security remediation that this document describes
 as carried out with Claude Code. The trailer was not added retroactively, because doing so
-would mean rewriting published history. Commits from 13 November 2026 onward carry it.
+would mean rewriting published history. Claude-assisted commits from 13 November 2026
+onward use the trailer when applicable. Documentation and CI edits on 14 November 2026
+were prepared with ChatGPT, not Claude, and therefore do not claim Claude co-authorship.
 
 **An internal QA audit report was removed from the working tree on 13 November 2026.**
 `frontend/QA_AUDIT_REPORT.md` was an AI-generated QA pass dated 3 March 2026, covering
