@@ -189,11 +189,55 @@ docker build -t ach-gadol .
 docker run -p 3000:3000 --env-file .env.local ach-gadol
 ```
 
+## Tests and CI
+
+The frontend has automated unit tests for request payload construction and eligibility
+calculations. From the repository root:
+
+```bash
+cd frontend
+npm ci
+npm test
+npm run lint
+npm run typecheck
+```
+
+The [GitHub Actions workflow](.github/workflows/ci.yml) runs these checks on pushes and
+pull requests. It needs no production API keys. These checks do **not** prove that
+Telegram delivery, external AI providers, the deployed site, or the security model work
+end-to-end. A production build can also be run locally with `npm run build` once the
+necessary environment is configured.
+
+## Engineering choices, lessons, and one open limitation
+
+**Why these tools?** Next.js lets the multilingual website and its API/webhook handlers
+share one TypeScript project. Postgres holds structured rights and conversation data;
+Supabase and pgvector leave room for semantic search as the knowledge base grows. Instead
+of training a model, the assistant uses curated official-source information and retrieved
+context. The eligibility rules remain deterministic code rather than asking a language
+model to calculate entitlement amounts.
+
+**What changed during development?** Reviewing the project revealed places where
+security must be enforced at the server boundary, not trusted to the client: the browser
+cannot choose someone else's chat session id, administrative routes must reject missing
+credentials, and webhooks must verify provider secrets/signatures. Another lesson is that
+citing an official source lowers the risk of a wrong answer but does not guarantee
+accuracy. The current retrieval approach deliberately favors simplicity for a small
+knowledge base over premature search infrastructure.
+
+**What remains to fix?** The Telegram webhook currently waits for the AI pipeline and
+message delivery inside a serverless request with a 60-second maximum duration. A slow
+model response or provider call can exceed that budget. A more robust design would
+acknowledge the webhook promptly, place the work in a durable queue, process it
+asynchronously with bounded timeouts, and deduplicate provider retries. This design is
+not implemented yet. Other known security and operational limitations are listed in
+[SECURITY.md](SECURITY.md).
+
 ## How this was built
 
 This project was built with Claude Code. Claude generated most of the code and assisted
-with architecture, integrations, documentation and fixes. Commits from 13 November 2026
-onward carry a `Co-Authored-By: Claude` trailer; earlier ones are inconsistent, which
+with architecture, integrations, documentation and fixes. Claude-assisted commits from 13 November 2026
+onward use a `Co-Authored-By: Claude` trailer when applicable; earlier ones are inconsistent, which
 [DEVELOPMENT.md](DEVELOPMENT.md) records.
 
 [DEVELOPMENT.md](DEVELOPMENT.md) also records the phase-by-phase history and four facts
@@ -203,6 +247,10 @@ was removed from the working tree on 13 November 2026 and is still readable in h
 and the co-author trailer was applied inconsistently before that date.
 [SECURITY_REMEDIATION.md](SECURITY_REMEDIATION.md) covers the security review and the
 fixes it produced.
+
+
+Documentation and CI edits on 14 November 2026 were prepared with ChatGPT. They do not
+change the chatbot's runtime code.
 
 ## License
 
