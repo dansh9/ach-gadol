@@ -73,7 +73,7 @@ provider retirement is a configuration change rather than a code change.
   16.4.1. The image optimizer, the subject of the most severe of them, is disabled
   (`images.unoptimized`) because the app does not use `next/image`; upgrading to 15.x is
   the remaining fix.
-- **No automated security tests or CI.** The controls above were verified by hand.
+- **No automated security regression tests.** GitHub Actions runs unit tests, lint, and TypeScript checks on pushes and pull requests, but does not test webhook authentication, session isolation, or the live deployment end-to-end. The security controls above were reviewed manually.
 
 ## Reporting
 
